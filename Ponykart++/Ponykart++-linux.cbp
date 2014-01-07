@@ -119,8 +119,10 @@
 		<Unit filename="Core/Animation/AnimationManager.h" />
 		<Unit filename="Core/Cameras/CameraManager.cpp" />
 		<Unit filename="Core/Cameras/CameraManager.h" />
+		<Unit filename="Core/Cameras/KnightyCamera.h" />
 		<Unit filename="Core/Cameras/LCamera.cpp" />
 		<Unit filename="Core/Cameras/LCamera.h" />
+		<Unit filename="Core/Cameras/PlayerCamera.h" />
 		<Unit filename="Core/ControllerManager.h" />
 		<Unit filename="Core/IDs.cpp" />
 		<Unit filename="Core/IDs.h" />
@@ -171,6 +173,7 @@
 		<Unit filename="Physics/PhysicsMain.h" />
 		<Unit filename="Players/Player.cpp" />
 		<Unit filename="Players/Player.h" />
+		<Unit filename="Players/PlayerManager.cpp" />
 		<Unit filename="Players/PlayerManager.h" />
 		<Unit filename="Sound/SoundMain.cpp" />
 		<Unit filename="Sound/SoundMain.h" />
