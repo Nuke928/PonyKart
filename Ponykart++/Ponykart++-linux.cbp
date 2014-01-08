@@ -156,6 +156,11 @@
 		<Unit filename="Levels/LevelType.h" />
 		<Unit filename="Lua/LuaMain.cpp" />
 		<Unit filename="Lua/LuaMain.h" />
+		<Unit filename="Lua/LuaStack.cpp" />
+		<Unit filename="Lua/LuaStack.h" />
+		<Unit filename="Lua/LuaStackObject" />
+		<Unit filename="Lua/LuaStackObject.cpp" />
+		<Unit filename="Lua/LuaStackObject.h" />
 		<Unit filename="Physics/CollisionGroups.h" />
 		<Unit filename="Physics/CollisionObjectDataHolder.cpp" />
 		<Unit filename="Physics/CollisionObjectDataHolder.h" />
