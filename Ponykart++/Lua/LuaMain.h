@@ -17,8 +17,6 @@ namespace Lua
 
 using LuaEvent = std::vector<std::function<void ()>>;
 
-class LuaStack;
-
 class LuaMain
 {
 public:
@@ -28,8 +26,6 @@ public:
 	void runRegisterEvent();
 
 	void doFunctionForLThing(std::string& functionName, Actors::LThing* thing);
-
-    LuaStack doFunction(const std::string& funcName, const LuaStack& params, int returnCount);
 
     void doFile(const std::string &filename);
     void doString(const std::string &s);

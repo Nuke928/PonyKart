@@ -2,14 +2,10 @@
 #include "Kernel/LKernelOgre.h"
 #include "Levels/LevelManager.h"
 #include "Lua/LuaMain.h"
-#include "Lua/LuaStack.h"
 
-extern "C"
-{
-#include "lua.h"
+#include "lua.hpp"
 #include "lualib.h"
 #include "lauxlib.h"
-}
 
 using namespace Ponykart;
 using namespace Ponykart::Levels;
@@ -43,34 +39,6 @@ void LuaMain::doFunctionForLThing(std::string& functionName, Actors::LThing* thi
         lua_pushlightuserdata(lua, thing);
 
         luaMutex.unlock();
-    }
-}
-
-// TODO: parse the return values
-LuaStack LuaMain::doFunction(const std::string& funcName, const LuaStack& params, int returnCount)
-{
-    lua_getglobal(lua, funcName.c_str());
-
-    for(size_t i = 0; i < params.getSize(); i++) {
-        switch(params[i].type) {
-            case LUAVARTYPE_BOOLEAN:
-                lua_pushboolean(lua, params[i].getBoolean());
-            break;
-            case LUAVARTYPE_STRING:
-                lua_pushstring(lua, params[i].getString());
-            break;
-            case LUAVARTYPE_INT:
-                lua_pushinteger(lua, params[i].getInt());
-            break;
-            case LUAVARTYPE_UINT:
-                lua_pushinteger(lua, params[i].getInt());
-            break;
-        }
-    }
-
-    if(lua_pcall(lua, params.getSize(), returnCount, 0) != 0)
-    {
-        throw std::string("Failed to call Lua function: " + funcName);
     }
 }
 
