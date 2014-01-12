@@ -1,11 +1,13 @@
 #ifndef KART_H_INCLUDED
 #define KART_H_INCLUDED
 
-#include <Ogre.h>
+#include <BulletDynamics/Vehicle/btRaycastVehicle.h>
 #include <OgreFrameListener.h>
 #include "Actors/LThing.h"
 #include "Actors/Wheels/Wheel.h"
 
+
+class btRaycastVehicle;
 namespace PonykartParsers
 {
 	class ThingBlock;
@@ -14,6 +16,7 @@ namespace PonykartParsers
 
 namespace Ponykart
 {
+namespace Physics{ class KartMotionState; }
 namespace Players{ class Player; }
 namespace Actors
 {
@@ -35,6 +38,15 @@ public:
 	const Wheel* const getWheelFR() const;
 	const Wheel* const getWheelBL() const;
 	const Wheel* const getWheelBR() const;
+	const btRaycastVehicle* const getVehicle() const;
+	btRaycastVehicle* getVehicle();
+	float getVehicleSpeed() const;
+	bool isCompletelyDrifting() const; ///< Returns true if we're completely drifting - not starting, not stopping, but in between.
+	bool isStartingDrifting() const; ///< Returns true if we're starting to drift
+	bool isStoppingDrifting() const; ///< Returns true if we're stopping drifting
+	bool isDriftingAtAll() const; ///< Returns true if we're drifting at all - starting, stopping, or in between.
+	const btRaycastVehicle::btVehicleTuning* const getTuning() const;
+	Ogre::Quaternion getActualOrientation() const;
 	const Ogre::SceneNode* const getLeftParticleNode() const;
 	const Ogre::SceneNode* const getRightParticleNode() const;
 	// Setters
@@ -52,12 +64,15 @@ public:
 	KartDriftState driftState;
 	Driver* driver;
 	Players::Player* player;
+	Physics::KartMotionState* kartMotionState;
 	// our wheelshapes
 protected:
 	Wheel* wheelFL;
 	Wheel* wheelFR;
 	Wheel* wheelBL;
 	Wheel* wheelBR;
+	btRaycastVehicle* _vehicle;
+	btRaycastVehicle::btVehicleTuning* tuning;
 private:
 	float maxSpeed;
 	float maxSpeedSquared;
