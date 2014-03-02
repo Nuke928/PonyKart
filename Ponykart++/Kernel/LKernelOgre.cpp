@@ -32,7 +32,7 @@ void LKernel::initOgreRoot()
 
 void LKernel::initOgreGraphics ()
 {
-	log("[Loading] Initializing Ogre Resources...");
+	log("[Loading] Initializing Ogre Graphics...");
 
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
 		throw string(SDL_GetError());
@@ -49,14 +49,6 @@ void LKernel::initOgreGraphics ()
 		}
 	}
 
-	bool fullscreen = StringConverter::parseBool(Options::get("Full Screen"));
-	gSDLWindow = SDL_CreateWindow(
-		"PonyKart",
-		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		width, height,
-		SDL_WINDOW_OPENGL | (fullscreen ? SDL_WINDOW_FULLSCREEN : 0)
-	);
-
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
@@ -70,6 +62,14 @@ void LKernel::initOgreGraphics ()
 	SDL_GL_SetAttribute(
 		SDL_GL_FRAMEBUFFER_SRGB_CAPABLE,
 		StringConverter::parseBool(Options::get("sRGB Gamma Conversion")) ? 1 : 0
+	);
+
+	bool fullscreen = StringConverter::parseBool(Options::get("Full Screen"));
+	gSDLWindow = SDL_CreateWindow(
+		"PonyKart",
+		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+		width, height,
+		SDL_WINDOW_OPENGL | (fullscreen ? SDL_WINDOW_FULLSCREEN : 0)
 	);
 
 	auto context = SDL_GL_CreateContext(gSDLWindow);
