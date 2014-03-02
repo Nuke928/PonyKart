@@ -22,6 +22,8 @@ using Ponykart::Core::Options;
 using Ponykart::Splash;
 
 
+Uint32 Ponykart::Launch::tenthOfASecondEvent = 0;
+
 int main (int argc, char *argv[])
 {
 	try
@@ -109,7 +111,11 @@ void Ponykart::Launch::enterGameLoop ()
 	auto soundMain = getG<Ponykart::Sound::SoundMain>();
 	auto music = soundMain->PlayMusic("./media/music/Sweet Apple Acres 128bpm.ogg");
 
-	while (!ogreWindow->isClosed()) {
+	tenthOfASecondEvent = SDL_RegisterEvents(1);
+	auto tenthOfASecondTimer = SDL_AddTimer(100, &tenthOfASecondCallback, nullptr);
+
+	bool quit = false;
+	while (!quit) {
 		ogreRoot->_fireFrameStarted();
 		ogreWindow->update(false);
 		ogreRoot->_fireFrameRenderingQueued();
@@ -119,12 +125,28 @@ void Ponykart::Launch::enterGameLoop ()
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {
+			case SDL_USEREVENT:
+				if (event.user.code == tenthOfASecondEvent)
+					for (auto &f : onEveryUnpausedTenthOfASecondEvent)
+						f(nullptr);
+				break;
 			case SDL_QUIT:
-				return;
+				quit = true;
+				break;
 			}
 		}
-
-		for (auto &f : onEveryUnpausedTenthOfASecondEvent)
-			f(nullptr);
 	}
+
+	SDL_RemoveTimer(tenthOfASecondTimer);
+}
+
+unsigned int Ponykart::Launch::tenthOfASecondCallback (Uint32 interval, void *param) {
+	SDL_Event event;
+	SDL_zero(event);
+	event.type = SDL_USEREVENT;
+	event.user.code = tenthOfASecondEvent;
+
+	SDL_PushEvent(&event);
+
+	return 100;
 }

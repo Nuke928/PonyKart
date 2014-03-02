@@ -2,13 +2,16 @@
 #define MAIN_H_INCLUDED
 
 #include <string>
+#include <SDL.h>
 
 namespace Ponykart
 {
 namespace Launch
 {
-	void enterGameLoop ();
+	extern Uint32 tenthOfASecondEvent;
 
+	void enterGameLoop ();
+	unsigned int tenthOfASecondCallback (Uint32 interval, void *param);
 
 //	static bool quit;
 };
