@@ -79,10 +79,11 @@ void LKernel::initOgreGraphics ()
 
 	if (StringConverter::parseBool(Options::get("VSync")))
 		if (SDL_GL_SetSwapInterval(-1) < 0) // Try to enable late-swap tearing support...
-			if (SDL_GL_SetSwapInterval(1)) // ...and fall back to standard VSync if not supported.
+			if (SDL_GL_SetSwapInterval(1) < 0) // ...and fall back to standard VSync if not supported.
 				log("[Loading] WARNING: Unable to activate VSync!");
 
 	gRenderSystem = gRoot->getRenderSystemByName("OpenGL Rendering Subsystem");
+	// TODO: Look into eliminating fixed-function usage
 	//gRenderSystem->setFixedPipelineEnabled(false); // Fixed-function pipeline is deprecated
 	gRoot->setRenderSystem(gRenderSystem); // Add to global objects
 //#if DEBUG
