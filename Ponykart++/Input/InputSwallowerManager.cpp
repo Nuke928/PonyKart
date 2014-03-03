@@ -1,8 +1,8 @@
 #include "pch.h"
-#include "Core/InputSwallowerManager.h"
+#include "Input/InputSwallowerManager.h"
 
 using namespace std;
-using namespace Ponykart;
+using namespace Ponykart::Input;
 
 void InputSwallowerManager::addSwallower(const bool* const condition, void* swallower)
 {

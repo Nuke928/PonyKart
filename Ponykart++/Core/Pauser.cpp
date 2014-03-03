@@ -1,12 +1,13 @@
 #include "pch.h"
 #include "Core/Pauser.h"
-#include "Core/InputMain.h"
+#include "Input/InputMain.h"
 #include "Kernel/LKernel.h"
 #include "Kernel/LKernelOgre.h"
 #include "Levels/LevelManager.h"
-#include "Core/InputSwallowerManager.h"
+#include "Input/InputSwallowerManager.h"
 
 using namespace Ponykart::Core;
+using namespace Ponykart::Input;
 using namespace Ponykart::LKernel;
 using namespace Ponykart::Levels;
 
@@ -19,7 +20,7 @@ Pauser::Pauser()
 	log("[Loading] Creating Pauser");
 
 	// if we press `, then pause
-	LKernel::getG<InputMain>()->onKeyboardPress_Anything.push_back(keyInvokePauseEvent);
+	LKernel::getG<InputMain>()->onKeyboardPress.push_back(keyInvokePauseEvent);
 	LKernel::getG<InputSwallowerManager>()->addSwallower(&isPaused, this);
 }
 

@@ -3,30 +3,30 @@
 
 namespace Ponykart
 {
-namespace Core
+namespace Input
 {
 	enum ControllerButtons
 	{
-		A
-		,B
-		,X
-		,Y
-		,RB
-		,LB
-		,Start
-		,Back
-		,LeftThumbstick
-		,RightThumbstick
+		A,
+		B,
+		X,
+		Y,
+		RB,
+		LB,
+		Start,
+		Back,
+		LeftThumbstick,
+		RightThumbstick
 	};
 
 	enum ControllerAxis
 	{
-		LeftX
-		,LeftY
-		,RightX
-		,RightY
-		,LeftTrigger
-		,RightTrigger
+		LeftX,
+		LeftY,
+		RightX,
+		RightY,
+		LeftTrigger,
+		RightTrigger
 	};
 
 	struct ControllerAxisArgument

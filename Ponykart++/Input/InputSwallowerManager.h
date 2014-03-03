@@ -7,6 +7,9 @@
 
 namespace Ponykart
 {
+namespace Input
+{
+
 /** "Swallowing" input is when we only give input to one particular thing. For example, if we have WASD as movement keys,
 // if we have a text box come up asking us for our name or something, we don't want to start moving while we're doing that.
 // We would say that text box has "swallowed" the input. This class manages that.
@@ -35,5 +38,7 @@ public:
 private:
 	std::map<const bool* const, void*> ThingsToCheck;
 };
+
+} // Input
 } // Ponykart
 #endif // INPUTSWALLOWERMANAGER_H_INCLUDED

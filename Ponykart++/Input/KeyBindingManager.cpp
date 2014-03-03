@@ -1,18 +1,19 @@
 #include "pch.h"
 #include "Kernel/LKernel.h"
 #include "Kernel/LKernelOgre.h"
-#include "Core/KeyBindingManager.h"
-#include "Core/InputMain.h"
+#include "Input/KeyBindingManager.h"
+#include "Input/InputMain.h"
 #include "Core/Options.h"
-#include "Core/InputSwallowerManager.h"
+#include "Input/InputSwallowerManager.h"
 
 using namespace std;
-using namespace Ponykart::Core;
+using namespace Ponykart;
+using namespace Ponykart::Input;
 using namespace Ponykart::LKernel;
 
 // Define our static members
 std::map<LKey, SDL_Keycode> KeyBindingManager::lKeysDict;
-std::map<SDL_Keycode, LKey> KeyBindingManager::oisKeysDict;
+std::map<SDL_Keycode, LKey> KeyBindingManager::sdlKeysDict;
 std::map<ControllerButtons, LKey> KeyBindingManager::lButtonsDict;
 std::map<ControllerAxis, LKey> KeyBindingManager::lAxisDict;
 std::map<LKey, std::function<void ()>> KeyBindingManager::pressEventsDict;
@@ -28,15 +29,15 @@ KeyBindingManager::KeyBindingManager()
 	// TODO: Replace the LymphInputEvents with std::functions
 
 	auto input = LKernel::getG<InputMain>();
-	input->onKeyboardPress_Anything.push_back(onKeyboardPressAnything);
-	input->onKeyboardRelease_Anything.push_back(onKeyboardReleaseAnything);
-	input->onLeftXAxisMoved.push_back(input_OnLeftXAxisMoved);
+	input->onKeyboardPress.push_back(onKeyboardPress);
+	input->onKeyboardRelease.push_back(onKeyboardRelease);
 
-	if (Options::getBool("Twh"))
-	{
-		input->onMousePress_Anything.push_back(onMousePress_Anything);
-		input->onMouseRelease_Anything.push_back(onMouseRelease_Anything);
-	}
+
+//	if (Options::getBool("Twh"))
+//	{
+//		input->onMousePress_Anything.push_back(onMousePress_Anything);
+//		input->onMouseRelease_Anything.push_back(onMouseRelease_Anything);
+//	}
 }
 
 // TODO read these from a file
@@ -48,12 +49,12 @@ void KeyBindingManager::setupInitialBindings()
 	lKeysDict[LKey::Drift] = SDLK_SPACE;
 	lKeysDict[LKey::Reverse] = SDLK_s;
 	lKeysDict[LKey::Item] = SDLK_LSHIFT;
-	oisKeysDict[SDLK_w] = LKey::Accelerate;
-	oisKeysDict[SDLK_a] = LKey::TurnLeft;
-	oisKeysDict[SDLK_d] = LKey::TurnRight;
-	oisKeysDict[SDLK_SPACE] = LKey::Drift;
-	oisKeysDict[SDLK_s] = LKey::Reverse;
-	oisKeysDict[SDLK_LSHIFT] = LKey::Item;
+	sdlKeysDict[SDLK_w] = LKey::Accelerate;
+	sdlKeysDict[SDLK_a] = LKey::TurnLeft;
+	sdlKeysDict[SDLK_d] = LKey::TurnRight;
+	sdlKeysDict[SDLK_SPACE] = LKey::Drift;
+	sdlKeysDict[SDLK_s] = LKey::Reverse;
+	sdlKeysDict[SDLK_LSHIFT] = LKey::Item;
 	lButtonsDict[ControllerButtons::A] = LKey::Drift;
 	lAxisDict[ControllerAxis::LeftX] = LKey::SteeringAxis;
 
@@ -72,37 +73,29 @@ void KeyBindingManager::setupInitialBindings()
 	releaseEventsDict.insert(pair<LKey,function<void()>>(LKey::Item, function<void ()>()));
 }
 
-void KeyBindingManager::onKeyboardPressAnything(const SDL_KeyboardEvent &ke)
+void KeyBindingManager::onKeyboardPress(const SDL_KeyboardEvent &ke)
 {
 	// don't do anything if it's swallowed
 	if (LKernel::getG<InputSwallowerManager>()->isSwallowed())
 		return;
 
 	LKey key;
-	if (oisKeysDict.find(ke.keysym.scancode) != oisKeysDict.end()) // TODO: Check if this is correct. I'm not sure of the translation.
+	if (sdlKeysDict.find(ke.keysym.scancode) != sdlKeysDict.end()) // TODO: Check if this is correct. I'm not sure of the translation.
 		invoke(pressEventsDict[key]);
 }
 
-void KeyBindingManager::onKeyboardReleaseAnything(const SDL_KeyboardEvent &ke)
+void KeyBindingManager::onKeyboardRelease(const SDL_KeyboardEvent &ke)
 {
 	// don't do anything if it's swallowed
 	if (LKernel::getG<InputSwallowerManager>()->isSwallowed())
 		return;
 
 	LKey key;
-	if (oisKeysDict.find(ke.keysym.scancode) != oisKeysDict.end()) // TODO: Check if this is correct. I'm not sure of the translation.
+	if (sdlKeysDict.find(ke.keysym.scancode) != sdlKeysDict.end()) // TODO: Check if this is correct. I'm not sure of the translation.
 		invoke(releaseEventsDict[key]);
 }
 
-void KeyBindingManager::input_OnLeftXAxisMoved(void* sender, ControllerAxisArgument e)
-{
-	if ( LKernel::getG<InputSwallowerManager>()->isSwallowed( ) )
-		return;
-
-	invoke(axisEvents[lAxisDict[e.Axis]] );
-}
-
-void KeyBindingManager::onMousePress_Anything(const SDL_MouseButtonEvent &mbe)
+void KeyBindingManager::onMousePress(const SDL_MouseButtonEvent &mbe)
 {
 	if (LKernel::getG<InputSwallowerManager>()->isSwallowed())
 		return;
@@ -121,7 +114,7 @@ void KeyBindingManager::onMousePress_Anything(const SDL_MouseButtonEvent &mbe)
 	}
 }
 
-void KeyBindingManager::onMouseRelease_Anything(const SDL_MouseButtonEvent &mbe)
+void KeyBindingManager::onMouseRelease(const SDL_MouseButtonEvent &mbe)
 {
 	switch (mbe.button)
 	{
