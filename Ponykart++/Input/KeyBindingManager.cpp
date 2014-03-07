@@ -10,28 +10,121 @@ using namespace std;
 using namespace Ponykart;
 using namespace Ponykart::Input;
 using namespace Ponykart::LKernel;
+using namespace Extensions;
 
-// Define our static members
-std::map<LKey, SDL_Keycode> KeyBindingManager::lKeysDict;
-std::map<SDL_Keycode, LKey> KeyBindingManager::sdlKeysDict;
-std::map<ControllerButtons, LKey> KeyBindingManager::lButtonsDict;
-std::map<ControllerAxis, LKey> KeyBindingManager::lAxisDict;
-std::map<LKey, std::function<void ()>> KeyBindingManager::pressEventsDict;
-std::map<LKey, std::function<void ()>> KeyBindingManager::releaseEventsDict;
-std::map<LKey, std::function<void ()>> KeyBindingManager::axisEvents;
+
+// SDLInputID
+
+SDLInputID::SDLInputID (const SDLInputID &other)
+	: inputType(other.inputType), input(other.input)
+{
+}
+SDLInputID::SDLInputID (SDL_Scancode scancode)
+{
+	*this = scancode;
+}
+SDLInputID SDLInputID::ofMouseAxis (Uint8 axis)
+{
+	auto id = SDLInputID();
+	id.inputType = SDL_MOUSEMOTION;
+	id.input.maxis = axis;
+}
+SDLInputID SDLInputID::ofMouseWheelAxis (Uint8 axis)
+{
+	auto id = SDLInputID();
+	id.inputType = SDL_MOUSEWHEEL;
+	id.input.maxis = axis;
+}
+SDLInputID::SDLInputID (SDL_GameControllerAxis axis)
+{
+	*this = axis;
+}
+SDLInputID::SDLInputID (SDL_GameControllerButton button)
+{
+	*this = button;
+}
+SDLInputID::SDLInputID (const SDL_KeyboardEvent &ke)
+	: inputType(SDL_KEYDOWN)
+{
+	input.scancode = ke.keysym.scancode;
+}
+SDLInputID::SDLInputID (const SDL_MouseButtonEvent &mbe)
+	: inputType(SDL_MOUSEBUTTONDOWN)
+{
+	input.mbutton = mbe.button;
+}
+SDLInputID::SDLInputID (const SDL_ControllerAxisEvent &cae)
+	: inputType(SDL_CONTROLLERAXISMOTION)
+{
+	input.caxis = (SDL_GameControllerAxis)cae.axis;
+}
+SDLInputID::SDLInputID (const SDL_ControllerButtonEvent &cbe)
+	: inputType(SDL_CONTROLLERBUTTONDOWN)
+{
+	input.cbutton = (SDL_GameControllerButton)cbe.button;
+}
+
+SDLInputID &SDLInputID::operator= (SDL_Scancode scancode)
+{
+	this->inputType = SDL_KEYDOWN;
+	this->input.scancode = scancode;
+	return *this;
+}
+SDLInputID &SDLInputID::operator= (SDL_GameControllerAxis axis)
+{
+	this->inputType = SDL_CONTROLLERAXISMOTION;
+	this->input.caxis = axis;
+	return *this;
+}
+SDLInputID &SDLInputID::operator= (SDL_GameControllerButton button)
+{
+	this->inputType = SDL_CONTROLLERBUTTONDOWN;
+	this->input.cbutton = button;
+	return *this;
+}
+
+
+bool SDLInputID::operator== (SDLInputID other) const
+{
+	if (other.inputType != inputType)
+		return false;
+	switch (inputType) {
+	case SDL_KEYDOWN:
+		return other.input.scancode == input.scancode;
+	case SDL_MOUSEMOTION:
+		return other.input.maxis == input.maxis;
+	case SDL_MOUSEWHEEL:
+		return true;
+	case SDL_MOUSEBUTTONDOWN:
+		return other.input.mbutton == input.mbutton;
+	case SDL_CONTROLLERAXISMOTION:
+		return other.input.caxis == input.caxis;
+	case SDL_CONTROLLERBUTTONDOWN:
+		return other.input.cbutton == input.cbutton;
+	default:
+		return false;
+	}
+}
+
+
+size_t SDLInputID::Hash::operator() (SDLInputID value) const
+{
+	return std::hash<typename std::underlying_type<SDL_EventType>::type>()(value.inputType)
+		+ std::hash<int>()(value.input.dummy);
+}
+
+
+// KeyBindingManager
 
 KeyBindingManager::KeyBindingManager()
 {
 	log("[Loading] Creating KeyBindingManager...");
 
-	setupInitialBindings();
-
-	// TODO: Replace the LymphInputEvents with std::functions
+	setDefaultBindings();
 
 	auto input = LKernel::getG<InputMain>();
-	input->onKeyboardPress.push_back(onKeyboardPress);
-	input->onKeyboardRelease.push_back(onKeyboardRelease);
-
+	input->onKeyPress.push_back(bind(&KeyBindingManager::onKeyboardPress, this, placeholders::_1));
+	input->onKeyRelease.push_back(bind(&KeyBindingManager::onKeyboardRelease, this, placeholders::_1));
 
 //	if (Options::getBool("Twh"))
 //	{
@@ -40,98 +133,182 @@ KeyBindingManager::KeyBindingManager()
 //	}
 }
 
-// TODO read these from a file
-void KeyBindingManager::setupInitialBindings()
+
+void KeyBindingManager::setControllerPlayer (SDL_JoystickID controllerID, int playerID)
 {
-	lKeysDict[LKey::Accelerate] = SDLK_w;
-	lKeysDict[LKey::TurnLeft] = SDLK_a;
-	lKeysDict[LKey::TurnRight] = SDLK_d;
-	lKeysDict[LKey::Drift] = SDLK_SPACE;
-	lKeysDict[LKey::Reverse] = SDLK_s;
-	lKeysDict[LKey::Item] = SDLK_LSHIFT;
-	sdlKeysDict[SDLK_w] = LKey::Accelerate;
-	sdlKeysDict[SDLK_a] = LKey::TurnLeft;
-	sdlKeysDict[SDLK_d] = LKey::TurnRight;
-	sdlKeysDict[SDLK_SPACE] = LKey::Drift;
-	sdlKeysDict[SDLK_s] = LKey::Reverse;
-	sdlKeysDict[SDLK_LSHIFT] = LKey::Item;
-	lButtonsDict[ControllerButtons::A] = LKey::Drift;
-	lAxisDict[ControllerAxis::LeftX] = LKey::SteeringAxis;
-
-	pressEventsDict.insert(pair<LKey,function<void()>>(LKey::Accelerate, function<void ()>()));
-	pressEventsDict.insert(pair<LKey,function<void()>>(LKey::TurnLeft, function<void ()>()));
-	pressEventsDict.insert(pair<LKey,function<void()>>(LKey::TurnRight, function<void ()>()));
-	pressEventsDict.insert(pair<LKey,function<void()>>(LKey::Drift, function<void ()>()));
-	pressEventsDict.insert(pair<LKey,function<void()>>(LKey::Reverse, function<void ()>()));
-	pressEventsDict.insert(pair<LKey,function<void()>>(LKey::Item, function<void ()>()));
-
-	releaseEventsDict.insert(pair<LKey,function<void()>>(LKey::Accelerate, function<void ()>()));
-	releaseEventsDict.insert(pair<LKey,function<void()>>(LKey::TurnLeft, function<void ()>()));
-	releaseEventsDict.insert(pair<LKey,function<void()>>(LKey::TurnRight, function<void ()>()));
-	releaseEventsDict.insert(pair<LKey,function<void()>>(LKey::Drift, function<void ()>()));
-	releaseEventsDict.insert(pair<LKey,function<void()>>(LKey::Reverse, function<void ()>()));
-	releaseEventsDict.insert(pair<LKey,function<void()>>(LKey::Item, function<void ()>()));
+	clearControllerPlayer(controllerID);
+	playersMapByController.insert(make_pair(controllerID, playerID));
+	controllersMapByPlayer.insert(make_pair(playerID, controllerID));
+}
+void KeyBindingManager::clearControllerPlayer (SDL_JoystickID controllerID)
+{
+	auto entry = playersMapByController.find(controllerID);
+	if (entry != playersMapByController.end()) {
+		controllersMapByPlayer.erase(entry->second);
+		playersMapByController.erase(entry);
+	}
+}
+void KeyBindingManager::clearPlayerController (int playerID)
+{
+	auto entry = controllersMapByPlayer.find(playerID);
+	if (entry != controllersMapByPlayer.end()) {
+		playersMapByController.erase(entry->second);
+		controllersMapByPlayer.erase(entry);
+	}
+}
+void KeyBindingManager::clearControllerPlayers ()
+{
+	playersMapByController.clear();
+	controllersMapByPlayer.clear();
 }
 
-void KeyBindingManager::onKeyboardPress(const SDL_KeyboardEvent &ke)
+
+void KeyBindingManager::setKeyBinding (SDLInputID realInput, LInputID gameInput)
+{
+	clearKeyBinding(realInput);
+	gameInputsMapByReal.insert(make_pair(realInput, gameInput));
+	realInputsMapByGame.insert(make_pair(gameInput, realInput));
+}
+void KeyBindingManager::clearKeyBinding (SDLInputID realInput)
+{
+	auto entry = gameInputsMapByReal.find(realInput);
+	if (entry != gameInputsMapByReal.end()) {
+		auto range = realInputsMapByGame.equal_range(entry->second);
+		for (auto it = range.first; it != range.second; it++) {
+			if (it->second == realInput) {
+				realInputsMapByGame.erase(it);
+				break;
+			}
+		}
+		gameInputsMapByReal.erase(entry);
+	}
+}
+void KeyBindingManager::clearKeyBinding (LInputID gameInput)
+{
+	auto range = realInputsMapByGame.equal_range(gameInput);
+	if (range.first != realInputsMapByGame.end()) {
+		for (auto it = range.first; it != range.second; )
+			gameInputsMapByReal.erase(it->second);
+		realInputsMapByGame.erase(range.first, range.second);
+	}
+}
+void KeyBindingManager::clearKeyBindings ()
+{
+	gameInputsMapByReal.clear();
+	realInputsMapByGame.clear();
+}
+
+
+void KeyBindingManager::setDefaultBindings ()
+{
+	clearKeyBindings();
+	setKeyBinding(SDL_SCANCODE_W, LInputID::Accelerate);
+	setKeyBinding(SDL_SCANCODE_S, LInputID::Reverse);
+	setKeyBinding(SDL_SCANCODE_A, LInputID::TurnLeft);
+	setKeyBinding(SDL_SCANCODE_D, LInputID::TurnRight);
+	setKeyBinding(SDL_SCANCODE_SPACE, LInputID::Drift);
+	setKeyBinding(SDL_SCANCODE_LSHIFT, LInputID::Item);
+}
+
+
+void KeyBindingManager::onKeyboardPress (const SDL_KeyboardEvent &ke)
 {
 	// don't do anything if it's swallowed
 	if (LKernel::getG<InputSwallowerManager>()->isSwallowed())
 		return;
 
-	LKey key;
-	if (sdlKeysDict.find(ke.keysym.scancode) != sdlKeysDict.end()) // TODO: Check if this is correct. I'm not sure of the translation.
-		invoke(pressEventsDict[key]);
+	auto binding = gameInputsMapByReal.find(SDLInputID(ke));
+	if (binding != gameInputsMapByReal.end())
+		fireEvent(pressEvent, 0, binding->second);
+}
+void KeyBindingManager::onKeyboardRelease (const SDL_KeyboardEvent &ke)
+{
+	auto binding = gameInputsMapByReal.find(SDLInputID(ke));
+	if (binding != gameInputsMapByReal.end())
+		fireEvent(releaseEvent, 0, binding->second);
 }
 
-void KeyBindingManager::onKeyboardRelease(const SDL_KeyboardEvent &ke)
+
+void KeyBindingManager::onMouseMove (const SDL_MouseMotionEvent &mme)
 {
 	// don't do anything if it's swallowed
 	if (LKernel::getG<InputSwallowerManager>()->isSwallowed())
 		return;
 
-	LKey key;
-	if (sdlKeysDict.find(ke.keysym.scancode) != sdlKeysDict.end()) // TODO: Check if this is correct. I'm not sure of the translation.
-		invoke(releaseEventsDict[key]);
+	// TODO: Mouse sensetivity
+	if (mme.xrel != 0) {
+		auto binding = gameInputsMapByReal.find(SDLInputID::ofMouseAxis(0));
+		if (binding != gameInputsMapByReal.end())
+			fireEvent(axisMoveEvent, 0, binding->second, static_cast<float>(mme.xrel) / 32768.0f);
+	}
+	if (mme.yrel != 0) {
+		auto binding = gameInputsMapByReal.find(SDLInputID::ofMouseAxis(1));
+		if (binding != gameInputsMapByReal.end())
+			fireEvent(axisMoveEvent, 0, binding->second, static_cast<float>(mme.yrel) / 32768.0f);
+	}
 }
 
-void KeyBindingManager::onMousePress(const SDL_MouseButtonEvent &mbe)
+
+void KeyBindingManager::onMouseWheelMove (const SDL_MouseWheelEvent &mwe)
+{
+	// don't do anything if it's swallowed
+	if (LKernel::getG<InputSwallowerManager>()->isSwallowed())
+		return;
+
+	if (mwe.x != 0) {
+		auto binding = gameInputsMapByReal.find(SDLInputID::ofMouseWheelAxis(0));
+		if (binding != gameInputsMapByReal.end())
+			fireEvent(axisMoveEvent, 0, binding->second, static_cast<float>(mwe.x) / 3.0f);
+	}
+	if (mwe.y != 0) {
+		auto binding = gameInputsMapByReal.find(SDLInputID::ofMouseWheelAxis(1));
+		if (binding != gameInputsMapByReal.end())
+			fireEvent(axisMoveEvent, 0, binding->second, static_cast<float>(mwe.y) / 3.0f);
+	}
+}
+
+
+void KeyBindingManager::onMousePress (const SDL_MouseButtonEvent &mbe)
 {
 	if (LKernel::getG<InputSwallowerManager>()->isSwallowed())
 		return;
 
-	switch (mbe.button)
-	{
-		case SDL_BUTTON_LEFT:
-			invoke(pressEventsDict[LKey::Accelerate]); break;
-		case SDL_BUTTON_X1:
-			invoke(pressEventsDict[LKey::TurnLeft]); break;
-		case SDL_BUTTON_X2:
-			invoke(pressEventsDict[LKey::TurnRight]); break;
-		case SDL_BUTTON_MIDDLE:
-			invoke(pressEventsDict[LKey::Drift]); break;
-		default:;
-	}
+	auto binding = gameInputsMapByReal.find(SDLInputID(mbe));
+	if (binding != gameInputsMapByReal.end())
+		fireEvent(pressEvent, 0, binding->second);
+}
+void KeyBindingManager::onMouseRelease (const SDL_MouseButtonEvent &mbe)
+{
+	auto binding = gameInputsMapByReal.find(SDLInputID(mbe));
+	if (binding != gameInputsMapByReal.end())
+		fireEvent(releaseEvent, 0, binding->second);
 }
 
-void KeyBindingManager::onMouseRelease(const SDL_MouseButtonEvent &mbe)
+
+void KeyBindingManager::onControllerAxisMove (const SDL_ControllerAxisEvent &cae)
 {
-	switch (mbe.button)
-	{
-	case SDL_BUTTON_LEFT:
-		invoke(releaseEventsDict[LKey::Accelerate]); break;
-	case SDL_BUTTON_X1:
-		invoke(releaseEventsDict[LKey::TurnLeft]); break;
-	case SDL_BUTTON_X2:
-		invoke(releaseEventsDict[LKey::TurnRight]); break;
-	case SDL_BUTTON_MIDDLE:
-		invoke(releaseEventsDict[LKey::Drift]); break;
-	default:;
-	}
+	// don't do anything if it's swallowed
+	if (LKernel::getG<InputSwallowerManager>()->isSwallowed())
+		return;
+
+	auto binding = gameInputsMapByReal.find(SDLInputID(cae));
+	if (binding != gameInputsMapByReal.end())
+		fireEvent(axisMoveEvent, 0, binding->second, static_cast<float>(cae.value) / 32768.0f);
 }
 
-void KeyBindingManager::invoke(std::function<void ()> e)
+
+void KeyBindingManager::onControllerButtonPress (const SDL_ControllerButtonEvent &cbe)
 {
-	if (e)
-		e();
+	if (LKernel::getG<InputSwallowerManager>()->isSwallowed())
+		return;
+
+	auto binding = gameInputsMapByReal.find(SDLInputID(cbe));
+	if (binding != gameInputsMapByReal.end())
+		fireEvent(pressEvent, 0, binding->second);
+}
+void KeyBindingManager::onControllerButtonRelease (const SDL_ControllerButtonEvent &cbe)
+{
+	auto binding = gameInputsMapByReal.find(SDLInputID(cbe));
+	if (binding != gameInputsMapByReal.end())
+		fireEvent(releaseEvent, 0, binding->second);
 }

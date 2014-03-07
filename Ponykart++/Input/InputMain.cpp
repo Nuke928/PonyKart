@@ -14,93 +14,89 @@ using namespace Ponykart;
 using namespace Ponykart::Input;
 using namespace Ponykart::Levels;
 using namespace Ponykart::LKernel;
+using namespace Extensions;
+
 
 InputMain::InputMain()
 {
 	log("[Loading] Initialising SDL2 input system");
 
 	if (SDL_InitSubSystem(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER) < 0)
-		throw string(SDL_GetError());
-
-
-//	// Create all devices (except joystick, as most people have Keyboard/Mouse) using buffered input.
-//	inputController = new Core::ControllerManager();
-
-	LKernel::gRoot->addFrameListener(this);  // TODO: ASAP! Implement this frame listener! It's crashing without it.
-
-	createEventHandlers(); // TODO: Implement
+		throw std::string(SDL_GetError());
 
 	log("[Loading] SDL2 input system loaded.");
 }
 
-void InputMain::createEventHandlers()
+
+void InputMain::processEvent (const SDL_Event &event)
 {
+	switch (event.type) {
+	case SDL_KEYDOWN:
+		fireEvent<const SDL_KeyboardEvent &>(onKeyPress, event.key);
+		break;
+	case SDL_KEYUP:
+		fireEvent<const SDL_KeyboardEvent &>(onKeyRelease, event.key);
+		break;
+	case SDL_TEXTINPUT:
+		fireEvent<const SDL_TextInputEvent &>(onTextInput, event.text);
+		break;
+	case SDL_TEXTEDITING:
+		fireEvent<const SDL_TextEditingEvent &>(onTextEdit, event.edit);
+		break;
+
+	case SDL_MOUSEMOTION:
+		fireEvent<const SDL_MouseMotionEvent &>(onMouseMove, event.motion);
+		break;
+	case SDL_MOUSEWHEEL:
+		fireEvent<const SDL_MouseWheelEvent &>(onMouseWheelMove, event.wheel);
+		break;
+	case SDL_MOUSEBUTTONDOWN:
+		fireEvent<const SDL_MouseButtonEvent &>(onMouseButtonPress, event.button);
+		break;
+	case SDL_MOUSEBUTTONUP:
+		fireEvent<const SDL_MouseButtonEvent &>(onMouseButtonRelease, event.button);
+		break;
+
+	case SDL_JOYDEVICEADDED:
+		fireEvent<const SDL_JoyDeviceEvent &>(onJoystickConnect, event.jdevice);
+		break;
+	case SDL_JOYDEVICEREMOVED:
+		fireEvent<const SDL_JoyDeviceEvent &>(onJoystickRemove, event.jdevice);
+		break;
+	case SDL_JOYAXISMOTION:
+		fireEvent<const SDL_JoyAxisEvent &>(onJoystickAxisMove, event.jaxis);
+		break;
+	case SDL_JOYBUTTONDOWN:
+		fireEvent<const SDL_JoyButtonEvent &>(onJoystickButtonPress, event.jbutton);
+		break;
+	case SDL_JOYBUTTONUP:
+		fireEvent<const SDL_JoyButtonEvent &>(onJoystickButtonRelease, event.jbutton);
+		break;
+
+	case SDL_CONTROLLERDEVICEADDED:
+	case SDL_CONTROLLERDEVICEREMAPPED:
+		fireEvent<const SDL_ControllerDeviceEvent &>(onControllerConnect, event.cdevice);
+		break;
+	case SDL_CONTROLLERDEVICEREMOVED:
+		fireEvent<const SDL_ControllerDeviceEvent &>(onControllerRemove, event.cdevice);
+		break;
+	case SDL_CONTROLLERAXISMOTION:
+		fireEvent<const SDL_ControllerAxisEvent &>(onControllerAxisMove, event.caxis);
+		break;
+	case SDL_CONTROLLERBUTTONDOWN:
+		fireEvent<const SDL_ControllerButtonEvent &>(onControllerButtonPress, event.cbutton);
+		break;
+	case SDL_CONTROLLERBUTTONUP:
+		fireEvent<const SDL_ControllerButtonEvent &>(onControllerButtonRelease, event.cbutton);
+		break;
+	}
 }
 
-template<typename T> void InputMain::fireEvent(LymphInputEvent1<T> handler, const T &eventArgs)
+
+bool receiveTextInput (bool enabled)
 {
-	if (handler.size())
-		for (auto fun : handler)
-			fun(eventArgs);
-}
-
-//template<typename T, typename U> void InputMain::fireEvent(LymphInputEvent2<T,U> handler, const T &eventArg1, const U &eventArg2)
-//{
-//	if (handler.size())
-//		for (auto fun : handler)
-//			fun(eventArg1, eventArg2);
-//}
-
-bool InputMain::keyPressed(const SDL_KeyboardEvent &ke)
-{
-	fireEvent<SDL_KeyboardEvent>(onKeyboardPress, ke);
-	return true;
-}
-
-bool InputMain::keyReleased(const SDL_KeyboardEvent &ke)
-{
-	fireEvent<SDL_KeyboardEvent>(onKeyboardRelease, ke);
-	return true;
-}
-
-bool InputMain::mousePressed(const SDL_MouseButtonEvent &mbe)
-{
-	fireEvent<SDL_MouseButtonEvent>(onMousePress, mbe);
-	return true;
-}
-
-bool InputMain::mouseReleased(const SDL_MouseButtonEvent &mbe)
-{
-	fireEvent<SDL_MouseButtonEvent>(onMouseRelease, mbe);
-	return true;
-}
-
-bool InputMain::mouseMoved(const SDL_MouseMotionEvent &mme)
-{
-	// you can use mme.xrel/yrel for relative position, and mme.x/y for absolute
-	fireEvent<SDL_MouseMotionEvent>(onMouseMove, mme);
-	return true;
-}
-
-bool InputMain::mouseWheelMoved(const SDL_MouseWheelEvent &mwe)
-{
-	fireEvent<SDL_MouseWheelEvent>(onMouseWheelMove, mwe);
-	return true;
-}
-
-bool InputMain::frameStarted(const Ogre::FrameEvent &evt)
-{
-	if (!LKernel::getG<LevelManager>()->getIsValidLevel())
-		return true;
-	
-	//timeSinceLastFrame += e.timeSinceLastFrame;
-	//if (timeSinceLastFrame >= _inputCaptureRate) {
-	// Capture all key presses since last check.
-	//inputKeyboard->capture();
-	// Capture all mouse movements and button presses since last check.
-	//inputMouse->capture();
-	//	timeSinceLastFrame -= _inputCaptureRate;
-	//}
-
-	return true;
+	if (enabled)
+		SDL_StartTextInput();
+	else
+		SDL_StopTextInput();
 }

@@ -20,7 +20,7 @@ Pauser::Pauser()
 	log("[Loading] Creating Pauser");
 
 	// if we press `, then pause
-	LKernel::getG<InputMain>()->onKeyboardPress.push_back(keyInvokePauseEvent);
+	LKernel::getG<InputMain>()->onKeyPress.push_back(keyInvokePauseEvent);
 	LKernel::getG<InputSwallowerManager>()->addSwallower(&isPaused, this);
 }
 
