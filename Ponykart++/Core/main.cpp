@@ -10,12 +10,14 @@
 #include "UI/Splash.h"
 #include "Kernel/LKernel.h"
 #include "Kernel/LKernelOgre.h"
-#include "Sound/SoundMain.h"
-#include "Sound/Music/MusicSource.h"
+#include "Input/InputMain.h"
+#include "Input/KeyBindingManager.h"
 #include "Misc/sdl2Extensions.h"
+#include "Misc/eventExtensions.h"
 
 using namespace Ponykart::Launch;
 using namespace Ponykart::LKernel;
+using namespace Ponykart::Input;
 using namespace Extensions;
 using Ponykart::Core::Options;
 using Ponykart::Splash;
@@ -107,11 +109,13 @@ void Ponykart::Launch::enterGameLoop ()
 	auto sdlWindow = getG<SDL_Window>();
 	auto ogreWindow = getG<Ogre::RenderWindow>();
 
-	auto soundMain = getG<Ponykart::Sound::SoundMain>();
-	auto music = soundMain->PlayMusic("./media/music/Sweet Apple Acres 128bpm.ogg");
-
 	tenthOfASecondEvent = SDL_RegisterEvents(1);
 	auto tenthOfASecondTimer = SDL_AddTimer(100, &tenthOfASecondCallback, nullptr);
+
+	auto binder = LKernel::getG<KeyBindingManager>();
+	binder->pressEvent.subscribe([](int playerID, GameInputID input) {
+		std::cout << "PRESS" << std::endl;
+	});
 
 	bool quit = false;
 	while (!quit) {
@@ -126,11 +130,13 @@ void Ponykart::Launch::enterGameLoop ()
 			switch (event.type) {
 			case SDL_USEREVENT:
 				if (event.user.code == tenthOfASecondEvent)
-					for (auto &f : onEveryUnpausedTenthOfASecondEvent)
-						f(nullptr);
+					onEveryUnpausedTenthOfASecondEvent(nullptr);
 				break;
 			case SDL_QUIT:
 				quit = true;
+				break;
+			default:
+				LKernel::getG<InputMain>()->processEvent(event);
 				break;
 			}
 		}

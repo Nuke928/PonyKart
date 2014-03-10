@@ -23,6 +23,13 @@ void LKernel::initOgreRoot()
 	if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_EVENTS) < 0)
 		throw SDL2Exception();
 
+	auto basePtr = SDL_GetBasePath();
+	basePath = string(basePtr);
+	SDL_free(basePtr);
+	auto prefPtr = SDL_GetPrefPath("", "Ponykart");
+	prefPath = string(prefPtr);
+	SDL_free(prefPtr);
+
 #if defined(DEBUG) && defined(WIN32)
 	gRoot = new Ogre::Root("media_debug/config/plugins.cfg", "", "Ponykart.log");
 #else

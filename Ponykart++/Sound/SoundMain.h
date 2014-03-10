@@ -17,6 +17,7 @@
 #include "Sound/Music/MusicSource.h"
 #include "Kernel/LKernelObject.h"
 #include "Misc/alExtensions.h"
+#include "Misc/eventExtensions.h"
 
 
 namespace Ponykart
@@ -68,8 +69,8 @@ private:
 	std::vector<Extensions::ALSource> forgottenSoundSources;
 	std::set<Actors::SoundComponent*> components;
 
-	bool enableMusic;
-	bool enableSounds;
+	bool enableSounds, enableMusic;
+	float soundVolume, musicVolume;
 
 	Core::CameraManager* cameraManager;
 	Players::PlayerManager* playerManager;
@@ -80,6 +81,8 @@ private:
 	std::thread musicThread;
 	std::mutex musicLock;
 	std::atomic_bool musicQuit;
+
+	Extensions::EventSubscriptionToken everyTenthToken;
 };
 
 } // Sound

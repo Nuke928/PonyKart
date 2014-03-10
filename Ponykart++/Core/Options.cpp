@@ -2,6 +2,7 @@
 #include <fstream>
 #include <OgreConfigFile.h>
 #include "Core/Options.h"
+#include "Kernel/LKernel.h"
 #include "Kernel/LKernelOgre.h"
 
 using namespace Ponykart;
@@ -25,14 +26,17 @@ void Options::setupDictionaries()
 		{"VSync","Yes"}, // Yes or No
 		{"Video Mode","1024x768"},
 		{"sRGB Gamma Conversion","No"}, // Yes or No
-		{"Music","Yes"}, // Yes or No
 		{"Sounds","Yes"},
+		{"Music","Yes"}, // Yes or No
+		{"Sound Volume", "50"},
+		{"Music Volume", "50"},
 		{"Ribbons","Yes"},
 		{"ModelDetail","Medium"}, // Low, Medium or High
 		{"ShadowDetail","Some"}, // None, Some or Many
 		{"ShadowDistance","40"},
 		{"Twh","No"},
-		{"Controller", "Keyboard"},
+		{"P1Controller", "Keyboard"},
+		{"Mouse Sensitivity", "1.0"},
 	});
 	dict = defaults; // copy it into the regular dictionary
 }
@@ -43,14 +47,14 @@ void Options::initialize()
 
 	setupDictionaries();
 
-	static const char optionsPath[] = "media/config/ponykart.cfg";
+	string optionsPath = LKernel::prefPath + "ponykart.cfg";
 
 	fstream file;
-	file.open(optionsPath,ios::in);
+	file.open(optionsPath.c_str(), ios::in);
 	if (!file.is_open()) // create it if the file doesn't exist, and write out some defaults
 	{
-		file.open(optionsPath,ios::out);
-		if (!file.is_open()) throw string("Cannot initialize media/config/ponykart.cfg");
+		file.open(optionsPath.c_str(), ios::out);
+		if (!file.is_open()) throw string("Cannot initialize " + optionsPath);
 		for (auto setting : defaults)
 			file << setting.first << "=" << setting.second << endl;
 		file.close();
@@ -61,7 +65,7 @@ void Options::initialize()
 	{
 		file.close(); // We're going to open it with cfile
 		ConfigFile cfile;
-		cfile.load(optionsPath, "=", true);
+		cfile.load(optionsPath.c_str(), "=", true);
 		auto sectionIterator = cfile.getSectionIterator();
 		ConfigFile::SettingsMultiMap* settings=sectionIterator.getNext();
 		for (auto curPair : *settings)
@@ -96,7 +100,7 @@ void Options::save()
 		file << setting.first << "=" << setting.second << endl;
 }
 
-string Options::get(const string keyName)
+string Options::get(const string &keyName)
 {
 	// TODO: The string comparisons should be case-insensitive, like in the C# code
 	if (keyName == "ModelDetail")
@@ -107,13 +111,34 @@ string Options::get(const string keyName)
 	return dict[keyName];
 }
 
-bool Options::getBool(string keyName)
+bool Options::getBool(const string &keyName)
 {
 	string value = dict[keyName];
-	if (value == "Yes")
+	if (value == "Yes" || value == "yes" || value == "True" || value == "true")
 		return true;
-	else if (value == "No")
+	else if (value == "No" || value == "no" || value == "False" || value == "false")
 		return false;
 	else
-		throw string("Options::getBool: The key '"+keyName+"' does not represent a boolean option!");
+		throw string("Options::getBool: The key '"+keyName+"' does not have a valid boolean value!");
 }
+
+int Options::getInt (const string &keyName)
+{
+	string value = dict[keyName];
+	try {
+		return std::strtol(value.c_str(), nullptr, 10);
+	} catch (...) {
+		throw string("Options::getInt: The key '"+keyName+"' does not have a valid integer value!");
+	}
+}
+
+float Options::getFloat (const string &keyName)
+{
+	string value = dict[keyName];
+	try {
+		return std::strtof(value.c_str(), nullptr);
+	} catch (...) {
+		throw string("Options::getFloat: The key '"+keyName+"' does not have a valid floating point value!");
+	}
+}
+

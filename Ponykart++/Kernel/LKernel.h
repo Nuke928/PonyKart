@@ -1,6 +1,7 @@
 #ifndef LKERNEL_H_INCLUDED
 #define LKERNEL_H_INCLUDED
 
+#include <string>
 #include <functional>
 #include <vector>
 #include <unordered_map>
@@ -11,11 +12,15 @@
 
 #include "LKernelObject.h"
 #include "UI/Splash.h"
+#include "Misc/eventExtensions.h"
 
 namespace Ponykart
 {
 namespace LKernel
 {
+	extern std::string basePath;
+	extern std::string prefPath;
+
 	// Anyone can get those from ogre's interface, but accessing them throught LKernel is faster.
 	extern Ogre::Root* gRoot;
 	extern SDL_Window *gSDLWindow;
@@ -23,7 +28,7 @@ namespace LKernel
 	extern Ogre::RenderSystem* gRenderSystem;
 	extern Ogre::SceneManager* gSceneManager;
 	extern Ogre::Viewport* gViewport;
-	extern std::vector<std::function<void (void*)>> onEveryUnpausedTenthOfASecondEvent;
+	extern Extensions::EventDelegate<void *> onEveryUnpausedTenthOfASecondEvent;
 
 	/// Implementation details that are not part of the interface.
 	namespace details

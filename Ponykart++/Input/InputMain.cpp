@@ -32,62 +32,62 @@ void InputMain::processEvent (const SDL_Event &event)
 {
 	switch (event.type) {
 	case SDL_KEYDOWN:
-		fireEvent<const SDL_KeyboardEvent &>(onKeyPress, event.key);
+		onKeyPress(event.key);
 		break;
 	case SDL_KEYUP:
-		fireEvent<const SDL_KeyboardEvent &>(onKeyRelease, event.key);
+		onKeyRelease(event.key);
 		break;
 	case SDL_TEXTINPUT:
-		fireEvent<const SDL_TextInputEvent &>(onTextInput, event.text);
+		onTextInput(event.text);
 		break;
 	case SDL_TEXTEDITING:
-		fireEvent<const SDL_TextEditingEvent &>(onTextEdit, event.edit);
+		onTextEdit(event.edit);
 		break;
 
 	case SDL_MOUSEMOTION:
-		fireEvent<const SDL_MouseMotionEvent &>(onMouseMove, event.motion);
+		onMouseMove(event.motion);
 		break;
 	case SDL_MOUSEWHEEL:
-		fireEvent<const SDL_MouseWheelEvent &>(onMouseWheelMove, event.wheel);
+		onMouseWheelMove(event.wheel);
 		break;
 	case SDL_MOUSEBUTTONDOWN:
-		fireEvent<const SDL_MouseButtonEvent &>(onMouseButtonPress, event.button);
+		onMouseButtonPress(event.button);
 		break;
 	case SDL_MOUSEBUTTONUP:
-		fireEvent<const SDL_MouseButtonEvent &>(onMouseButtonRelease, event.button);
+		onMouseButtonRelease(event.button);
 		break;
 
 	case SDL_JOYDEVICEADDED:
-		fireEvent<const SDL_JoyDeviceEvent &>(onJoystickConnect, event.jdevice);
+		onJoystickConnect(event.jdevice);
 		break;
 	case SDL_JOYDEVICEREMOVED:
-		fireEvent<const SDL_JoyDeviceEvent &>(onJoystickRemove, event.jdevice);
+		onJoystickRemove(event.jdevice);
 		break;
 	case SDL_JOYAXISMOTION:
-		fireEvent<const SDL_JoyAxisEvent &>(onJoystickAxisMove, event.jaxis);
+		onJoystickAxisMove(event.jaxis);
 		break;
 	case SDL_JOYBUTTONDOWN:
-		fireEvent<const SDL_JoyButtonEvent &>(onJoystickButtonPress, event.jbutton);
+		onJoystickButtonPress(event.jbutton);
 		break;
 	case SDL_JOYBUTTONUP:
-		fireEvent<const SDL_JoyButtonEvent &>(onJoystickButtonRelease, event.jbutton);
+		onJoystickButtonRelease(event.jbutton);
 		break;
 
 	case SDL_CONTROLLERDEVICEADDED:
 	case SDL_CONTROLLERDEVICEREMAPPED:
-		fireEvent<const SDL_ControllerDeviceEvent &>(onControllerConnect, event.cdevice);
+		onControllerConnect(event.cdevice);
 		break;
 	case SDL_CONTROLLERDEVICEREMOVED:
-		fireEvent<const SDL_ControllerDeviceEvent &>(onControllerRemove, event.cdevice);
+		onControllerRemove(event.cdevice);
 		break;
 	case SDL_CONTROLLERAXISMOTION:
-		fireEvent<const SDL_ControllerAxisEvent &>(onControllerAxisMove, event.caxis);
+		onControllerAxisMove(event.caxis);
 		break;
 	case SDL_CONTROLLERBUTTONDOWN:
-		fireEvent<const SDL_ControllerButtonEvent &>(onControllerButtonPress, event.cbutton);
+		onControllerButtonPress(event.cbutton);
 		break;
 	case SDL_CONTROLLERBUTTONUP:
-		fireEvent<const SDL_ControllerButtonEvent &>(onControllerButtonRelease, event.cbutton);
+		onControllerButtonRelease(event.cbutton);
 		break;
 	}
 }

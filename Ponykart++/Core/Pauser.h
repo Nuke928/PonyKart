@@ -5,6 +5,7 @@
 #include <functional>
 #include <SDL.h>
 #include "Kernel/LKernelObject.h"
+#include "Misc/eventExtensions.h"
 
 namespace Ponykart
 {
@@ -25,12 +26,12 @@ public:
 	static void pauseWithEvent(); ///< Use this to pause things but it also fires off a pause event, which may cause other things to happen that you don't want.
 
 public:
-/// An event for things that need it
-static std::vector<std::function<void (PausingState state)>> pauseEvent;
-/// Setting this to true will pause the spawner, physics engine, level changer, movement managers, etc.
-/** It won't pause animations, UI, scripts, cameras, and so on.
-// I think most things will be fine with just a boolean. */
-static bool isPaused;
+	/// Setting this to true will pause the spawner, physics engine, level changer, movement managers, etc.
+	/** It won't pause animations, UI, scripts, cameras, and so on.
+	// I think most things will be fine with just a boolean. */
+	static bool isPaused;
+	/// An event for things that need it
+	static Extensions::EventDelegate<PausingState> pauseEvent;
 };
 
 } // Core

@@ -2,6 +2,7 @@
 #include "MusicSource.h"
 
 #include <string>
+#include "Kernel/LKernel.h"
 #include "VorbisStream.h"
 #include "OpusStream.h"
 #include "Misc/direntSearch.h"
@@ -13,14 +14,16 @@ using namespace Extensions;
 
 MusicSource::MusicSource (const string &filename, bool startPaused)
 {
+	auto path = LKernel::basePath + "media/music/" + filename;
+
 	auto ext = getFileExtension(filename);
 	for (char &c : ext)
 		c = tolower(c);
 
 	if (ext == ".ogg")
-		stream = new VorbisStream(filename);
+		stream = new VorbisStream(path);
 	else if (ext == ".opus")
-		stream = new OpusStream(filename);
+		stream = new OpusStream(path);
 	else
 		throw string("Unsupported music format: " + ext);
 

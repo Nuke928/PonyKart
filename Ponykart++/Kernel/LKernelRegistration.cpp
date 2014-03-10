@@ -4,7 +4,6 @@
 #include "Core/Settings.h"
 #include "Input/InputMain.h"
 #include "Input/KeyBindingManager.h"
-#include "Input/InputSwallowerManager.h"
 #include "Core/Pauser.h"
 #include "Kernel/LKernel.h"
 #include "Kernel/LKernelOgre.h"
@@ -63,7 +62,6 @@ void LKernel::loadInitialObjects(Splash& splash)
 	splash.increment("Starting input system...");
 	addGlobalObject(new InputMain());
 	addGlobalObject(new KeyBindingManager());
-	addGlobalObject(new InputSwallowerManager());
 	addGlobalObject(new Pauser());
 
 	// spawner
