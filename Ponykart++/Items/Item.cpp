@@ -4,7 +4,7 @@
 #include "Core/Spawner.h"
 #include "Items/Item.h"
 #include "Kernel/LKernel.h"
-#include "Misc/OgreExtensions.h"
+#include "Misc/ogreExtensions.h"
 #include "Players/Player.h"
 
 using namespace Extensions;

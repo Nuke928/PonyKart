@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Kernel/LKernel.h"
 #include "Networking/NetworkEntity.h"
+#include "Networking/NetworkManager.h"
 
 using namespace Ponykart;
 using namespace Ponykart::Networking;
