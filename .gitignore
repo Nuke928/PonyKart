@@ -30,7 +30,7 @@ tmp/
 *.rar
 
 # vim swap files
-.swp
+*.swp
 
 /[Rr]eferences/
 
