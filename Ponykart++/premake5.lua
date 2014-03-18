@@ -31,6 +31,7 @@ solution "Ponykart++"
 			"/usr/include/vorbis",
 			"/usr/local/include/opus",
 			"/usr/include/opus",
+			"/usr/include/OIS",
 		}
 	configuration { "MacOSX" }
 		buildoptions "-std=c++11"

@@ -95,7 +95,7 @@ const btRigidBody* const Player::getBody() const
 	return kart->getBody();
 }
 
-const Ogre::Vector3 const Player::getNodePosition()
+const Ogre::Vector3 Player::getNodePosition() const
 {
 	return kart->getRootNode()->_getDerivedPosition();
 }

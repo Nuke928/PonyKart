@@ -62,7 +62,7 @@ void ComputerPlayer::everyTenth(void* o)
 
 float ComputerPlayer::steerTowards(Ogre::Vector3 vecToTar)
 {
-	Vector3& xaxis = kart->getActualOrientation().xAxis();
+	Vector3 xaxis = kart->getActualOrientation().xAxis();
 
 	xaxis.normalise();
 	vecToTar.normalise();
