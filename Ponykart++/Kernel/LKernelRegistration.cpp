@@ -101,8 +101,8 @@ void LKernel::loadInitialObjects(Splash& splash)
 	//lua->runRegisterEvent();
 
 	// players
-	//splash.increment("Spawning players...");
-	//addGlobalObject(new PlayerManager());
+	splash.increment("Spawning players...");
+	addGlobalObject(new PlayerManager());
 	//addGlobalObject(new RaceCountdown());
 	//addGlobalObject(new LapCounter());
 	//addGlobalObject(new LThingHelperManager());
