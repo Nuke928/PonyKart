@@ -119,7 +119,7 @@ solution "Ponykart++"
 		files { "**.cpp", "**.h" }
 
 		includedirs {
-			".",
+			"../Ponykart++/",
 			"../PonykartParsers++/"
 		}
 
@@ -147,7 +147,6 @@ solution "Ponykart++"
 			linkoptions  "-pthread -lluajit-5.1"
 		configuration { "MacOSX" }
 		configuration { "Windows" }
-			flags { "StaticRuntime" } -- We need the /MT CRT, since that's what our dependencies are using
 			buildoptions { "/W0" } -- Disable warnings for speed. Visual generates ~2500 warnings for Ogre only. 
 			buildoptions { "/Zm500" } -- Increase MSVC's internal heap limit for PCHs
 			links {
@@ -184,10 +183,12 @@ solution "Ponykart++"
 			"../PonykartParsers++/**.h",
 		}
 
-		includedirs { "../PonykartParsers++/" }
+		includedirs {
+			"../Ponykart++/",
+			"../PonykartParsers++/"
+		}
 		
 		configuration { "Windows" }
-			flags { "StaticRuntime" } -- We need the /MT CRT, since that's what our dependencies are using
 			buildoptions { "/W0" } -- Disable warnings for speed. Visual generates ~2500 warnings for Ogre only. 
 			buildoptions { "/Zm500" } -- Increase MSVC's internal heap limit for PCHs
 
