@@ -2,9 +2,9 @@
 #define CAMERAMANAGER_H_INCLUDED
 
 #include <vector>
-#include "Kernel/LKernelObject.h"
 #include "Core/Cameras/LCamera.h"
-
+#include "Kernel/LKernelObject.h"
+#include "Levels/LevelManager.h"
 
 namespace Ponykart
 {
@@ -15,6 +15,10 @@ class CameraManager : public LKernel::LKernelObject
 {
 public:
 	CameraManager();
+
+	void onLevelLoad(Levels::LevelChangedEventArgs *args);
+	void onLevelUnload(Levels::LevelChangedEventArgs *args);
+
 	// getters
 	const LCamera* const getCurrentCamera(); ///< Gets the current camera that is being used for rendering.
 
