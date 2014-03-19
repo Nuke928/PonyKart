@@ -2,11 +2,11 @@
 #include <SDL.h>
 #include <OgreConfigFile.h>
 #include <OgreMaterialManager.h>
-#include <OgreOverlay.h>
-#include <OgreOverlayContainer.h>
-#include <OgreOverlayManager.h>
+#include <Overlay/OgreOverlay.h>
+#include <Overlay/OgreOverlayContainer.h>
+#include <Overlay/OgreOverlayManager.h>
 #include <OgreRoot.h>
-#include <OgreTextAreaOverlayElement.h>
+#include <Overlay/OgreTextAreaOverlayElement.h>
 #include <OgreWindowEventUtilities.h>
 #include "UI/Splash.h"
 #include "Core/Options.h"

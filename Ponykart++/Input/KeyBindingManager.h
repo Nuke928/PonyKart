@@ -6,8 +6,8 @@
 #include <map>
 #include <unordered_map>
 #include <SDL.h>
+#include <boost/signals2.hpp>
 #include "Kernel/LKernelObject.h"
-#include "Misc/eventExtensions.h"
 #include "Misc/sdl2Extensions.h"
 
 namespace Ponykart
@@ -63,9 +63,9 @@ public:
 
 	// Events
 	// First argument is local player ID (0 based).
-	Extensions::EventDelegate<int, GameInputID> pressEvent;
-	Extensions::EventDelegate<int, GameInputID> releaseEvent;
-	Extensions::EventDelegate<int, GameInputID, float> axisMoveEvent;
+	boost::signals2::signal<void (int, GameInputID)> pressEvent;
+	boost::signals2::signal<void (int, GameInputID)> releaseEvent;
+	boost::signals2::signal<void (int, GameInputID, float)> axisMoveEvent;
 
 private:
 	int inputSuppressedSem;

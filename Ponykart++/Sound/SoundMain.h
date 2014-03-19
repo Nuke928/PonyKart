@@ -12,12 +12,12 @@
 #include <al.h>
 #include <alc.h>
 #include <Ogre.h>
+#include <boost/signals2.hpp>
 #include "Core/Pauser.h"
 #include "SoundSource.h"
 #include "Sound/Music/MusicSource.h"
 #include "Kernel/LKernelObject.h"
 #include "Misc/alExtensions.h"
-#include "Misc/eventExtensions.h"
 
 
 namespace Ponykart
@@ -82,7 +82,7 @@ private:
 	std::mutex musicLock;
 	std::atomic_bool musicQuit;
 
-	Extensions::EventSubscriptionToken everyTenthToken;
+	boost::signals2::scoped_connection everyTenthToken;
 };
 
 } // Sound

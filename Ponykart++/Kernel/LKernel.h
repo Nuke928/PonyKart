@@ -7,12 +7,13 @@
 #include <unordered_map>
 #include <typeinfo>
 #include <SDL.h>
-#include <OgreTextAreaOverlayElement.h>
-#include <OgreFontManager.h>
+#include <Overlay/OgreOverlaySystem.h>
+#include <Overlay/OgreTextAreaOverlayElement.h>
+#include <Overlay/OgreFontManager.h>
+#include <boost/signals2.hpp>
 
 #include "LKernelObject.h"
 #include "UI/Splash.h"
-#include "Misc/eventExtensions.h"
 
 namespace Ponykart
 {
@@ -27,8 +28,9 @@ namespace LKernel
 	extern Ogre::RenderWindow* gOgreWindow;
 	extern Ogre::RenderSystem* gRenderSystem;
 	extern Ogre::SceneManager* gSceneManager;
+	extern Ogre::OverlaySystem *gOverlaySystem;
 	extern Ogre::Viewport* gViewport;
-	extern Extensions::EventDelegate<void *> onEveryUnpausedTenthOfASecondEvent;
+	extern boost::signals2::signal<void (void *)> onEveryUnpausedTenthOfASecondEvent;
 
 	/// Implementation details that are not part of the interface.
 	namespace details

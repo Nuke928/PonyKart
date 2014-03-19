@@ -1,5 +1,6 @@
 #ifndef PCH_H_INCLUDED
 #define PCH_H_INCLUDED
+
 // Stdlib
 #include <functional>
 #include <memory>
@@ -40,5 +41,8 @@
 
 // libopusfile
 #include <opusfile.h>
+
+// Boost
+#include <boost/signals2.hpp>
 
 #endif // PCH_H_INCLUDED

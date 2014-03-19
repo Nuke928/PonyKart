@@ -52,7 +52,7 @@ SoundMain::SoundMain()
 	//playerManager->onPostPlayerCreation.push_back(bind(&SoundMain::onPostPlayerCreation,this));
 	LevelManager::onLevelUnload.push_back(bind(&SoundMain::onLevelUnload, this, placeholders::_1));
 	LevelManager::onLevelLoad.push_back(bind(&SoundMain::onLevelLoad, this, placeholders::_1));
-	LKernel::getG<Pauser>()->pauseEvent.subscribe(bind(&SoundMain::pauseEvent,this,placeholders::_1));
+	LKernel::getG<Pauser>()->pauseEvent.connect(bind(&SoundMain::pauseEvent,this,placeholders::_1));
 
 	device = alcOpenDevice(nullptr);
 	context = alcCreateContext(device, nullptr);
@@ -363,7 +363,7 @@ void SoundMain::pauseEvent(PausingState state)
 void SoundMain::onPostPlayerCreation() 
 {
 	if (LKernel::getG<LevelManager>()->isPlayableLevel())
-		everyTenthToken = LKernel::onEveryUnpausedTenthOfASecondEvent.subscribe(bind(&SoundMain::everyTenth,this,placeholders::_1));
+		everyTenthToken = LKernel::onEveryUnpausedTenthOfASecondEvent.connect(bind(&SoundMain::everyTenth,this,placeholders::_1));
 }
 
 
@@ -393,7 +393,7 @@ void SoundMain::onLevelLoad(LevelChangedEventArgs* eventArgs)
 
 void SoundMain::onLevelUnload(LevelChangedEventArgs* eventArgs)
 {
-	LKernel::onEveryUnpausedTenthOfASecondEvent.unsubscribe(everyTenthToken);
+	everyTenthToken.disconnect();
 
 	stopAllSources();
 	alListener3f(AL_POSITION, 0, 0, 0);

@@ -20,15 +20,15 @@ KeyBindingManager::KeyBindingManager()
 	setDefaultBindings();
 
 	auto input = LKernel::getG<InputMain>();
-	input->onKeyPress.subscribe(bind(&KeyBindingManager::onKeyPress, this, placeholders::_1));
-	input->onKeyRelease.subscribe(bind(&KeyBindingManager::onKeyRelease, this, placeholders::_1));
-	input->onMouseMove.subscribe(bind(&KeyBindingManager::onMouseMove, this, placeholders::_1));
-	input->onMouseWheelMove.subscribe(bind(&KeyBindingManager::onMouseWheelMove, this, placeholders::_1));
-	input->onMouseButtonPress.subscribe(bind(&KeyBindingManager::onMouseButtonPress, this, placeholders::_1));
-	input->onMouseButtonRelease.subscribe(bind(&KeyBindingManager::onMouseButtonRelease, this, placeholders::_1));
-	input->onControllerAxisMove.subscribe(bind(&KeyBindingManager::onControllerAxisMove, this, placeholders::_1));
-	input->onControllerButtonPress.subscribe(bind(&KeyBindingManager::onControllerButtonPress, this, placeholders::_1));
-	input->onControllerButtonRelease.subscribe(bind(&KeyBindingManager::onControllerButtonRelease, this, placeholders::_1));
+	input->onKeyPress.connect(bind(&KeyBindingManager::onKeyPress, this, placeholders::_1));
+	input->onKeyRelease.connect(bind(&KeyBindingManager::onKeyRelease, this, placeholders::_1));
+	input->onMouseMove.connect(bind(&KeyBindingManager::onMouseMove, this, placeholders::_1));
+	input->onMouseWheelMove.connect(bind(&KeyBindingManager::onMouseWheelMove, this, placeholders::_1));
+	input->onMouseButtonPress.connect(bind(&KeyBindingManager::onMouseButtonPress, this, placeholders::_1));
+	input->onMouseButtonRelease.connect(bind(&KeyBindingManager::onMouseButtonRelease, this, placeholders::_1));
+	input->onControllerAxisMove.connect(bind(&KeyBindingManager::onControllerAxisMove, this, placeholders::_1));
+	input->onControllerButtonPress.connect(bind(&KeyBindingManager::onControllerButtonPress, this, placeholders::_1));
+	input->onControllerButtonRelease.connect(bind(&KeyBindingManager::onControllerButtonRelease, this, placeholders::_1));
 
 	try {
 		mouseSens = std::strtof(Options::get("Mouse Sensitivity").c_str(), nullptr);

@@ -5,8 +5,8 @@
 #include <functional>
 #include <SDL.h>
 #include <OgreFrameListener.h>
+#include <boost/signals2.hpp>
 #include "Kernel/LKernelObject.h"
-#include "Misc/eventExtensions.h"
 
 
 namespace Ponykart
@@ -34,27 +34,27 @@ public:
 	void receiveTextInput (bool enabled);
 
 	// Events
-	Extensions::EventDelegate<const SDL_KeyboardEvent&> onKeyPress;
-	Extensions::EventDelegate<const SDL_KeyboardEvent&> onKeyRelease;
-	Extensions::EventDelegate<const SDL_TextInputEvent&> onTextInput;
-	Extensions::EventDelegate<const SDL_TextEditingEvent&> onTextEdit;
+	boost::signals2::signal<void (const SDL_KeyboardEvent&)> onKeyPress;
+	boost::signals2::signal<void (const SDL_KeyboardEvent&)> onKeyRelease;
+	boost::signals2::signal<void (const SDL_TextInputEvent&)> onTextInput;
+	boost::signals2::signal<void (const SDL_TextEditingEvent&)> onTextEdit;
 
-	Extensions::EventDelegate<const SDL_MouseMotionEvent&> onMouseMove;
-	Extensions::EventDelegate<const SDL_MouseButtonEvent&> onMouseButtonPress;
-	Extensions::EventDelegate<const SDL_MouseButtonEvent&> onMouseButtonRelease;
-	Extensions::EventDelegate<const SDL_MouseWheelEvent&> onMouseWheelMove;
+	boost::signals2::signal<void (const SDL_MouseMotionEvent&)> onMouseMove;
+	boost::signals2::signal<void (const SDL_MouseButtonEvent&)> onMouseButtonPress;
+	boost::signals2::signal<void (const SDL_MouseButtonEvent&)> onMouseButtonRelease;
+	boost::signals2::signal<void (const SDL_MouseWheelEvent&)> onMouseWheelMove;
 
-	Extensions::EventDelegate<const SDL_JoyDeviceEvent&> onJoystickConnect;
-	Extensions::EventDelegate<const SDL_JoyDeviceEvent&> onJoystickRemove;
-	Extensions::EventDelegate<const SDL_JoyAxisEvent&> onJoystickAxisMove;
-	Extensions::EventDelegate<const SDL_JoyButtonEvent&> onJoystickButtonPress;
-	Extensions::EventDelegate<const SDL_JoyButtonEvent&> onJoystickButtonRelease;
+	boost::signals2::signal<void (const SDL_JoyDeviceEvent&)> onJoystickConnect;
+	boost::signals2::signal<void (const SDL_JoyDeviceEvent&)> onJoystickRemove;
+	boost::signals2::signal<void (const SDL_JoyAxisEvent&)> onJoystickAxisMove;
+	boost::signals2::signal<void (const SDL_JoyButtonEvent&)> onJoystickButtonPress;
+	boost::signals2::signal<void (const SDL_JoyButtonEvent&)> onJoystickButtonRelease;
 
-	Extensions::EventDelegate<const SDL_ControllerDeviceEvent&> onControllerConnect;
-	Extensions::EventDelegate<const SDL_ControllerDeviceEvent&> onControllerRemove;
-	Extensions::EventDelegate<const SDL_ControllerAxisEvent&> onControllerAxisMove;
-	Extensions::EventDelegate<const SDL_ControllerButtonEvent&> onControllerButtonPress;
-	Extensions::EventDelegate<const SDL_ControllerButtonEvent&> onControllerButtonRelease;
+	boost::signals2::signal<void (const SDL_ControllerDeviceEvent&)> onControllerConnect;
+	boost::signals2::signal<void (const SDL_ControllerDeviceEvent&)> onControllerRemove;
+	boost::signals2::signal<void (const SDL_ControllerAxisEvent&)> onControllerAxisMove;
+	boost::signals2::signal<void (const SDL_ControllerButtonEvent&)> onControllerButtonPress;
+	boost::signals2::signal<void (const SDL_ControllerButtonEvent&)> onControllerButtonRelease;
 };
 
 } // Input

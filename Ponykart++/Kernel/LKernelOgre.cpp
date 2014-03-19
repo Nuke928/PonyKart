@@ -131,6 +131,8 @@ void LKernel::initOgreGraphics ()
 
 	//void LKernel::initOgreSceneManager()
 	gSceneManager = gRoot->createSceneManager("OctreeSceneManager","sceneMgr");
+	gOverlaySystem = new Ogre::OverlaySystem();
+	gSceneManager->addRenderQueueListener(gOverlaySystem);
 
 	//void LKernel::initOgreViewportCam()
 	gViewport = gOgreWindow->addViewport(gSceneManager->createCamera("tempCam"));
@@ -193,6 +195,8 @@ void LKernel::shutdownOgre ()
 
 	delete gRoot;
 	gRoot = nullptr;
+	gOverlaySystem = nullptr;
+	gSceneManager = nullptr;
 
 	auto context = SDL_GL_GetCurrentContext();
 	SDL_GL_MakeCurrent(gSDLWindow, NULL);

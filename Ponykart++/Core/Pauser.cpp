@@ -10,18 +10,18 @@ using namespace Ponykart::Core;
 using namespace Ponykart::Input;
 using namespace Ponykart::LKernel;
 using namespace Ponykart::Levels;
-using namespace Extensions;
+namespace bs2 = boost::signals2;
 
 // Define static members
 bool Pauser::isPaused = false;
-EventDelegate<PausingState> Pauser::pauseEvent;
+bs2::signal<void (PausingState)> Pauser::pauseEvent;
 
 Pauser::Pauser()
 {
 	log("[Loading] Creating Pauser");
 
 	// if we press `, then pause
-	LKernel::getG<InputMain>()->onKeyPress.subscribe(keyInvokePauseEvent);
+	LKernel::getG<InputMain>()->onKeyPress.connect(keyInvokePauseEvent);
 }
 
 void Pauser::keyInvokePauseEvent(const SDL_KeyboardEvent &ke)

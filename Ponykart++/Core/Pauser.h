@@ -4,8 +4,8 @@
 #include <vector>
 #include <functional>
 #include <SDL.h>
+#include <boost/signals2.hpp>
 #include "Kernel/LKernelObject.h"
-#include "Misc/eventExtensions.h"
 
 namespace Ponykart
 {
@@ -31,7 +31,7 @@ public:
 	// I think most things will be fine with just a boolean. */
 	static bool isPaused;
 	/// An event for things that need it
-	static Extensions::EventDelegate<PausingState> pauseEvent;
+	static boost::signals2::signal<void (PausingState)> pauseEvent;
 };
 
 } // Core

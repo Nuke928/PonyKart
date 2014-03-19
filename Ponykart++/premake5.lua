@@ -130,6 +130,7 @@ solution "Ponykart++"
 			links {
 				"PonykartParsers++",
 				"SDL2",
+				"OgreOverlay",
 				"OgreMain",
 				"BulletDynamics",
 				"BulletCollision",

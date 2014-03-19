@@ -14,7 +14,6 @@ using namespace Ponykart;
 using namespace Ponykart::Input;
 using namespace Ponykart::Levels;
 using namespace Ponykart::LKernel;
-using namespace Extensions;
 
 
 InputMain::InputMain()

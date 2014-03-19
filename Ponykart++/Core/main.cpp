@@ -13,7 +13,6 @@
 #include "Input/InputMain.h"
 #include "Input/KeyBindingManager.h"
 #include "Misc/sdl2Extensions.h"
-#include "Misc/eventExtensions.h"
 
 using namespace Ponykart::Launch;
 using namespace Ponykart::LKernel;
@@ -113,7 +112,7 @@ void Ponykart::Launch::enterGameLoop ()
 	auto tenthOfASecondTimer = SDL_AddTimer(100, &tenthOfASecondCallback, nullptr);
 
 	auto binder = LKernel::getG<KeyBindingManager>();
-	binder->pressEvent.subscribe([](int playerID, GameInputID input) {
+	binder->pressEvent.connect([](int playerID, GameInputID input) {
 		std::cout << "PRESS" << std::endl;
 	});
 
