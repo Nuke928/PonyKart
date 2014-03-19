@@ -87,14 +87,14 @@ void Options::initialize()
 
 void Options::save()
 {
-	static const char optionsPath[] = "media/config/ponykart.cfg";
+	string optionsPath = LKernel::prefPath + "ponykart.cfg";
 
 	dict["ModelDetail"] = modelDetail==ModelDetailOption::High?"High": (modelDetail==ModelDetailOption::Low?"Low": ("Medium"));
 	dict["ShadowDetail"] = shadowDetail==ShadowDetailOption::Many?"Many": (shadowDetail==ShadowDetailOption::None?"None": ("Some"));
 
 	fstream file;
-	file.open(optionsPath,ios::out);
-	if (!file.is_open()) throw string("Cannot save media/config/ponykart.cfg");
+	file.open(optionsPath.c_str(), ios::out);
+	if (!file.is_open()) throw string("Cannot save " + optionsPath);
 
 	for (auto setting : dict)
 		file << setting.first << "=" << setting.second << endl;
