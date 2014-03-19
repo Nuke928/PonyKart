@@ -7,7 +7,7 @@
 #include <OgreFrameListener.h>
 #include <boost/signals2.hpp>
 #include "Kernel/LKernelObject.h"
-
+#include "Misc/sdl2Extensions.h"
 
 namespace Ponykart
 {
@@ -55,6 +55,10 @@ public:
 	boost::signals2::signal<void (const SDL_ControllerAxisEvent&)> onControllerAxisMove;
 	boost::signals2::signal<void (const SDL_ControllerButtonEvent&)> onControllerButtonPress;
 	boost::signals2::signal<void (const SDL_ControllerButtonEvent&)> onControllerButtonRelease;
+
+	// Polling
+	bool pollButton (Extensions::SDLInputID inputID, SDL_GameController *controller);
+	int pollAxis (Extensions::SDLInputID inputID, SDL_GameController *controller);
 };
 
 } // Input

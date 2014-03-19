@@ -47,15 +47,15 @@ KeyBindingManager::KeyBindingManager()
 }
 
 
-void KeyBindingManager::setControllerPlayer (SDL_JoystickID controllerID, int playerID)
+void KeyBindingManager::setControllerPlayer (SDL_GameController *controller, int playerID)
 {
-	clearControllerPlayer(controllerID);
-	playersMapByController.insert(make_pair(controllerID, playerID));
-	controllersMapByPlayer.insert(make_pair(playerID, controllerID));
+	clearControllerPlayer(controller);
+	playersMapByController.insert(make_pair(controller, playerID));
+	controllersMapByPlayer.insert(make_pair(playerID, controller));
 }
-void KeyBindingManager::clearControllerPlayer (SDL_JoystickID controllerID)
+void KeyBindingManager::clearControllerPlayer (SDL_GameController *controller)
 {
-	auto entry = playersMapByController.find(controllerID);
+	auto entry = playersMapByController.find(controller);
 	if (entry != playersMapByController.end()) {
 		controllersMapByPlayer.erase(entry->second);
 		playersMapByController.erase(entry);
@@ -76,11 +76,11 @@ void KeyBindingManager::clearControllerPlayers ()
 }
 
 
-void KeyBindingManager::setKeyBinding (SDLInputID realInput, GameInputID gameInput)
+void KeyBindingManager::setKeyBinding (SDLInputID realInputID, GameInputID gameInputID)
 {
-	clearKeyBinding(realInput);
-	gameInputsMapByReal.insert(make_pair(realInput, gameInput));
-	realInputsMapByGame.insert(make_pair(gameInput, realInput));
+	clearKeyBinding(realInputID);
+	gameInputsMapByReal.insert(make_pair(realInputID, gameInputID));
+	realInputsMapByGame.insert(make_pair(gameInputID, realInputID));
 }
 void KeyBindingManager::clearKeyBinding (SDLInputID realInput)
 {
@@ -96,9 +96,9 @@ void KeyBindingManager::clearKeyBinding (SDLInputID realInput)
 		gameInputsMapByReal.erase(entry);
 	}
 }
-void KeyBindingManager::clearKeyBinding (GameInputID gameInput)
+void KeyBindingManager::clearKeyBinding (GameInputID gameInputID)
 {
-	auto range = realInputsMapByGame.equal_range(gameInput);
+	auto range = realInputsMapByGame.equal_range(gameInputID);
 	if (range.first != realInputsMapByGame.end()) {
 		for (auto it = range.first; it != range.second; )
 			gameInputsMapByReal.erase(it->second);
@@ -278,4 +278,46 @@ void KeyBindingManager::onControllerButtonRelease (const SDL_ControllerButtonEve
 	auto binding = gameInputsMapByReal.find(SDLInputID(cbe));
 	if (binding != gameInputsMapByReal.end())
 		releaseEvent(0, binding->second);
+}
+
+
+bool KeyBindingManager::pollKey (GameInputID gameInputID, int playerID)
+{
+	auto range = realInputsMapByGame.equal_range(gameInputID);
+	for (auto it = range.first; it != range.second; it++) {
+		auto realInputID = it->second;
+		if (realInputID.inputType == SDL_KEYDOWN || realInputID.inputType == SDL_MOUSEBUTTONDOWN) {
+			if (getG<InputMain>()->pollButton(realInputID, 0))
+				return true;
+		} else {
+			if (getG<InputMain>()->pollButton(realInputID, controllersMapByPlayer[playerID]))
+				return true;
+		}
+	}
+
+	return false;
+}
+float KeyBindingManager::pollAxis (GameInputID gameInputID, int playerID)
+{
+	auto range = realInputsMapByGame.equal_range(gameInputID);
+	for (auto it = range.first; it != range.second; it++) {
+		auto realInputID = it->second;
+		int value;
+		switch (realInputID.inputType) {
+		case SDL_MOUSEMOTION:
+			value = getG<InputMain>()->pollAxis(realInputID, nullptr);
+			if (value != 0)
+				return (float)value / 10 * mouseSens;
+		case SDL_MOUSEWHEEL:
+			value = getG<InputMain>()->pollAxis(realInputID, nullptr);
+			if (value != 0)
+				return (float)value;
+		default:
+			value = getG<InputMain>()->pollAxis(realInputID, controllersMapByPlayer[playerID]);
+			if (value != 0)
+				return (float)value / 32768.0f;
+		}
+	}
+
+	return 0.0f;
 }

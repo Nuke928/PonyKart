@@ -92,10 +92,47 @@ void InputMain::processEvent (const SDL_Event &event)
 }
 
 
-bool receiveTextInput (bool enabled)
+void InputMain::receiveTextInput (bool enabled)
 {
 	if (enabled)
 		SDL_StartTextInput();
 	else
 		SDL_StopTextInput();
 }
+
+
+bool InputMain::pollButton (Extensions::SDLInputID inputID, SDL_GameController *controller)
+{
+	switch (inputID.inputType) {
+	case SDL_KEYDOWN:
+		{
+			int nKeys;
+			auto keys = SDL_GetKeyboardState(&nKeys);
+			return keys[inputID.input.scancode];
+		}
+	case SDL_MOUSEBUTTONDOWN:
+		{
+			int x, y;
+			auto buttonState = SDL_GetMouseState(&x, &y);
+			return SDL_BUTTON(inputID.input.mbutton);
+		}
+	default:
+		return SDL_GameControllerGetButton(controller, inputID.input.cbutton);
+	}
+}
+int InputMain::pollAxis (Extensions::SDLInputID inputID, SDL_GameController *controller)
+{
+	switch (inputID.inputType) {
+	case SDL_MOUSEMOTION:
+		{
+			int x, y;
+			auto buttonState = SDL_GetMouseState(&x, &y);
+			return inputID.input.maxis ? y : x;
+		}
+	case SDL_MOUSEWHEEL:
+		return 0;
+	default:
+		return SDL_GameControllerGetAxis(controller, inputID.input.caxis);
+	}
+}
+

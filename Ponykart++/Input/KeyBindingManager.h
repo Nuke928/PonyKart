@@ -42,14 +42,14 @@ class KeyBindingManager : public LKernel::LKernelObject
 public:
 	KeyBindingManager();
 
-	void setControllerPlayer (SDL_JoystickID controllerID, int playerID);
-	void clearControllerPlayer (SDL_JoystickID controllerID);
+	void setControllerPlayer (SDL_GameController *controller, int playerID);
+	void clearControllerPlayer (SDL_GameController *controller);
 	void clearPlayerController (int playerID);
 	void clearControllerPlayers ();
 
-	void setKeyBinding (Extensions::SDLInputID realInput, GameInputID gameInput);
-	void clearKeyBinding (Extensions::SDLInputID realInput);
-	void clearKeyBinding (GameInputID gameInput);
+	void setKeyBinding (Extensions::SDLInputID realInputID, GameInputID gameInputID);
+	void clearKeyBinding (Extensions::SDLInputID realInputID);
+	void clearKeyBinding (GameInputID gameInputID);
 	void clearKeyBindings ();
 
 	void setMouseSensetivity (float value);
@@ -67,14 +67,18 @@ public:
 	boost::signals2::signal<void (int, GameInputID)> releaseEvent;
 	boost::signals2::signal<void (int, GameInputID, float)> axisMoveEvent;
 
+	// Polling
+	bool pollKey (GameInputID gameInputID, int playerID);
+	float pollAxis (GameInputID gameInputID, int playerID);
+
 private:
 	int inputSuppressedSem;
 	float mouseSens;
 
 	// Mapping of controllers to players and vice-versa.
 	// Keyboard and mouse are always associated with playerID 0.
-	std::unordered_multimap<SDL_JoystickID, int> playersMapByController;
-	std::map<int, SDL_JoystickID> controllersMapByPlayer;
+	std::unordered_multimap<SDL_GameController *, int> playersMapByController;
+	std::map<int, SDL_GameController *> controllersMapByPlayer;
 
 	// One-to-one mapping of real inputs to game inputs (any given button can only be bound to one action).
 	std::unordered_map<Extensions::SDLInputID, GameInputID, typename Extensions::SDLInputID::Hash> gameInputsMapByReal;
