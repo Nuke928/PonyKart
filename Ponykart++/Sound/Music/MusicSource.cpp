@@ -12,7 +12,7 @@ using namespace Ponykart::Sound;
 using namespace Extensions;
 
 
-MusicSource::MusicSource (const string &filename, bool startPaused)
+MusicSource::MusicSource (const string &filename, bool startPaused, float volume)
 {
 	auto path = LKernel::basePath + "media/music/" + filename;
 
@@ -31,6 +31,7 @@ MusicSource::MusicSource (const string &filename, bool startPaused)
 	alGenBuffers(buffers.size(), buffers.data());
 	fill();
 
+	alSourcef(source, AL_GAIN, volume);
 	if (startPaused)
 		alSourcePause(source);
 	else

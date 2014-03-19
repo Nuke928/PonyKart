@@ -318,6 +318,7 @@ SoundSource SoundMain::play3D(ALBuffer sound, const Vector3& pos, bool looping, 
 	alSourcei(src, AL_BUFFER, sound);
 	alSource3f(src, AL_POSITION, pos.x, pos.y, pos.z);
 	alSourcei(src, AL_LOOPING, true);
+	alSourcef(src, AL_GAIN, soundVolume);
 	if (startPaused)
 		alSourcePause(src);
 	else
@@ -340,7 +341,7 @@ SoundSource SoundMain::play3D(ALBuffer sound, const Vector3& pos, bool looping, 
 
 SoundMain::MusicSourcePtr SoundMain::PlayMusic (const string filename, bool startPaused, bool efx)
 {
-	auto musicSrc = new MusicSource(filename, startPaused);
+	auto musicSrc = new MusicSource(filename, startPaused, musicVolume);
 
 	lock_guard<mutex> musicGuard(musicLock);
 	musicSources.insert(musicSrc);
