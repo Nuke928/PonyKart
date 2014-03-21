@@ -33,5 +33,6 @@ tmp/
 *.swp
 
 /[Rr]eferences/
+/Dropbox/
 
 doxygen/
