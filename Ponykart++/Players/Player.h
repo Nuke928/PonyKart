@@ -21,7 +21,7 @@ public:
 	const Actors::Kart* const getKart() const;
 	const Actors::Driver* const getDriver() const;
 	const btRigidBody* const getBody() const; ///< Gets the kart's Body
-	int getId();
+	int getId() const;
 	const std::string& getCharacter();
 	bool getIsComputerControlled();
 	bool getIsLocal();
@@ -33,18 +33,12 @@ public:
 	const Ogre::Vector3 getNodePosition() const;
 protected:
 	Player(); // Set some default values
-	virtual void useItem()=0; // Uses an item
-	// Key events : it's very important that these are run before any of the "override" methods do anything else
-	virtual void onStartAccelerate() {}
-	virtual void onStopAccelerate() {}
+	virtual void onSteeringChanged (float value);
+	virtual void onAccelerateChanged (float value);
+	virtual void onBrakeChanged (float value);
 	virtual void onStartDrift() {}
 	virtual void onStopDrift() {}
-	virtual void onStartReverse() {}
-	virtual void onStopReverse() {}
-	virtual void onStartTurnLeft() {}
-	virtual void onStopTurnLeft() {}
-	virtual void onStartTurnRight() {}
-	virtual void onStopTurnRight() {}
+	virtual void useItem()=0; // Uses an item
 public:
 	bool isControlEnabled; // Can the player control his kart?
 protected:
@@ -54,9 +48,15 @@ protected:
 	std::string character;
 	bool hasItem;
 	std::string heldItem;
+
+	float steeringAxis;
+	float accelAxis;
+	float brakeAxis;
+
 private:
 	bool isComputerControlled;
 	bool isLocal;
+
 };
 } // Players
 } // Ponykart

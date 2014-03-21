@@ -12,6 +12,7 @@
 #include <al.h>
 #include <alc.h>
 #include <Ogre.h>
+#include <boost/signals2.hpp>
 #include "Core/Pauser.h"
 #include "SoundSource.h"
 #include "Sound/Music/MusicSource.h"
@@ -68,8 +69,8 @@ private:
 	std::vector<Extensions::ALSource> forgottenSoundSources;
 	std::set<Actors::SoundComponent*> components;
 
-	bool enableMusic;
-	bool enableSounds;
+	bool enableSounds, enableMusic;
+	float soundVolume, musicVolume;
 
 	Core::CameraManager* cameraManager;
 	Players::PlayerManager* playerManager;
@@ -80,6 +81,8 @@ private:
 	std::thread musicThread;
 	std::mutex musicLock;
 	std::atomic_bool musicQuit;
+
+	boost::signals2::scoped_connection everyTenthToken;
 };
 
 } // Sound

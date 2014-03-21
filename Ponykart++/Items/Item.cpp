@@ -26,5 +26,5 @@ Item::Item(Player* User, std::string itemName)
 	}
 
 	onUse();
-	LKernel::onEveryUnpausedTenthOfASecondEvent.push_back(bind(&Item::everyTenth,this,std::placeholders::_1));
+	LKernel::onEveryUnpausedTenthOfASecondEvent.connect(bind(&Item::everyTenth,this,std::placeholders::_1));
 }

@@ -1,26 +1,27 @@
 #include "pch.h"
 #include "Core/Pauser.h"
-#include "Core/InputMain.h"
+#include "Input/InputMain.h"
 #include "Kernel/LKernel.h"
 #include "Kernel/LKernelOgre.h"
 #include "Levels/LevelManager.h"
-#include "Core/InputSwallowerManager.h"
+#include "Input/KeyBindingManager.h"
 
 using namespace Ponykart::Core;
+using namespace Ponykart::Input;
 using namespace Ponykart::LKernel;
 using namespace Ponykart::Levels;
+namespace bs2 = boost::signals2;
 
 // Define static members
 bool Pauser::isPaused = false;
-std::vector<std::function<void (PausingState state)>> Pauser::pauseEvent;
+bs2::signal<void (PausingState)> Pauser::pauseEvent;
 
 Pauser::Pauser()
 {
 	log("[Loading] Creating Pauser");
 
 	// if we press `, then pause
-	LKernel::getG<InputMain>()->onKeyboardPress_Anything.push_back(keyInvokePauseEvent);
-	LKernel::getG<InputSwallowerManager>()->addSwallower(&isPaused, this);
+	LKernel::getG<InputMain>()->onKeyPress.connect(keyInvokePauseEvent);
 }
 
 void Pauser::keyInvokePauseEvent(const SDL_KeyboardEvent &ke)
@@ -39,13 +40,12 @@ void Pauser::pauseWithEvent()
 {
 	log("Pause!");
 	isPaused = !isPaused;
-	if (pauseEvent.size())
-	{
-		if (isPaused)
-			for (auto event : pauseEvent)
-				event(PausingState::Pausing);
-		else
-			for (auto event : pauseEvent)
-				event(PausingState::Unpausing);
+
+	if (isPaused) {
+		LKernel::getG<KeyBindingManager>()->suppressInput();
+		pauseEvent(PausingState::Pausing);
+	} else {
+		LKernel::getG<KeyBindingManager>()->allowInput();
+		pauseEvent(PausingState::Unpausing);
 	}
 }

@@ -5,8 +5,6 @@
 #include "Lua/LuaMain.h"
 
 #include "lua.hpp"
-#include "lualib.h"
-#include "lauxlib.h"
 
 using namespace Ponykart;
 using namespace Ponykart::Levels;

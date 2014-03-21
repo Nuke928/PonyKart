@@ -4,7 +4,7 @@
 
 namespace Ponykart
 {
-	namespace Core { class KeyBindingManager; }
+	namespace Input { class KeyBindingManager; }
 	namespace Levels{ class LevelChangedEventArgs; }
 	namespace Players
 	{

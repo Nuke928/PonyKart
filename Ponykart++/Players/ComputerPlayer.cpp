@@ -22,7 +22,7 @@ ComputerPlayer::ComputerPlayer(LevelChangedEventArgs* eventArgs, int id)
 	axis2->getModelComponents()[0]->getNode()->setScale(0.1f, 0.1f, 0.1f);
 #endif
 
-	LKernel::onEveryUnpausedTenthOfASecondEvent.push_back(std::bind(&ComputerPlayer::everyTenth,this,std::placeholders::_1));
+	LKernel::onEveryUnpausedTenthOfASecondEvent.connect(std::bind(&ComputerPlayer::everyTenth,this,std::placeholders::_1));
 }
 
 void ComputerPlayer::everyTenth(void* o)

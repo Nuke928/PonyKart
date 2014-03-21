@@ -12,6 +12,7 @@
 #include "Players/Player.h"
 #include "Players/PlayerManager.h"
 #include "Players/WiimotePlayer.h"
+#include "Input/KeyBindingManager.h"
 
 using namespace std;
 using namespace Ponykart;
@@ -20,6 +21,7 @@ using namespace Ponykart::Levels;
 using namespace Ponykart::LKernel;
 using namespace Ponykart::Networking;
 using namespace Ponykart::Players;
+using namespace Ponykart::Input;
 
 // Static members
 const string PlayerManager::availableCharacters[] = { "Twilight Sparkle", "Rainbow Dash", "Applejack", "Pinkie Pie", "Fluttershy", "Rarity" };
@@ -60,6 +62,8 @@ void PlayerManager::onLevelUnload(LevelChangedEventArgs* eventArgs)
 			}
 		}
 		mainPlayer = nullptr;
+		getG<KeyBindingManager>()->clearKeyboardPlayer();
+		getG<KeyBindingManager>()->clearMousePlayer();
 	}
 }
 
@@ -134,6 +138,9 @@ void PlayerManager::onLevelLoad(LevelChangedEventArgs* eventArgs)
 				for (auto& fun : onPostPlayerCreation)
 					fun();
 		}
+
+		getG<KeyBindingManager>()->setKeyboardPlayer(mainPlayer->getId());
+		getG<KeyBindingManager>()->setMousePlayer(mainPlayer->getId());
 	}
 }
 

@@ -19,7 +19,7 @@ class SoundMain;
 class MusicSource
 {
 public:
-	MusicSource (const std::string &filename, bool startPaused = false);
+	MusicSource (const std::string &filename, bool startPaused = false, float volume = 1.0f);
 	MusicSource (const MusicSource &) = delete;
 	MusicSource &operator= (const MusicSource &) = delete;
 

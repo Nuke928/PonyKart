@@ -31,7 +31,6 @@ solution "Ponykart++"
 			"/usr/include/vorbis",
 			"/usr/local/include/opus",
 			"/usr/include/opus",
-			"/usr/include/OIS",
 		}
 	configuration { "MacOSX" }
 		buildoptions "-std=c++11"
@@ -131,6 +130,7 @@ solution "Ponykart++"
 			links {
 				"PonykartParsers++",
 				"SDL2",
+				"OgreOverlay",
 				"OgreMain",
 				"BulletDynamics",
 				"BulletCollision",

@@ -23,6 +23,13 @@ void LKernel::initOgreRoot()
 	if (SDL_Init(SDL_INIT_TIMER | SDL_INIT_EVENTS) < 0)
 		throw SDL2Exception();
 
+	auto basePtr = SDL_GetBasePath();
+	basePath = string(basePtr);
+	SDL_free(basePtr);
+	auto prefPtr = SDL_GetPrefPath("", "Ponykart");
+	prefPath = string(prefPtr);
+	SDL_free(prefPtr);
+
 #if defined(DEBUG) && defined(WIN32)
 	gRoot = new Ogre::Root("media_debug/config/plugins.cfg", "", "Ponykart.log");
 #else
@@ -32,7 +39,7 @@ void LKernel::initOgreRoot()
 
 void LKernel::initOgreGraphics ()
 {
-	log("[Loading] Initializing Ogre Resources...");
+	log("[Loading] Initializing Ogre Graphics...");
 
 	if (SDL_InitSubSystem(SDL_INIT_VIDEO) < 0)
 		throw string(SDL_GetError());
@@ -49,14 +56,6 @@ void LKernel::initOgreGraphics ()
 		}
 	}
 
-	bool fullscreen = StringConverter::parseBool(Options::get("Full Screen"));
-	gSDLWindow = SDL_CreateWindow(
-		"PonyKart",
-		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		width, height,
-		SDL_WINDOW_OPENGL | (fullscreen ? SDL_WINDOW_FULLSCREEN : 0)
-	);
-
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
@@ -72,6 +71,14 @@ void LKernel::initOgreGraphics ()
 		StringConverter::parseBool(Options::get("sRGB Gamma Conversion")) ? 1 : 0
 	);
 
+	bool fullscreen = StringConverter::parseBool(Options::get("Full Screen"));
+	gSDLWindow = SDL_CreateWindow(
+		"PonyKart",
+		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+		width, height,
+		SDL_WINDOW_OPENGL | (fullscreen ? SDL_WINDOW_FULLSCREEN : 0)
+	);
+
 	auto context = SDL_GL_CreateContext(gSDLWindow);
 	if (context == NULL)
 		throw string(SDL_GetError());
@@ -79,10 +86,11 @@ void LKernel::initOgreGraphics ()
 
 	if (StringConverter::parseBool(Options::get("VSync")))
 		if (SDL_GL_SetSwapInterval(-1) < 0) // Try to enable late-swap tearing support...
-			if (SDL_GL_SetSwapInterval(1)) // ...and fall back to standard VSync if not supported.
+			if (SDL_GL_SetSwapInterval(1) < 0) // ...and fall back to standard VSync if not supported.
 				log("[Loading] WARNING: Unable to activate VSync!");
 
 	gRenderSystem = gRoot->getRenderSystemByName("OpenGL Rendering Subsystem");
+	// TODO: Look into eliminating fixed-function usage
 	//gRenderSystem->setFixedPipelineEnabled(false); // Fixed-function pipeline is deprecated
 	gRoot->setRenderSystem(gRenderSystem); // Add to global objects
 //#if DEBUG
@@ -123,6 +131,8 @@ void LKernel::initOgreGraphics ()
 
 	//void LKernel::initOgreSceneManager()
 	gSceneManager = gRoot->createSceneManager("OctreeSceneManager","sceneMgr");
+	gOverlaySystem = new Ogre::OverlaySystem();
+	gSceneManager->addRenderQueueListener(gOverlaySystem);
 
 	//void LKernel::initOgreViewportCam()
 	gViewport = gOgreWindow->addViewport(gSceneManager->createCamera("tempCam"));
@@ -185,6 +195,8 @@ void LKernel::shutdownOgre ()
 
 	delete gRoot;
 	gRoot = nullptr;
+	gOverlaySystem = nullptr;
+	gSceneManager = nullptr;
 
 	auto context = SDL_GL_GetCurrentContext();
 	SDL_GL_MakeCurrent(gSDLWindow, NULL);

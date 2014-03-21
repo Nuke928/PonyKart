@@ -3,9 +3,8 @@
 #include "Core/Animation/AnimationManager.h"
 #include "Core/Cameras/CameraManager.h"
 #include "Core/Settings.h"
-#include "Core/InputMain.h"
-#include "Core/KeyBindingManager.h"
-#include "Core/InputSwallowerManager.h"
+#include "Input/InputMain.h"
+#include "Input/KeyBindingManager.h"
 #include "Core/Pauser.h"
 #include "Core/Spawner.h"
 #include "Kernel/LKernel.h"
@@ -25,6 +24,7 @@ using namespace Ogre;
 using namespace Ponykart;
 using namespace Ponykart::Actors;
 using namespace Ponykart::Core;
+using namespace Ponykart::Input;
 using namespace Ponykart::Networking;
 using namespace Ponykart::Physics;
 using namespace Ponykart::Players;
@@ -66,11 +66,10 @@ void LKernel::loadInitialObjects(Splash& splash)
 	getG<PhysicsMain>()->loadPhysicsLevel(Settings::MainMenuName);
 	addGlobalObject(new CameraManager());
 
-	// Input
+	// input
 	splash.increment("Starting input system...");
 	addGlobalObject(new InputMain());
 	addGlobalObject(new KeyBindingManager());
-	addGlobalObject(new InputSwallowerManager());
 	addGlobalObject(new Pauser());
 
 	// spawner

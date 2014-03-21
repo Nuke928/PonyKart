@@ -84,6 +84,19 @@ Player::Player(LevelChangedEventArgs* eventArgs, int Id, bool IsComputerControll
 	id = Id;
 }
 
+void Player::onSteeringChanged (float value)
+{
+	steeringAxis = value;
+}
+void Player::onAccelerateChanged (float value)
+{
+	accelAxis = value;
+}
+void Player::onBrakeChanged (float value)
+{
+	brakeAxis = value;
+}
+
 void Player::detach()
 {
 	kart = nullptr;
@@ -93,6 +106,11 @@ void Player::detach()
 const btRigidBody* const Player::getBody() const
 {
 	return kart->getBody();
+}
+
+int Player::getId() const
+{
+	return id;
 }
 
 const Ogre::Vector3 Player::getNodePosition() const

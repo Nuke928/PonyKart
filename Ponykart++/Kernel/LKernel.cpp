@@ -8,13 +8,16 @@ using namespace LKernel;
 using namespace LKernel::details;
 
 // Define the globals
+std::string LKernel::basePath;
+std::string LKernel::prefPath;
 Ogre::Root* LKernel::gRoot;
 SDL_Window *LKernel::gSDLWindow;
 Ogre::RenderWindow* LKernel::gOgreWindow;
 Ogre::RenderSystem* LKernel::gRenderSystem;
 Ogre::SceneManager* LKernel::gSceneManager;
+Ogre::OverlaySystem *LKernel::gOverlaySystem;
 Ogre::Viewport* LKernel::gViewport;
-std::vector<std::function<void (void*)>> LKernel::onEveryUnpausedTenthOfASecondEvent;
+boost::signals2::signal<void (void *)> LKernel::onEveryUnpausedTenthOfASecondEvent;
 std::unordered_map<std::string, LKernelObject*> LKernel::details::globalObjects;
 std::unordered_map<std::string, LKernelObject*> LKernel::details::levelObjects;
 

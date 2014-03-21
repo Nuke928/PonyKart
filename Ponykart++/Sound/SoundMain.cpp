@@ -41,8 +41,10 @@ SoundMain::SoundMain()
 {
 	log("[Loading] Creating OpenAL and SoundMain...");
 
-	enableMusic = Options::getBool("Music");
 	enableSounds = Options::getBool("Sounds");
+	enableMusic = Options::getBool("Music");
+	soundVolume = Options::getInt("Sound Volume") / 100.0f;
+	musicVolume = Options::getInt("Music Volume") / 100.0f;
 
 	playerManager = LKernel::getG<PlayerManager>();
 	cameraManager = LKernel::getG<CameraManager>();
@@ -50,7 +52,7 @@ SoundMain::SoundMain()
 	//playerManager->onPostPlayerCreation.push_back(bind(&SoundMain::onPostPlayerCreation,this));
 	LevelManager::onLevelUnload.push_back(bind(&SoundMain::onLevelUnload, this, placeholders::_1));
 	LevelManager::onLevelLoad.push_back(bind(&SoundMain::onLevelLoad, this, placeholders::_1));
-	LKernel::getG<Pauser>()->pauseEvent.push_back(bind(&SoundMain::pauseEvent,this,placeholders::_1));
+	LKernel::getG<Pauser>()->pauseEvent.connect(bind(&SoundMain::pauseEvent,this,placeholders::_1));
 
 	device = alcOpenDevice(nullptr);
 	context = alcCreateContext(device, nullptr);
@@ -132,7 +134,7 @@ float SoundMain::setDefaultReferenceDistance (float value)
 
 ALBuffer SoundMain::loadSoundData (string filename)
 {
-	string path=filename;
+	string path= LKernel::basePath + "media/sound/" + filename;
 	filename = getFilename(filename);
 
 	auto fullpathIt = fileList.find(path);
@@ -316,6 +318,7 @@ SoundSource SoundMain::play3D(ALBuffer sound, const Vector3& pos, bool looping, 
 	alSourcei(src, AL_BUFFER, sound);
 	alSource3f(src, AL_POSITION, pos.x, pos.y, pos.z);
 	alSourcei(src, AL_LOOPING, true);
+	alSourcef(src, AL_GAIN, soundVolume);
 	if (startPaused)
 		alSourcePause(src);
 	else
@@ -338,7 +341,7 @@ SoundSource SoundMain::play3D(ALBuffer sound, const Vector3& pos, bool looping, 
 
 SoundMain::MusicSourcePtr SoundMain::PlayMusic (const string filename, bool startPaused, bool efx)
 {
-	auto musicSrc = new MusicSource(filename, startPaused);
+	auto musicSrc = new MusicSource(filename, startPaused, musicVolume);
 
 	lock_guard<mutex> musicGuard(musicLock);
 	musicSources.insert(musicSrc);
@@ -361,7 +364,7 @@ void SoundMain::pauseEvent(PausingState state)
 void SoundMain::onPostPlayerCreation() 
 {
 	if (LKernel::getG<LevelManager>()->isPlayableLevel())
-		LKernel::onEveryUnpausedTenthOfASecondEvent.push_back(bind(&SoundMain::everyTenth,this,placeholders::_1));
+		everyTenthToken = LKernel::onEveryUnpausedTenthOfASecondEvent.connect(bind(&SoundMain::everyTenth,this,placeholders::_1));
 }
 
 
@@ -391,21 +394,7 @@ void SoundMain::onLevelLoad(LevelChangedEventArgs* eventArgs)
 
 void SoundMain::onLevelUnload(LevelChangedEventArgs* eventArgs)
 {
-	// Get the address of the function we registered to the event
-	typedef void(*fPtrType)(void*);
-	auto fPtr = function<void(void*)>(bind(&SoundMain::everyTenth, this, placeholders::_1)).target<fPtrType>();
-
-	// Remove all functions of the event matching this address. Hopefully exactly one.
-	bool found = false; // TODO: This is experimental. It may not work, if it does, remove the bool and the throw.
-	for (auto it = begin(onEveryUnpausedTenthOfASecondEvent); it != end(onEveryUnpausedTenthOfASecondEvent); it++)
-		if ((*it).target<fPtrType>() == fPtr)
-		{
-			onEveryUnpausedTenthOfASecondEvent.erase(it);
-			found = true;
-			break;
-		}	
-	if (!found)
-		throw string("SoundMain::onLevelUnload: Couldn't unregister from event onEveryUnpausedTenthOfASecondEvent");
+	everyTenthToken.disconnect();
 
 	stopAllSources();
 	alListener3f(AL_POSITION, 0, 0, 0);
