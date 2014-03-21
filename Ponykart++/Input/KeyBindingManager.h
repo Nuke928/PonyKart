@@ -42,8 +42,12 @@ class KeyBindingManager : public LKernel::LKernelObject
 public:
 	KeyBindingManager();
 
-	void setControllerPlayer (SDL_GameController *controller, int playerID);
-	void clearControllerPlayer (SDL_GameController *controller);
+	void setKeyboardPlayer (int playerID);
+	void clearKeyboardPlayer ();
+	void setMousePlayer (int playerID);
+	void clearMousePlayer ();
+	void setControllerPlayer (SDL_JoystickID controller, int playerID);
+	void clearControllerPlayer (SDL_JoystickID controller);
 	void clearPlayerController (int playerID);
 	void clearControllerPlayers ();
 
@@ -68,17 +72,18 @@ public:
 	boost::signals2::signal<void (int, GameInputID, float)> axisMoveEvent;
 
 	// Polling
-	bool pollKey (GameInputID gameInputID, int playerID);
-	float pollAxis (GameInputID gameInputID, int playerID);
+	bool pollKey (int playerID, GameInputID gameInputID);
+	float pollAxis (int playerID, GameInputID gameInputID);
 
 private:
 	int inputSuppressedSem;
 	float mouseSens;
 
 	// Mapping of controllers to players and vice-versa.
-	// Keyboard and mouse are always associated with playerID 0.
-	std::unordered_multimap<SDL_GameController *, int> playersMapByController;
-	std::map<int, SDL_GameController *> controllersMapByPlayer;
+	// Keyboard and mouse are always associated with the main player.
+	int keyboardPlayerID, mousePlayerID;
+	std::unordered_map<SDL_JoystickID, int> playersMapByControllerID;
+	std::map<int, SDL_JoystickID> controllerIDsMapByPlayer;
 
 	// One-to-one mapping of real inputs to game inputs (any given button can only be bound to one action).
 	std::unordered_map<Extensions::SDLInputID, GameInputID, typename Extensions::SDLInputID::Hash> gameInputsMapByReal;
@@ -98,8 +103,8 @@ private:
 
 public:
 	// Accessors
-	decltype(playersMapByController) &getPlayersMapByController() { return playersMapByController; }
-	decltype(controllersMapByPlayer) &getControllersMapByPlayer() { return controllersMapByPlayer; }
+	decltype(playersMapByControllerID) &getPlayersMapByController() { return playersMapByControllerID; }
+	decltype(controllerIDsMapByPlayer) &getControllersMapByPlayer() { return controllerIDsMapByPlayer; }
 	decltype(gameInputsMapByReal) &getGameInputMapByReal() { return gameInputsMapByReal; }
 	decltype(realInputsMapByGame) &getRealInputMapByGame() { return realInputsMapByGame; }
 };

@@ -23,7 +23,39 @@ InputMain::InputMain()
 	if (SDL_InitSubSystem(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER) < 0)
 		throw std::string(SDL_GetError());
 
+	int nJoysticks = SDL_NumJoysticks();
+	for (int i = 0; i < nJoysticks; i++)
+		if (SDL_IsGameController(i))
+			openController(i);
+
 	log("[Loading] SDL2 input system loaded.");
+}
+
+
+void InputMain::openController (int deviceIndex)
+{
+	auto controller = SDL_GameControllerOpen(deviceIndex);
+	controllersMapByJoystickID.insert(make_pair(SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller)) , controller));
+	log(string("[Input] Opened controller: ") + SDL_GameControllerName(controller));
+}
+void InputMain::closeController (int controllerID)
+{
+	auto entry = controllersMapByJoystickID.find(controllerID);
+	if (entry != controllersMapByJoystickID.end()) {
+		log(string("[Input] Closed controller: ") + SDL_GameControllerName(entry->second));
+		SDL_GameControllerClose(entry->second);
+		controllersMapByJoystickID.erase(entry);
+	}
+}
+
+
+SDL_JoystickID InputMain::getControllerID (SDL_GameController *controller)
+{
+	return SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller));
+}
+SDL_GameController *InputMain::getController (SDL_JoystickID joystickID)
+{
+	return controllersMapByJoystickID.find(joystickID)->second;
 }
 
 
@@ -73,10 +105,13 @@ void InputMain::processEvent (const SDL_Event &event)
 		break;
 
 	case SDL_CONTROLLERDEVICEADDED:
+		openController(event.cdevice.which);
+		// fallthrough
 	case SDL_CONTROLLERDEVICEREMAPPED:
 		onControllerConnect(event.cdevice);
 		break;
 	case SDL_CONTROLLERDEVICEREMOVED:
+		closeController(event.cdevice.which);
 		onControllerRemove(event.cdevice);
 		break;
 	case SDL_CONTROLLERAXISMOTION:
@@ -116,9 +151,15 @@ bool InputMain::pollButton (Extensions::SDLInputID inputID, SDL_GameController *
 			auto buttonState = SDL_GetMouseState(&x, &y);
 			return SDL_BUTTON(inputID.input.mbutton);
 		}
-	default:
+	case SDL_CONTROLLERBUTTONDOWN:
 		return SDL_GameControllerGetButton(controller, inputID.input.cbutton);
+	default:
+		return false;
 	}
+}
+bool InputMain::pollButton (Extensions::SDLInputID inputID, SDL_JoystickID controllerID)
+{
+	return pollButton(inputID, getController(controllerID));
 }
 int InputMain::pollAxis (Extensions::SDLInputID inputID, SDL_GameController *controller)
 {
@@ -131,8 +172,14 @@ int InputMain::pollAxis (Extensions::SDLInputID inputID, SDL_GameController *con
 		}
 	case SDL_MOUSEWHEEL:
 		return 0;
-	default:
+	case SDL_CONTROLLERAXISMOTION:
 		return SDL_GameControllerGetAxis(controller, inputID.input.caxis);
+	default:
+		return 0;
 	}
+}
+int InputMain::pollAxis (Extensions::SDLInputID inputID, SDL_JoystickID controllerID)
+{
+	return pollAxis(inputID, getController(controllerID));
 }
 

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <functional>
+#include <unordered_map>
 #include <SDL.h>
 #include <OgreFrameListener.h>
 #include <boost/signals2.hpp>
@@ -28,6 +29,9 @@ class InputMain : public LKernel::LKernelObject
 {
 public:
 	InputMain();
+
+	SDL_JoystickID getControllerID(SDL_GameController *controller);
+	SDL_GameController *getController(SDL_JoystickID joystickID);
 
 	// Event handlers
 	void processEvent (const SDL_Event &event); ///< Process SDL input events
@@ -57,8 +61,16 @@ public:
 	boost::signals2::signal<void (const SDL_ControllerButtonEvent&)> onControllerButtonRelease;
 
 	// Polling
-	bool pollButton (Extensions::SDLInputID inputID, SDL_GameController *controller);
-	int pollAxis (Extensions::SDLInputID inputID, SDL_GameController *controller);
+	bool pollButton (Extensions::SDLInputID inputID, SDL_GameController *controller = nullptr);
+	bool pollButton (Extensions::SDLInputID inputID, SDL_JoystickID controllerID);
+	int pollAxis (Extensions::SDLInputID inputID, SDL_GameController *controller = nullptr);
+	int pollAxis (Extensions::SDLInputID inputID, SDL_JoystickID controllerID);
+
+private:
+	void openController (int deviceIndex);
+	void closeController (int controllerID);
+
+	std::unordered_map<SDL_JoystickID, SDL_GameController *> controllersMapByJoystickID;
 };
 
 } // Input

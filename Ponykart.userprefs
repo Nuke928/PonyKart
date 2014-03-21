@@ -1,16 +1,11 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Ponykart/Players/Player.cs">
     <Files>
       <File FileName="Ponykart/Lua/LuaMain.cs" Line="261" Column="3" />
+      <File FileName="Ponykart/Players/HumanPlayer.cs" Line="178" Column="18" />
+      <File FileName="Ponykart/Players/Player.cs" Line="123" Column="4" />
     </Files>
-    <Pads>
-      <Pad Id="ClassPad">
-        <State expanded="True">
-          <Node name="PonykartParsers" selected="True" />
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />

@@ -29,6 +29,9 @@ tmp/
 # Archives
 *.rar
 
+# vim swap files
+*.swp
+
 /[Rr]eferences/
 
 doxygen/
