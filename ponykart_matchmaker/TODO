@@ -1,0 +1,11 @@
+
+TODO
+
+Need to properly implement client reporting
+	db.smembers() returns a set where socket.send() requires buffer or string
+
+Enable zlib compression on client reporting
+	zlib compression requires a buffer or string as well
+
+Implement IPv6 compatibility
+
