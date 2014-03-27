@@ -16,6 +16,25 @@ Note: these instructions are written for Arch Linux.
 
 3. Start redis
 	$ redis-server &
+	
+4. Configure networking and redis within server.py
+	$ vim server.py
 
 4. Start server
 	$ ./server.py
+
+This server takes an ip:port combination and caches it into a 
+a redis database to be reported to clients later to search for
+matches. 
+
+The server accepts three types of requests:
+	SRV_EST - Server establshed request. Should be followed by a semicolon
+		and port such as SRV_EST;12345 
+	
+	SRV_REM - Server removal request. Should also be followed by a semicolon
+		and port such as SRV_REM;12345
+		
+	CLT_REQ - Client request. Does not require any port number or semicolon
+	
+For testing purposes, currently the server is not compressing output to clients
+using zlib, comment line 70 and uncomment line 71 to enable it.
