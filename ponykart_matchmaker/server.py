@@ -48,9 +48,8 @@ print 'Listening for connections'
 # Define function for handling connections
 def clientthread(conn):
 	while True:
-		data = string.strip(conn.recv(1024))
-		req = data.split(';')
-		if not data:
+		req = string.split(string.strip(conn.recv(1024)), ';')
+		if not req:
 			break
 		else:
 			if req[0] == 'SRV_EST':
@@ -63,13 +62,12 @@ def clientthread(conn):
 				db.srem('server', srv)
 			elif req[0] == 'CLT_REQ':
 				print 'Client request from: ' + addr[0]
-				lst = db.smembers('server')
-				strlst = ""
-				for n in lst:
-					strlst = strlst + ';' + n
-				conn.send(strlst)
-				#conn.send(zlib.compress(strlst))
-				del strlst
+				lst = ""
+				for n in db.smembers('server'):
+					lst = n + ';' + lst
+				conn.send(lst)
+				#conn.send(zlib.compress(lst))
+				del lst
 			else:
 				print 'Malformed request from: ' + addr[0]
 	conn.close()
@@ -77,7 +75,5 @@ def clientthread(conn):
 while 1:
 	conn, addr = s.accept()
 	print 'Connection from [' + addr[0] + ']:' + str(addr[1])
-	
 	start_new_thread(clientthread ,(conn,))
-	
 s.close()
