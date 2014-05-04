@@ -13,6 +13,8 @@ namespace Ogre
 
 namespace Ponykart
 {
+namespace UI
+{
 	/// Manages the splash/loading screen during startup.
 	class Splash
 	{
@@ -34,6 +36,7 @@ namespace Ponykart
 		static int current; ///< Progress bar internal counter
 		static const int maximum; ///< Maximum for the progress bar's internal counter.
 	};
-}
+} // UI
+} // Ponykart
 
 #endif // SPLASH_H_INCLUDED

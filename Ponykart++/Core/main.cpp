@@ -17,9 +17,10 @@
 using namespace Ponykart::Launch;
 using namespace Ponykart::LKernel;
 using namespace Ponykart::Input;
+using namespace Ponykart::UI;
 using namespace Extensions;
 using Ponykart::Core::Options;
-using Ponykart::Splash;
+using Ponykart::UI::Splash;
 
 
 Uint32 Ponykart::Launch::tenthOfASecondEvent = 0;

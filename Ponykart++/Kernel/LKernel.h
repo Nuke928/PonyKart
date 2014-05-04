@@ -40,7 +40,7 @@ namespace LKernel
 	} // details
 
 	// Interface
-	void loadInitialObjects(Splash& splash);
+	void loadInitialObjects(UI::Splash& splash);
 	LKernelObject* addGlobalObject(LKernelObject* object, const std::string& typeName); ///< Add a singleton to LKernel's global map.
 	template<typename T> inline T* addGlobalObject(T* object) {return (T*)addGlobalObject(object,typeid(T).name());} ///< Add a singleton to LKernel's global map.
 	/// Get a singleton from LKernel's global map.

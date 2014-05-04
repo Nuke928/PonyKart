@@ -19,6 +19,7 @@
 #include "Players/PlayerManager.h"
 #include "Sound/SoundMain.h"
 #include "Thing/ThingDatabase.h"
+#include "UI/UIMain.h"
 
 using namespace Ogre;
 using namespace Ponykart;
@@ -29,6 +30,7 @@ using namespace Ponykart::Networking;
 using namespace Ponykart::Physics;
 using namespace Ponykart::Players;
 using namespace Ponykart::Sound;
+using namespace Ponykart::UI;
 using namespace PonykartParsers;
 using namespace LKernel::details;
 
@@ -84,9 +86,9 @@ void LKernel::loadInitialObjects(Splash& splash)
 	addGlobalObject(new NetworkManager());
 
 	// GUI
-	//splash.increment("Initialising Miyagi...");
+	splash.increment("Initialising the GUI...");
 	//addGlobalObject(new DebugOverlayManager());
-	//addGlobalObject(new UIMain());
+	addGlobalObject(new UIMain());
 	//addGlobalObject(new LuaConsoleManager());
 	//addGlobalObject(new MainMenuManager());
 	//addGlobalObject(new GameUIManager());
