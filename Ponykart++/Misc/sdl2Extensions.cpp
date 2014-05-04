@@ -19,12 +19,14 @@ SDLInputID SDLInputID::ofMouseAxis (Uint8 axis)
 	auto id = SDLInputID();
 	id.inputType = SDL_MOUSEMOTION;
 	id.input.maxis = axis;
+	return id;
 }
 SDLInputID SDLInputID::ofMouseWheelAxis (Uint8 axis)
 {
 	auto id = SDLInputID();
 	id.inputType = SDL_MOUSEWHEEL;
 	id.input.maxis = axis;
+	return id;
 }
 SDLInputID::SDLInputID (SDL_GameControllerAxis axis)
 {
