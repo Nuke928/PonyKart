@@ -24,6 +24,6 @@ UIMain::UIMain()
 
 bool UIMain::frameStarted(const Ogre::FrameEvent& evt)
 {
-	/// TODO: Implement
+	System::getSingleton().injectTimePulse(evt.timeSinceLastFrame);
 	return true;
 }
