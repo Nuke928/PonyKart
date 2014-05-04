@@ -61,6 +61,7 @@ solution "Ponykart++"
 			"C:/libsndfile64/lib",
 		}
 		includedirs {
+			"C:/boost_1_55_0/",
 			"C:/SDL2/include/SDL2",
 			"C:/Lua/5.1/include",
 			"C:/OGRE/include/OGRE",
@@ -82,7 +83,8 @@ solution "Ponykart++"
 		}
 	configuration { "Windows", "Debug" }	
 		libdirs { 
-			"C:/SDL2/lib/Debug",
+			"C:/SDL2/lib/Win32/Debug",
+			"C:/SDL2/lib/x64/Debug",
 			"C:/OGRE/lib/debug",
 			"C:/BULLET_PHYSICS/lib/Debug",
 			"C:/libvorbis-1.3.4/lib/Win32/Debug",
@@ -97,7 +99,8 @@ solution "Ponykart++"
 		}
 	configuration { "Windows", "Release" }	
 		libdirs { 
-			"C:/SDL2/lib/Release",
+			"C:/SDL2/lib/Win32/Release",
+			"C:/SDL2/lib/x64/Release",
 			"C:/OGRE/lib/release",
 			"C:/BULLET_PHYSICS/lib/Release",
 			"C:/libvorbis-1.3.4/lib/Win32/Release",
