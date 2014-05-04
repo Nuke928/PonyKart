@@ -6,7 +6,7 @@ solution "Ponykart++"
 
 
 	configuration { "Debug" }
-		defines { "DEBUG" }
+		defines { "_DEBUG" }
 		flags { "Symbols" }
 		targetsuffix "-d"
 	configuration { "Release" }
@@ -100,6 +100,7 @@ solution "Ponykart++"
 		}
 		links {
 			"CEGUIOgreRenderer-0_d",
+			"CEGUIBase-0_d",
 			"OgreMain_d",
 			"OgreOverlay_d",
 			"OIS_d",
@@ -127,6 +128,7 @@ solution "Ponykart++"
 		}
 		links {
 			"CEGUIOgreRenderer-0",
+			"CEGUIBase-0",
 			"OgreMain",
 			"OgreOverlay",
 			"OIS",
