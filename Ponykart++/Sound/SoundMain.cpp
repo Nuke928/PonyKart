@@ -57,8 +57,9 @@ SoundMain::SoundMain()
 	device = alcOpenDevice(nullptr);
 	context = alcCreateContext(device, nullptr);
 	alcMakeContextCurrent(context);
-	if (alGetError() != AL_NO_ERROR)
-		throw string("Failed to initialize OpenAL!");
+	ALenum alerror = alGetError();
+	if (alerror != AL_NO_ERROR)
+		throw string("Failed to initialize OpenAL! (error "+to_string(alerror)+")");
 
 	alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 
