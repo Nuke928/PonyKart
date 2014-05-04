@@ -48,6 +48,23 @@ void Options::initialize()
 	setupDictionaries();
 
 	string optionsPath = LKernel::prefPath + "ponykart.cfg";
+	
+#ifdef WIN32
+	// On Windows, create the directory first
+	string folder;
+	auto end = prefPath.find('\\');
+	while (end != string::npos)
+	{
+		folder = prefPath.substr(0,end+1);
+		if (!CreateDirectory(folder.c_str(), NULL))
+		{
+			DWORD err = GetLastError();
+			if (err != ERROR_ALREADY_EXISTS)
+				log("[Error] Couldn't create options directory : " + prefPath + " (error " + to_string(err)+")");
+		}
+		end = prefPath.find('\\', ++end);
+	}
+#endif
 
 	fstream file;
 	file.open(optionsPath.c_str(), ios::in);
