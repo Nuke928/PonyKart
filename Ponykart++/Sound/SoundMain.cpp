@@ -59,7 +59,12 @@ SoundMain::SoundMain()
 	alcMakeContextCurrent(context);
 	ALenum alerror = alGetError();
 	if (alerror != AL_NO_ERROR)
-		throw string("Failed to initialize OpenAL! (error "+to_string(alerror)+")");
+	{
+		if (alerror == 40964) // FIXME: BUG: TODO: This error happens at random during launch
+			log("[WARNING] OpenAL error 40964 during initialization");
+		else
+			throw string("Failed to initialize OpenAL! (error " + to_string(alerror) + ")");
+	}
 
 	alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 
