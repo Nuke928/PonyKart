@@ -1,0 +1,3 @@
+<Imageset autoScaled="vertical" imagefile="dashbackground.png" name="dashbackground" nativeHorzRes="450" nativeVertRes="450" version="2">
+    <Image height="450" name="dashbackground" width="450" xPos="0" yPos="0" />
+</Imageset>
