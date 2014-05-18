@@ -8,8 +8,16 @@ using namespace Ponykart::LKernel;
 using namespace Ponykart::Levels;
 using namespace std;
 
-void loadLevelHandlers(Levels::Level& newLevel)
+namespace Ponykart
 {
-	// TODO: Implement, requires implementing a RTTI mess
-	throw string("loadLevelHandlers(): Not implemented");
+namespace LKernel
+{
+
+	void loadLevelHandlers(Levels::Level& newLevel)
+	{
+		// TODO: Implement, requires implementing a RTTI mess
+		throw string("loadLevelHandlers(): Not implemented");
+	}
+
+}
 }
