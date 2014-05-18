@@ -3,11 +3,13 @@
 #include "Core/Settings.h"
 #include "Kernel/LKernelOgre.h"
 #include "Levels/Level.h"
+#include "Muffin/MuffinImporter.h"
 
 using namespace std;
 using namespace Ponykart;
 using namespace Ponykart::Actors;
 using namespace Ponykart::Levels;
+using namespace PonykartParsers;
 
 Level::Level(const std::string& Name)
 {
@@ -53,4 +55,26 @@ void Level::addThing(Actors::LThing* newThing)
 const PonykartParsers::MuffinDefinition* const Level::getDefinition() const
 {
 	return definition;
+}
+
+void Level::readMuffin()
+{
+	MuffinImporter importer;
+	definition =  importer.parseByName(name);
+	for (string& file : definition->getExtraFiles())
+		definition = importer.parseByName(file, definition);
+
+	// get the type of the level
+	ThingEnum tempType = definition->getEnumProperty("type");
+	if (tempType == ThingEnum::All)
+		type = LevelType::All;
+	else if (tempType == ThingEnum::Race)
+		type = LevelType::Race;
+	else if (tempType == ThingEnum::EmptyLevel)
+		type = LevelType::EmptyLevel;
+	else if (tempType == ThingEnum::Menu)
+		type = LevelType::Menu;
+	else
+		throw string("[ERROR] Level::readMuffin(): Can't convert ThingEnum to LevelEnum");
+	
 }
