@@ -11,6 +11,8 @@ using namespace Ponykart::Levels;
 using namespace Ponykart::LKernel;
 using namespace Ponykart::Lua;
 
+const std::string LuaMain::luaLevelFileLocation = "media/level scripts/";
+
 LuaMain::LuaMain()
 {
     initLuaState();

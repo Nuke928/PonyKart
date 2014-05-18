@@ -1,10 +1,18 @@
 #include "pch.h"
+#ifdef _WIN32
+	#include <io.h>
+	#include "WindowsCompat/dirent.h"
+#else
+	#include <unistd.h>
+	#include <dirent.h>
+#endif
 #include "Actors/LThing.h"
 #include "Core/Settings.h"
 #include "Core/Spawner.h"
 #include "Kernel/LKernel.h"
 #include "Kernel/LKernelOgre.h"
 #include "Levels/Level.h"
+#include "Lua/LuaMain.h"
 #include "Muffin/MuffinImporter.h"
 #include "Physics/PhysicsMain.h"
 
@@ -14,6 +22,7 @@ using namespace Ponykart::Actors;
 using namespace Ponykart::Core;
 using namespace Ponykart::Levels;
 using namespace Ponykart::LKernel;
+using namespace Ponykart::Lua;
 using namespace Ponykart::Physics;
 using namespace PonykartParsers;
 
@@ -96,4 +105,15 @@ void Level::createEntities()
 	Spawner* spawner = getG<Spawner>();
 	for (ThingBlock& tb : definition->getThingBlocks())
 		spawner->spawn(tb.getThingName(), &tb);
+}
+
+void Level::runLevelScript() 
+{
+	DIR* dir_point = opendir((LuaMain::luaLevelFileLocation + name + "/").c_str());
+	if (dir_point)
+	{
+		// TODO: Implement this function. It depends on Lua stuff.
+		//getG<LuaMain>()->luaVM.Lua.GetFunction(name).call(this);
+		throw string("Level::runLevelScript(): Not implemented !");
+	}
 }

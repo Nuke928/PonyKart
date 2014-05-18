@@ -43,6 +43,9 @@ private:
     LuaEvent onRegister;
 
     void initLuaState();
+
+public:
+	static const std::string luaLevelFileLocation;
 };
 
 } // Lua
