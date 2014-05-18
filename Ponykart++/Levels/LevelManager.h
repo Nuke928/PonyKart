@@ -36,12 +36,24 @@ public:
 
 private:
 	void unloadLevel(LevelChangedEventArgs* eventArgs); ///< Unloads the current level
-	void loadLevelNow(LevelChangedEventArgs* args); ///<s Unloads the current level and loads the new level
+	void loadLevelNow(LevelChangedEventArgs* args); ///< Unloads the current level and loads the new level
 	// TODO: Fix FrameEvent not being defined
 	//bool DelayedRun_FrameStarted(FrameEvent evt, float delay, void (*action)(LevelChangedEventArgs), LevelChangedEventArgs args); ///< Runs something after both the specified time has passed and two frames have been rendered.
 	void detach(); ///< Unhook from the frame started event
 	void invoke(LevelEvent e, LevelChangedEventArgs* args); ///< Helper
 	void invokeLevelProgress(LevelChangedEventArgs* args, std::string message);
+
+private:
+	class PreUnloadFrameStartedHandler : public Ogre::FrameListener
+	{
+		bool frameStarted(const Ogre::FrameEvent& evt) override;
+	};
+	class PostLoadFrameStartedHandler : public Ogre::FrameListener
+	{
+		bool frameStarted(const Ogre::FrameEvent& evt) override;
+	};
+	PreUnloadFrameStartedHandler* preUnloadFrameStartedHandler;
+	PostLoadFrameStartedHandler* postLoadFrameStartedHandler;
 
 private:
 	Level* currentLevel;

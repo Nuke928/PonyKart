@@ -34,6 +34,8 @@ public:
     void restart();
 
     void print(const std::string &s);
+
+	void loadScriptFiles(const std::string& levelName); ///< Loads up all of the script files. We will also load files from /level scripts/levelName/ if it exists
 private:
     lua_State *lua;
     std::mutex luaMutex;

@@ -1,8 +1,25 @@
 #include "pch.h"
+#include "Actors/StaticGeometryManager.h"
+#include "Actors/InstancedGeometryManager.h"
+#include "Core/Pauser.h"
+#include "Kernel/LKernel.h"
+#include "Kernel/LKernelHandler.h"
+#include "Kernel/LKernelOgre.h"
 #include "Levels/LevelManager.h"
+#include "Levels/LevelChangedEventArgs.h"
+#include "Lua/LuaMain.h"
+#include "Misc/ogreExtensions.h"
+#include "Physics/PhysicsMain.h"
 
+using namespace Extensions;
+using namespace Ponykart::Actors;
+using namespace Ponykart::Core;
+using namespace Ponykart::Levels;
+using namespace Ponykart::LKernel;
+using namespace Ponykart::Lua;
+using namespace Ponykart::Physics;
 using namespace Ponykart;
-using namespace Levels;
+using namespace Ogre;
 
 const float LevelManager::INITIAL_DELAY{0.1f};
 LevelProgressEvent LevelManager::onLevelLoadProgress;
@@ -18,4 +35,113 @@ LevelManager::LevelManager()
 	elapsed = 0;
 	frameOneRendered = frameTwoRendered = false;
 
+}
+
+void LevelManager::loadLevel(LevelChangeRequest request, float delay)
+{
+	Pauser::isPaused = false;
+	LevelChangedEventArgs* eventArgs = new LevelChangedEventArgs(Level(request.newLevelName), *currentLevel, request);
+
+	// fire our preUnload events
+	for (auto f : onLevelPreUnload)
+		if (f)
+			f(eventArgs);
+
+	if (delay > 0) 
+	{
+		// we need to have this because otherwise we start loading before we manage to render a frame, and we need to render a frame to
+		// show stuff like a loading screen
+
+		// reset these
+		elapsed = 0;
+		frameOneRendered = frameTwoRendered = false;
+
+		// set up a little frame started handler with our events
+		preUnloadFrameStartedHandler = new PreUnloadFrameStartedHandler;
+		get<Root>()->addFrameListener(preUnloadFrameStartedHandler);
+	}
+	else 
+	{
+		// if our delay is 0, just load the level and don't do any of the delayed stuff
+		loadLevelNow(eventArgs);
+	}
+}
+
+void LevelManager::loadLevelNow(LevelChangedEventArgs* args)
+{
+	Level* newLevel = &args->newLevel;
+
+	// Unload current level
+	unloadLevel(args);
+
+	currentLevel = newLevel;
+
+	// Load new Level
+	if (newLevel != nullptr) 
+	{
+		log("==========================================================");
+		log("======= Level loading: " + newLevel->getName() + " =======");
+		log("==========================================================");
+
+		// load our resource group, if we have one
+		invokeLevelProgress(args, "Initialising new resource group...");
+		if (ResourceGroupManager::getSingleton().resourceGroupExists(newLevel->getName()) 
+			&& !ResourceGroupManager::getSingleton().isResourceGroupInitialised(newLevel->getName()))
+		{
+			log("[Loading] Initialising resource group: " + newLevel->getName());
+			ResourceGroupManager::getSingleton().initialiseResourceGroup(newLevel->getName());
+		}
+
+		// load up the world definition from the .muffin file
+		invokeLevelProgress(args, "Reading .muffin files...");
+		newLevel->readMuffin();
+
+		// set up shadows, create stuff in the .scene file, and set up physics
+		invokeLevelProgress(args, "Reading .scene file and setting up shadows and physics...");
+		setupShadows(getG<SceneManager>(), *newLevel); // TODO: It's an extension, implement it
+		newLevel->readDotSceneAndSetupPhysics();
+
+		// run our level loading events
+		log("[Loading] Loading everything else...");
+		invokeLevelProgress(args, "Invoking level load event...");
+		invoke(onLevelLoad, args);
+
+		// then put Things into our world
+		invokeLevelProgress(args, "Creating entities...");
+		newLevel->createEntities();
+		// then load the rest of the handlers
+		invokeLevelProgress(args, "Loading level handlers...");
+		loadLevelHandlers(*newLevel);
+
+		isValidLevel = true;
+
+		if (isPlayableLevel())
+			getG<PhysicsMain>()->startSimulation();
+
+		// run our scripts
+		invokeLevelProgress(args, "Running scripts...");
+		getG<LuaMain>()->loadScriptFiles(newLevel->getName());
+		newLevel->runLevelScript();
+		newLevel->runThingScripts();
+
+		invokeLevelProgress(args, "Building static and instanced geometry...");
+		getG<StaticGeometryManager>()->build();
+		getG<InstancedGeometryManager>()->build();
+	}
+
+	// if we're on the main menu, pause it
+	if (newLevel->getName() == Settings::MainMenuName)
+		Pauser::isPaused = true;
+
+	// post load event needs to be delayed
+	if (newLevel != nullptr) 
+	{
+		// reset these
+		elapsed = 0;
+		frameOneRendered = frameTwoRendered = false;
+
+		// set up our handler
+		postLoadFrameStartedHandler = new PostLoadFrameStartedHandler;
+		get<Root>()->addFrameListener(postLoadFrameStartedHandler);
+	}
 }

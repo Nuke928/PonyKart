@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Actors/LThing.h"
+#include "Core/Settings.h"
 #include "Kernel/LKernelOgre.h"
 #include "Levels/Level.h"
 
@@ -7,6 +8,16 @@ using namespace std;
 using namespace Ponykart;
 using namespace Ponykart::Actors;
 using namespace Ponykart::Levels;
+
+Level::Level(const std::string& Name)
+{
+	name = Name;
+
+	if (!name.size())
+		type = LevelType::EmptyLevel;
+	else if (name == Settings::MainMenuName)
+		type = LevelType::Menu;
+}
 
 const std::string& Level::getName() const
 {

@@ -33,6 +33,7 @@ namespace Actors
 	public:
 		InstancedGeometryManager();
 		void add(ModelComponent* mc, PonykartParsers::ThingBlock* thingTemplate, PonykartParsers::ModelBlock* block, PonykartParsers::ThingDefinition* def);
+		void build();
 	private:
 		void onLevelUnload(Levels::LevelChangedEventArgs* eventArgs);
 	public:
