@@ -1,8 +1,12 @@
 #include "pch.h"
 #include "UI/MainMenuManager.h"
+#include "Kernel/LKernelOgre.h"
+#include "Core/main.h"
 
 using namespace CEGUI;
+using namespace Ponykart;
 using namespace Ponykart::UI;
+using namespace Ponykart::LKernel;
 
 MainMenuManager::MainMenuManager()
 {
@@ -27,4 +31,31 @@ MainMenuManager::MainMenuManager()
 	playmenu->setSize(USize(UDim(0.60f, 0), UDim(0.85f, 0)));
 	playmenu->setProperty("Image", "playmenu/playmenu");
 	mainWindow->addChild(playmenu);
+
+	Window* playButton = WindowManager::getSingleton().createWindow("Ponykart/Button", "playButton");
+	playButton->setYPosition({ 0.30f, 0 });
+	playButton->setText("Single Player");
+	playmenu->addChild(playButton);
+
+	Window* hostButton = WindowManager::getSingleton().createWindow("Ponykart/Button", "hostButton");
+	hostButton->setYPosition({ 0.40f, 0 });
+	hostButton->setText("Host Networked Game");
+	playmenu->addChild(hostButton);
+
+	Window* joinButton = WindowManager::getSingleton().createWindow("Ponykart/Button", "joinButton");
+	joinButton->setYPosition({ 0.50f, 0 });
+	joinButton->setText("Join Networked Game");
+	playmenu->addChild(joinButton);
+
+	Window* optionsButton = WindowManager::getSingleton().createWindow("Ponykart/Button", "optionsButton");
+	optionsButton->setYPosition({ 0.60f, 0 });
+	optionsButton->setText("Options");
+	playmenu->addChild(optionsButton);
+
+	Window* quitButton = WindowManager::getSingleton().createWindow("Ponykart/Button", "quitButton");
+	quitButton->setYPosition({ 0.70f, 0 });
+	quitButton->setText("Quit");
+	auto quitLambda = [](const EventArgs& e){Launch::quit = true; return true; };
+	quitButton->subscribeEvent(PushButton::EventClicked, Event::Subscriber(quitLambda));
+	playmenu->addChild(quitButton);
 }
