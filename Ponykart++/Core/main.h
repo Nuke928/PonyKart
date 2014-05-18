@@ -9,6 +9,7 @@ namespace Ponykart
 namespace Launch
 {
 	extern Uint32 tenthOfASecondEvent;
+	extern bool quit;
 
 	void enterGameLoop ();
 	unsigned int tenthOfASecondCallback (Uint32 interval, void *param);

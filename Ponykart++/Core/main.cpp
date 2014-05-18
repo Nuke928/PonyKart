@@ -24,6 +24,7 @@ using Ponykart::UI::Splash;
 
 
 Uint32 Ponykart::Launch::tenthOfASecondEvent = 0;
+bool Ponykart::Launch::quit = false;
 
 int main (int argc, char *argv[])
 {
@@ -117,7 +118,6 @@ void Ponykart::Launch::enterGameLoop ()
 		std::cout << "PRESS" << std::endl;
 	});
 
-	bool quit = false;
 	while (!quit) {
 		ogreRoot->_fireFrameStarted();
 		ogreWindow->update(false);
@@ -152,6 +152,8 @@ unsigned int Ponykart::Launch::tenthOfASecondCallback (Uint32 interval, void *pa
 	event.user.code = tenthOfASecondEvent;
 
 	SDL_PushEvent(&event);
+
+	CEGUI::System::getSingleton().injectTimePulse(0.1f);
 
 	return 100;
 }
