@@ -27,3 +27,8 @@ bool UIMain::frameStarted(const Ogre::FrameEvent& evt)
 	System::getSingleton().injectTimePulse(evt.timeSinceLastFrame);
 	return true;
 }
+
+void UIMain::changeSceneManager(Ogre::SceneManager* newSceneManager)
+{
+	// TODO: This is supposed to update Miyagi's render target, check if CEGUI needs the same thing. If so, implement this.
+}
