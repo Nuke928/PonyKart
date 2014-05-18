@@ -1,14 +1,18 @@
 #include "pch.h"
 #include "Actors/LThing.h"
 #include "Core/Settings.h"
+#include "Kernel/LKernel.h"
 #include "Kernel/LKernelOgre.h"
 #include "Levels/Level.h"
 #include "Muffin/MuffinImporter.h"
+#include "Physics/PhysicsMain.h"
 
 using namespace std;
 using namespace Ponykart;
 using namespace Ponykart::Actors;
 using namespace Ponykart::Levels;
+using namespace Ponykart::LKernel;
+using namespace Ponykart::Physics;
 using namespace PonykartParsers;
 
 Level::Level(const std::string& Name)
@@ -77,4 +81,9 @@ void Level::readMuffin()
 	else
 		throw string("[ERROR] Level::readMuffin(): Can't convert ThingEnum to LevelEnum");
 	
+}
+
+void Level::readDotSceneAndSetupPhysics()
+{
+	getG<PhysicsMain>()->loadPhysicsLevel(name);
 }
