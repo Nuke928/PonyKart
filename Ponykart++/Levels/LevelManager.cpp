@@ -3,6 +3,7 @@
 #include "Actors/InstancedGeometryManager.h"
 #include "Core/Pauser.h"
 #include "Kernel/LKernel.h"
+#include "Kernel/LKernelCleanup.h"
 #include "Kernel/LKernelHandler.h"
 #include "Kernel/LKernelOgre.h"
 #include "Levels/LevelManager.h"
@@ -143,5 +144,37 @@ void LevelManager::loadLevelNow(LevelChangedEventArgs* args)
 		// set up our handler
 		postLoadFrameStartedHandler = new PostLoadFrameStartedHandler;
 		get<Root>()->addFrameListener(postLoadFrameStartedHandler);
+	}
+}
+
+/// Unloads the current level
+/// - Sets IsValidLevel to false
+/// - Runs the levelUnload events
+/// - Tells the kernel to unload all level objects
+/// - Delete the current level
+void LevelManager::unloadLevel(LevelChangedEventArgs* eventArgs)
+{
+	if (currentLevel->getName().size()) 
+	{
+		log("==========================================================");
+		log("==== Level unloading: " + currentLevel->getName() + " ====");
+		log("==========================================================");
+
+		isValidLevel = false;
+
+		//currentLevel->save();
+
+		invokeLevelProgress(eventArgs, "Unloading level handlers...");
+		unloadLevelHandlers();
+
+		invokeLevelProgress(eventArgs, "Invoking level unload event...");
+		// invoke the level unloading events
+		invoke(onLevelUnload, eventArgs);
+
+		invokeLevelProgress(eventArgs, "Cleaning up...");
+		cleanup();
+
+		delete currentLevel;
+		currentLevel = nullptr;
 	}
 }
