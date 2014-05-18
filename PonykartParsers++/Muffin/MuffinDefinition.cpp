@@ -13,3 +13,8 @@ void MuffinDefinition::finish()
 	for (ThingBlock tb : thingBlocks)
 		tb.finish();
 }
+
+std::vector<std::string> MuffinDefinition::getExtraFiles()
+{
+	return extraFiles;
+}
