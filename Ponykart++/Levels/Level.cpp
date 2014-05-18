@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Actors/LThing.h"
 #include "Core/Settings.h"
+#include "Core/Spawner.h"
 #include "Kernel/LKernel.h"
 #include "Kernel/LKernelOgre.h"
 #include "Levels/Level.h"
@@ -10,6 +11,7 @@
 using namespace std;
 using namespace Ponykart;
 using namespace Ponykart::Actors;
+using namespace Ponykart::Core;
 using namespace Ponykart::Levels;
 using namespace Ponykart::LKernel;
 using namespace Ponykart::Physics;
@@ -86,4 +88,12 @@ void Level::readMuffin()
 void Level::readDotSceneAndSetupPhysics()
 {
 	getG<PhysicsMain>()->loadPhysicsLevel(name);
+}
+
+void Level::createEntities() 
+{
+	// load up everything into this world
+	Spawner* spawner = getG<Spawner>();
+	for (ThingBlock& tb : definition->getThingBlocks())
+		spawner->spawn(tb.getThingName(), &tb);
 }
