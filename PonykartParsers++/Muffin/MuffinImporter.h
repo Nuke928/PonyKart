@@ -10,6 +10,7 @@ namespace PonykartParsers
 	{
 	public:
 		MuffinDefinition* parseByName(const std::string& nameOfMuffin, MuffinDefinition* worldDef = nullptr);
+		MuffinDefinition* parseByFile(const std::string& filePath, MuffinDefinition* worldDef = nullptr);
 	};
 }
 

@@ -6,6 +6,8 @@ namespace Settings
 
 const static char WorldFileLocation[] = "media/worlds/";
 const static char MainMenuName[] = "Level0";
+const static char MuffinFileLocation[] = "media/worlds/";
+const static char MuffinFileExtension[] = ".muffin";
 const static bool EnableGlowyRegions = false;
 const static int NumberOfPlayers = 2;
 const static float CameraTightness = 21.f;
