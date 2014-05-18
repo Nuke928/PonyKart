@@ -117,3 +117,9 @@ void Level::runLevelScript()
 		throw string("Level::runLevelScript(): Not implemented !");
 	}
 }
+
+void Level::runThingScripts() 
+{
+	for (pair<string,LThing*> l : things)
+		l.second->runScript();
+}
