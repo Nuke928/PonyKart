@@ -1,5 +1,5 @@
-# Dependencies : 
-- Ogre 1.8.1
+# Dependencies (this readme may be outdated !) : 
+- Ogre 1.9
 -- OIS
 - Bullet2 (Dynamics, Collision, LinearMath, FileLoader, WorldImporter) >= 2.81-r2613
 - Boost >= 1.55.0
