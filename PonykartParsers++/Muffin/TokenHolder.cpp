@@ -6,8 +6,9 @@ using namespace PonykartParsers;
 
 ThingEnum TokenHolder::getEnumProperty(const string& propertyName) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto it = enumTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto it = enumTokens.find(lowerPropName);
 	if (it != enumTokens.end())
 		return it->second;
 	else
@@ -16,8 +17,9 @@ ThingEnum TokenHolder::getEnumProperty(const string& propertyName) const
 
 ThingEnum TokenHolder::getEnumProperty(const string& propertyName, const ThingEnum& defaultValue) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto it = enumTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto it = enumTokens.find(lowerPropName);
 	if (it != enumTokens.end())
 		return it->second;
 	else
@@ -26,8 +28,9 @@ ThingEnum TokenHolder::getEnumProperty(const string& propertyName, const ThingEn
 
 Vector3 TokenHolder::getVectorProperty(const string& propertyName) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto vecIt = vectorTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto vecIt = vectorTokens.find(lowerPropName);
 	if (vecIt != vectorTokens.end())
 		return vecIt->second;
 	else
@@ -36,8 +39,9 @@ Vector3 TokenHolder::getVectorProperty(const string& propertyName) const
 
 Vector3 TokenHolder::getVectorProperty(const string& propertyName, const Vector3& defaultValue) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto vecIt = vectorTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto vecIt = vectorTokens.find(lowerPropName);
 	if (vecIt != vectorTokens.end())
 		return vecIt->second;
 	else
@@ -46,8 +50,9 @@ Vector3 TokenHolder::getVectorProperty(const string& propertyName, const Vector3
 
 Quaternion TokenHolder::getQuatProperty(const string& propertyName) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto it = quatTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto it = quatTokens.find(lowerPropName);
 	if (it != quatTokens.end())
 		return it->second;
 	else
@@ -56,8 +61,9 @@ Quaternion TokenHolder::getQuatProperty(const string& propertyName) const
 
 Quaternion TokenHolder::getQuatProperty(const string& propertyName, const Quaternion& defaultValue) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto it = quatTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto it = quatTokens.find(lowerPropName);
 	if (it != quatTokens.end())
 		return it->second;
 	else
@@ -66,8 +72,9 @@ Quaternion TokenHolder::getQuatProperty(const string& propertyName, const Quater
 
 string TokenHolder::getStringProperty(const string& propertyName) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto sIt=stringTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto sIt = stringTokens.find(lowerPropName);
 	if (sIt != stringTokens.end())
 		return sIt->second;
 	else
@@ -76,8 +83,9 @@ string TokenHolder::getStringProperty(const string& propertyName) const
 
 string TokenHolder::getStringProperty(const string& propertyName, const string& defaultValue) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto sIt=stringTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto sIt = stringTokens.find(lowerPropName);
 	if (sIt != stringTokens.end())
 		return sIt->second;
 	else
@@ -86,8 +94,9 @@ string TokenHolder::getStringProperty(const string& propertyName, const string& 
 
 float TokenHolder::getFloatProperty(const string& propertyName) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto fIt=floatTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto fIt = floatTokens.find(lowerPropName);
 	if (fIt != floatTokens.end())
 		return fIt->second;
 	else
@@ -96,8 +105,9 @@ float TokenHolder::getFloatProperty(const string& propertyName) const
 
 float TokenHolder::getFloatProperty(const string& propertyName, const float defaultValue) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto fIt=floatTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto fIt = floatTokens.find(lowerPropName);
 	if (fIt != floatTokens.end())
 		return fIt->second;
 	else
@@ -106,8 +116,9 @@ float TokenHolder::getFloatProperty(const string& propertyName, const float defa
 
 bool TokenHolder::getBoolProperty(const string& propertyName) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto it=boolTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto it = boolTokens.find(lowerPropName);
 	if (it != boolTokens.end())
 		return it->second;
 	else
@@ -116,8 +127,9 @@ bool TokenHolder::getBoolProperty(const string& propertyName) const
 
 bool TokenHolder::getBoolProperty(const string& propertyName, const bool defaultValue) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto it=boolTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto it = boolTokens.find(lowerPropName);
 	if (it != boolTokens.end())
 		return it->second;
 	else
