@@ -181,7 +181,7 @@ void LevelManager::unloadLevel(LevelChangedEventArgs* eventArgs)
 
 void LevelManager::invoke(LevelEvent e, LevelChangedEventArgs* args)
 {
-	for (auto f : e)
+	for (auto& f : e)
 		if (f)
 			f(args);
 }
