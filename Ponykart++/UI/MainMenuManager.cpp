@@ -1,10 +1,14 @@
 #include "pch.h"
-#include "UI/MainMenuManager.h"
-#include "Kernel/LKernelOgre.h"
 #include "Core/main.h"
+#include "Handlers/UI/MainMenuUIHandler.h"
+#include "Handlers/MainMenuSinglePlayerHandler.h"
+#include "Kernel/LKernel.h"
+#include "Kernel/LKernelOgre.h"
+#include "UI/MainMenuManager.h"
 
 using namespace CEGUI;
 using namespace Ponykart;
+using namespace Ponykart::Handlers;
 using namespace Ponykart::UI;
 using namespace Ponykart::LKernel;
 
@@ -15,7 +19,7 @@ MainMenuManager::MainMenuManager()
 
 	// Add a quick menu placeholder as a test
 	Window* mainWindow = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
-
+	// Background
 	Window* dashbackground = WindowManager::getSingleton().createWindow("Generic/Image", "dashbackground");
 	dashbackground->setSize(USize(UDim(1, 0), UDim(1, 0)));
 	dashbackground->setProperty("Image", "dashbackground/dashbackground");
@@ -31,10 +35,21 @@ MainMenuManager::MainMenuManager()
 	playmenu->setSize(USize(UDim(0.60f, 0), UDim(0.85f, 0)));
 	playmenu->setProperty("Image", "playmenu/playmenu");
 	mainWindow->addChild(playmenu);
-
+	
+	// Menu buttons
 	Window* playButton = WindowManager::getSingleton().createWindow("Ponykart/Button", "playButton");
 	playButton->setYPosition({ 0.30f, 0 });
 	playButton->setText("Single Player");
+	auto playLambda = [](const EventArgs& e)
+	{
+		MainMenuUIHandler* menuUiHandler = getG<MainMenuUIHandler>();
+		MainMenuSinglePlayerHandler* menuSpHandler = getG<MainMenuSinglePlayerHandler>();
+		menuUiHandler->onGameType_SelectSinglePlayer();
+		menuSpHandler->onLevelSelect("Sweet Apple Acres");  
+		menuSpHandler->onCharacterSelect("Applejack");
+		return true; 
+	};
+	playButton->subscribeEvent(PushButton::EventClicked, Event::Subscriber(playLambda));
 	playmenu->addChild(playButton);
 
 	Window* hostButton = WindowManager::getSingleton().createWindow("Ponykart/Button", "hostButton");

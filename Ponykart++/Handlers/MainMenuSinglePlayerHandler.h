@@ -2,6 +2,7 @@
 #define MAINMENUSINGLEPLAYERHANDLER_H_INCLUDED
 
 #include <string>
+#include "Kernel/LKernelObject.h"
 
 namespace Ponykart
 {
@@ -10,7 +11,7 @@ namespace Handlers
 	/// This handler responds to level and character selection events from the main menu, holds on to them, then loads the appropriate level with the right character.
 	/// 
 	/// At the moment it's only for single player and it's pretty rough. It'll probably need to be rewritten a bunch when we come to adding multiplayer.
-	struct MainMenuSinglePlayerHandler
+	struct MainMenuSinglePlayerHandler : public LKernel::LKernelObject
 	{
 	public:
 		MainMenuSinglePlayerHandler();

@@ -8,6 +8,7 @@
 #include "Core/Pauser.h"
 #include "Core/Spawner.h"
 #include "Kernel/LKernel.h"
+#include "Kernel/LKernelHandler.h"
 #include "Kernel/LKernelOgre.h"
 #include "Levels/LevelManager.h"
 #include "Networking/NetworkManager.h"
@@ -123,8 +124,8 @@ void LKernel::loadInitialObjects(Splash& splash)
 	addGlobalObject(new SoundMain());
 
 	// handlers
-	//splash.increment("Loading global handlers...");
-	//LoadGlobalHandlers();
+	splash.increment("Loading global handlers...");
+	loadGlobalHandlers();
 
 	// Post-init
 	//splash.increment("Running post-initialisation events...");

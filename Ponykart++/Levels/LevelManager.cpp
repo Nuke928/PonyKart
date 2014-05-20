@@ -36,7 +36,7 @@ LevelManager::LevelManager()
 	hasRunPostInitEvents = false;
 	elapsed = 0;
 	frameOneRendered = frameTwoRendered = false;
-
+	currentLevel = nullptr;
 }
 
 void LevelManager::loadLevel(LevelChangeRequest request, float delay)
@@ -162,7 +162,7 @@ void LevelManager::loadLevelNow(LevelChangedEventArgs* args)
 /// - Delete the current level
 void LevelManager::unloadLevel(LevelChangedEventArgs* eventArgs)
 {
-	if (currentLevel->getName().size()) 
+	if (currentLevel && currentLevel->getName().size()) 
 	{
 		LKernel::log("==========================================================");
 		LKernel::log("==== Level unloading: " + currentLevel->getName() + " ====");

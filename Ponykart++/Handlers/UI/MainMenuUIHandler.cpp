@@ -18,3 +18,9 @@ GameTypeEnum MainMenuUIHandler::getGameType()
 {
 	return gameType;
 }
+
+void MainMenuUIHandler::onGameType_SelectSinglePlayer()
+{
+	gameType = GameTypeEnum::SinglePlayer;
+	// TODO: Draw the singleplayer GUI here
+}
