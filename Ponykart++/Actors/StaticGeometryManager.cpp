@@ -104,7 +104,7 @@ void StaticGeometryManager::build()
 	for (pair<string,Entity*> e : ents) 
 	{
 		sceneMgr->destroyEntity(e.second);
-		delete e.second;
+		//delete e.second; TODO: FIXME: Memory leak. Uncommenting crashes.
 	}
 }
 

@@ -84,6 +84,7 @@ LThing::LThing(ThingBlock* thingTemplate, ThingDefinition* def)
 
 LThing::~LThing() // TODO: The C# version takes "bool disposing" as an argument. Check if this is correct.
 {
+	/* TODO: FIXME: BUG: INTENTIONAL MEMORY LEAK ! FIXME. The C# version was using the conditional dispose thing. Translate it.
 	auto sceneMgr = LKernel::gSceneManager;
 	auto world = LKernel::getG<PhysicsMain>()->getWorld();
 	bool valid = LKernel::getG<LevelManager>()->getIsValidLevel();
@@ -100,13 +101,16 @@ LThing::~LThing() // TODO: The C# version takes "bool disposing" as an argument.
 	{
 		if (valid) sceneMgr->destroySceneNode(rootNode);
 		delete rootNode;
+		rootNode = nullptr;
 	}
 
 	if (body != nullptr)
 	{
 		if (valid) world->removeRigidBody(body);
 		delete body;
+		body = nullptr;
 	}
+	*/
 }
 
 std::string LThing::getName() const
