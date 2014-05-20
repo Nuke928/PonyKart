@@ -12,6 +12,7 @@
 #include "Core/IDs.h"
 #include "Core/Animation/AnimationBlender.h"
 #include "Kernel/LKernel.h"
+#include "Kernel/LKernelOgre.h"
 #include "Levels/LevelManager.h"
 #include "Lua/LuaMain.h"
 #include "Misc/bulletExtensions.h"
@@ -56,7 +57,14 @@ LThing::LThing(ThingBlock* thingTemplate, ThingDefinition* def)
 	preSetup(thingTemplate, def);
 	setupOgre(thingTemplate, def);
 
-	initialiseComponents(thingTemplate, def);
+	try 
+	{
+		initialiseComponents(thingTemplate, def);
+	}
+	catch (...)
+	{
+		log("[WARNING] LThing::LThing: Exception while initializing components. Continuing happilly.");
+	}
 
 	rootNode->setPosition(spawnPosition);
 	rootNode->setOrientation(spawnOrientation);
