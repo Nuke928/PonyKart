@@ -146,30 +146,42 @@ const unordered_map<string, string>& TokenHolder::getStringTokens() const
 
 void TokenHolder::setEnumProperty(const std::string& propertyName, ThingEnum value)
 {
-	enumTokens[propertyName] = value;
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	enumTokens[lowerPropName] = value;
 }
 
 void TokenHolder::setStringProperty(const std::string& propertyName, const std::string& value)
 {
-	stringTokens[propertyName] = value;
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	stringTokens[lowerPropName] = value;
 }
 
 void TokenHolder::setFloatProperty(const std::string& propertyName, float value)
 {
-	floatTokens[propertyName] = value;
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	floatTokens[lowerPropName] = value;
 }
 
 void TokenHolder::setBoolProperty(const std::string& propertyName, bool value)
 {
-	boolTokens[propertyName] = value;
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	boolTokens[lowerPropName] = value;
 }
 
 void TokenHolder::setVectorProperty(const std::string& propertyName, const Ogre::Vector3& value)
 {
-	vectorTokens[propertyName] = value;
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	vectorTokens[lowerPropName] = value;
 }
 
 void TokenHolder::setQuatProperty(const std::string& propertyName, const Ogre::Quaternion& value)
 {
-	quatTokens[propertyName] = value;
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	quatTokens[lowerPropName] = value;
 }
