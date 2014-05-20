@@ -42,16 +42,18 @@ ThingDefinition* ThingImporter::parse(const std::string& nameOfThing)
 	Ogre::LogManager::getSingleton().logMessage("[ThingImporter] Importing and parsing thing: " + filePath);
 
 	// read stuff
-	ifstream fileStream(filePath, ios::in);
+	ifstream fileStream(filePath, ios::binary);
 	if (!fileStream)
 		throw string("ThingImporter: Can't open "+filePath);
-	
-	string fileContents;
-    fileStream.seekg(0, std::ios::end);
-    fileContents.resize((size_t)fileStream.tellg()); // We're assuming that the .thing is smaller than 4GB
-    fileStream.seekg(0, std::ios::beg);
-    fileStream.read(&fileContents[0], fileContents.size());
-    fileStream.close();
+
+	fileStream.seekg(0, ios::end);
+	int size = fileStream.tellg();
+	fileStream.seekg(0, ios::beg);
+	char* rawcontent = new char[size];
+	fileStream.read(rawcontent, size);
+	string fileContents(rawcontent, size);
+	delete rawcontent;
+	fileStream.close();
 
 	ThingParser::Parser p;
 	root = p.parse(fileContents);
@@ -91,7 +93,7 @@ void ThingImporter::prepareFileList()
 				auto scripts = direntSearch(loc, ".thing");
 
 				for (string file : scripts)
-					fileList[getFilenameWithoutExtension(file)] = file;
+					fileList[getFilenameWithoutExtension(file)] = loc+'/'+file;
 			}
 		}
 #if !DEBUG
