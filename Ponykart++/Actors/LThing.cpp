@@ -61,6 +61,10 @@ LThing::LThing(ThingBlock* thingTemplate, ThingDefinition* def)
 	{
 		initialiseComponents(thingTemplate, def);
 	}
+	catch (const string& e)
+	{
+		log("[WARNING] LThing::LThing: Exception while initializing components : "+e);
+	}
 	catch (...)
 	{
 		log("[WARNING] LThing::LThing: Exception while initializing components. Continuing happilly.");
