@@ -185,3 +185,9 @@ void LevelManager::invoke(LevelEvent e, LevelChangedEventArgs* args)
 		if (f)
 			f(args);
 }
+
+void LevelManager::invokeLevelProgress(LevelChangedEventArgs* args, std::string message)
+{
+	for (auto& f : onLevelLoadProgress)
+		f(args, message);
+}
