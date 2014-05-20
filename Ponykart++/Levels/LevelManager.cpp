@@ -178,3 +178,10 @@ void LevelManager::unloadLevel(LevelChangedEventArgs* eventArgs)
 		currentLevel = nullptr;
 	}
 }
+
+void LevelManager::invoke(LevelEvent e, LevelChangedEventArgs* args)
+{
+	for (auto f : e)
+		if (f)
+			f(args);
+}
