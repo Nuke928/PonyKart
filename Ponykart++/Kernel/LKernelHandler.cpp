@@ -19,5 +19,11 @@ namespace LKernel
 		throw string("loadLevelHandlers(): Not implemented");
 	}
 
+	void unloadLevelHandlers()
+	{
+		// TODO: Implement, requires implementing a RTTI mess
+		throw string("unloadLevelHandlers(): Not implemented");
+	}
+
 }
 }
