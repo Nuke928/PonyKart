@@ -1553,7 +1553,8 @@ RuleInstance* Parser::matchStart()
 
 	for (;;)
 	{
-		if ((tok = fetchToken(laOffset))->type == NodeType::Tok_KeyFalse || tok->type == NodeType::Tok_KeyTrue || tok->type == NodeType::Tok_Name)
+		if ((tok = fetchToken(laOffset))->type == NodeType::Tok_KeyFalse 
+			|| tok->type == NodeType::Tok_KeyTrue || tok->type == NodeType::Tok_Name)
 		{
 			laOffsets.push(laOffset);
 			laSuccess.push(true);
