@@ -19,6 +19,12 @@ MainMenuManager::MainMenuManager()
 
 	// Add a quick menu placeholder as a test
 	Window* mainWindow = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
+
+	// Loading screen
+	Window* loadingWindow = WindowManager::getSingleton().createWindow("Generic/Image", "loadingWindow");
+	loadingWindow->setSize(USize(UDim(1, 0), UDim(1, 0)));
+	loadingWindow->setProperty("Image", "loading/background");
+
 	// Background
 	Window* dashbackground = WindowManager::getSingleton().createWindow("Generic/Image", "dashbackground");
 	dashbackground->setSize(USize(UDim(1, 0), UDim(1, 0)));
@@ -42,12 +48,26 @@ MainMenuManager::MainMenuManager()
 	playButton->setText("Single Player");
 	auto playLambda = [=](const EventArgs& e)
 	{
-		mainWindow->hide();
+		auto ogreRoot = getG<Ogre::Root>();
+		auto sdlWindow = getG<SDL_Window>();
+		auto ogreWindow = getG<Ogre::RenderWindow>();
+
+		// Show the loading screen and redraw
+		System::getSingleton().getDefaultGUIContext().setRootWindow(loadingWindow);
+		ogreRoot->_fireFrameStarted();
+		getG<Ogre::RenderWindow>()->update(true);
+		ogreRoot->_fireFrameRenderingQueued();
+		SDL_GL_SwapWindow(getG<SDL_Window>());
+
+		// Load a level
 		MainMenuUIHandler* menuUiHandler = getG<MainMenuUIHandler>();
 		MainMenuSinglePlayerHandler* menuSpHandler = getG<MainMenuSinglePlayerHandler>();
 		menuUiHandler->onGameType_SelectSinglePlayer();
 		menuSpHandler->onLevelSelect("SweetAppleAcres");  
 		menuSpHandler->onCharacterSelect("Applejack");
+
+		// Hide the loading screen so we can see the level
+		loadingWindow->hide();
 		return true; 
 	};
 	playButton->subscribeEvent(PushButton::EventClicked, Event::Subscriber(playLambda));
