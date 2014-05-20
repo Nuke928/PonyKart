@@ -58,7 +58,9 @@ void LevelManager::loadLevel(LevelChangeRequest request, float delay)
 		frameOneRendered = frameTwoRendered = false;
 
 		// set up a little frame started handler with our events
-		preUnloadFrameStartedHandler = new PreUnloadFrameStartedHandler;
+		auto func = bind(&LevelManager::loadLevelNow, this, _1);
+		preUnloadFrameStartedHandler = new LambdaFrameStartedHandler(
+			[&](const Ogre::FrameEvent& evt){return delayedRun_FrameStarted(evt, delay, func, eventArgs); });
 		get<Root>()->addFrameListener(preUnloadFrameStartedHandler);
 	}
 	else 
@@ -80,16 +82,16 @@ void LevelManager::loadLevelNow(LevelChangedEventArgs* args)
 	// Load new Level
 	if (newLevel != nullptr) 
 	{
-		log("==========================================================");
-		log("======= Level loading: " + newLevel->getName() + " =======");
-		log("==========================================================");
+		LKernel::log("==========================================================");
+		LKernel::log("======= Level loading: " + newLevel->getName() + " =======");
+		LKernel::log("==========================================================");
 
 		// load our resource group, if we have one
 		invokeLevelProgress(args, "Initialising new resource group...");
 		if (ResourceGroupManager::getSingleton().resourceGroupExists(newLevel->getName()) 
 			&& !ResourceGroupManager::getSingleton().isResourceGroupInitialised(newLevel->getName()))
 		{
-			log("[Loading] Initialising resource group: " + newLevel->getName());
+			LKernel::log("[Loading] Initialising resource group: " + newLevel->getName());
 			ResourceGroupManager::getSingleton().initialiseResourceGroup(newLevel->getName());
 		}
 
@@ -142,7 +144,12 @@ void LevelManager::loadLevelNow(LevelChangedEventArgs* args)
 		frameOneRendered = frameTwoRendered = false;
 
 		// set up our handler
-		postLoadFrameStartedHandler = new PostLoadFrameStartedHandler;
+		auto lambda = [&](const Ogre::FrameEvent& evt)
+		{
+			auto invokeLambda = [&](LevelChangedEventArgs* a){invoke(onLevelPostLoad, a); };
+			return delayedRun_FrameStarted(evt, INITIAL_DELAY, invokeLambda, args);
+		};
+		postLoadFrameStartedHandler = new LambdaFrameStartedHandler(lambda);
 		get<Root>()->addFrameListener(postLoadFrameStartedHandler);
 	}
 }
@@ -156,9 +163,9 @@ void LevelManager::unloadLevel(LevelChangedEventArgs* eventArgs)
 {
 	if (currentLevel->getName().size()) 
 	{
-		log("==========================================================");
-		log("==== Level unloading: " + currentLevel->getName() + " ====");
-		log("==========================================================");
+		LKernel::log("==========================================================");
+		LKernel::log("==== Level unloading: " + currentLevel->getName() + " ====");
+		LKernel::log("==========================================================");
 
 		isValidLevel = false;
 
