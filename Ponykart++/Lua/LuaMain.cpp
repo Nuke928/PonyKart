@@ -11,6 +11,8 @@ using namespace Ponykart::Levels;
 using namespace Ponykart::LKernel;
 using namespace Ponykart::Lua;
 
+const std::string LuaMain::luaLevelFileLocation = "media/level scripts/";
+
 LuaMain::LuaMain()
 {
     initLuaState();
@@ -82,4 +84,10 @@ void LuaMain::initLuaState()
     luaopen_table(lua);
     luaopen_string(lua);
     luaopen_math(lua);
+}
+
+void LuaMain::loadScriptFiles(const std::string& levelName)
+{
+	// TODO: Implement loadScriptFiles once we figure out Lua
+	//throw std::string("LuaMain::loadScriptFiles: Not implemented");
 }

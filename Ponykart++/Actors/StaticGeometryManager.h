@@ -4,6 +4,7 @@
 #include <vector>
 #include <unordered_map>
 #include <Ogre.h>
+#include "Kernel/LKernelObject.h"
 
 namespace PonykartParsers
 {
@@ -19,11 +20,12 @@ namespace Actors
 {
 	class ModelComponent;
 
-	class StaticGeometryManager
+	class StaticGeometryManager : public LKernel::LKernelObject
 	{
 	public:
 		StaticGeometryManager();
 		void add(ModelComponent* mc, PonykartParsers::ThingBlock* thingTemplate, PonykartParsers::ModelBlock* block, PonykartParsers::ThingDefinition* def); ///< Adds all of the geometry used by a model component to the static geometry. This is used by the ModelComponent.
+		void build(); ///< Builds the geometry. Is called after everything else has been created.
 	private:
 		void onLevelUnload(Levels::LevelChangedEventArgs* eventArgs);
 	public:

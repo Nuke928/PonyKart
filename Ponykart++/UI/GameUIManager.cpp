@@ -15,7 +15,7 @@ void GameUIManager::setItemLevel(int level)
 	//	itembox.Bitmap = new Bitmap("media/gui/items/lv2 box.png");
 	//else if (level >= 3)
 	//	itembox.Bitmap = new Bitmap("media/gui/items/lv3 box.png");
-	throw std::string("[CRITICAL][NOTIMPLEMENTED][DARKSNYDERPLSFIX]GameUIManager::setItemLevel: Not implemented.");
+	//throw std::string("[CRITICAL][NOTIMPLEMENTED][DARKSNYDERPLSFIX]GameUIManager::setItemLevel: Not implemented.");
 }
 
 void GameUIManager::setItemImage(const std::string& name)

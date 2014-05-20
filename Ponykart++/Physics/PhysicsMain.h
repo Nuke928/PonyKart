@@ -33,6 +33,7 @@ namespace Physics
 		void createGroundPlane(float yposition);
 		void onLevelUnload(Levels::LevelChangedEventArgs* eventArgs); ///< Deletes the world
 		void loadPhysicsLevel(const std::string& levelName);
+		void startSimulation(); /// To be called from the LevelManager
 		// Getters
 		btDiscreteDynamicsWorld* getWorld();
 

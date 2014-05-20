@@ -84,6 +84,8 @@ SoundMain::SoundMain()
 		}
 	});
 
+	buildFileList();
+
 	log("[Loading] OpenAL and SoundMain initialised.");
 }
 
@@ -143,7 +145,7 @@ ALBuffer SoundMain::loadSoundData (string filename)
 	string path= LKernel::basePath + "media/sound/" + filename;
 	filename = getFilename(filename);
 
-	auto fullpathIt = fileList.find(path);
+	auto fullpathIt = fileList.find(filename);
 	if (fullpathIt != fileList.end()) {
 		auto ext = getFileExtension(fullpathIt->second);
 		for (char &c : ext)
@@ -374,7 +376,7 @@ void SoundMain::onPostPlayerCreation()
 }
 
 
-void SoundMain::onLevelLoad(LevelChangedEventArgs* eventArgs)
+void SoundMain::buildFileList()
 {
 	auto& rgMan = ResourceGroupManager::getSingleton();
 	for (string group : rgMan.getResourceGroups())
@@ -385,16 +387,21 @@ void SoundMain::onLevelLoad(LevelChangedEventArgs* eventArgs)
 		auto resourceLocations = *(rgMan.listResourceLocations(group));
 		for (string loc : resourceLocations)
 		{
-			std::vector<string> soundfiles = direntSearch(loc, "*.ogg");
-			std::vector<string> tmpVec = direntSearch(loc, "*.opus");
-			std::vector<string> tmpVec2 = direntSearch(loc, "*.wav");
+			std::vector<string> soundfiles = direntSearch(loc, ".ogg");
+			std::vector<string> tmpVec = direntSearch(loc, ".opus");
+			std::vector<string> tmpVec2 = direntSearch(loc, ".wav");
 			soundfiles.insert(end(soundfiles), begin(tmpVec), end(tmpVec));
 			soundfiles.insert(end(soundfiles), begin(tmpVec2), end(tmpVec2));
 
 			for (string file : soundfiles)
-				fileList[getFilename(file)] = file;
+				fileList[getFilename(file)] = loc+'/'+file;
 		}
 	}
+}
+
+void SoundMain::onLevelLoad(LevelChangedEventArgs* eventArgs)
+{
+	
 }
 
 

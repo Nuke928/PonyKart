@@ -5,6 +5,11 @@ using namespace std;
 using namespace PonykartParsers::MuffinParser;
 
 std::unordered_map<std::string, NodeType> Token::specForTok_Name;
+std::string PonykartParsers::MuffinParser::NodeTypeMap[] = { "Tok_EOF", "Tok_Assign", "Tok_Comma", "Tok_LBrace", "Tok_RBrace",
+"Tok_Name,Tok_KeyFalse", "Tok_KeyTrue", "Tok_StringLiteral", "Tok_FloatLiteral", "Tok_IntLiteral",
+"Tok_SingleLineComment", "Tok_MultiLineComment", "Tok_Whitespace", "Rule_Start", "Rule_Property",
+"Rule_EnumProperty", "Rule_QuatProperty", "Rule_Vec3Property", "Rule_NumericProperty", "Rule_StringProperty",
+"Rule_BoolProperty", "Rule_Block", "Rule_AnyName" };
 
 Token::Token(vector<Token* > PrecedingFillerTokens, NodeType Type, const string& Image, int LineNr, int CharNr)
  : Node(specializeType(Type, Image)), precedingFillerTokens(PrecedingFillerTokens),
@@ -1548,7 +1553,8 @@ RuleInstance* Parser::matchStart()
 
 	for (;;)
 	{
-		if ((tok = fetchToken(laOffset))->type == NodeType::Tok_KeyFalse || tok->type == NodeType::Tok_KeyTrue || tok->type == NodeType::Tok_Name)
+		if ((tok = fetchToken(laOffset))->type == NodeType::Tok_KeyFalse 
+			|| tok->type == NodeType::Tok_KeyTrue || tok->type == NodeType::Tok_Name)
 		{
 			laOffsets.push(laOffset);
 			laSuccess.push(true);

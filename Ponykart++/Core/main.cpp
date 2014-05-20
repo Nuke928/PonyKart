@@ -14,6 +14,8 @@
 #include "Input/KeyBindingManager.h"
 #include "Misc/sdl2Extensions.h"
 
+#define CATCH_STD_STRINGS false
+
 using namespace Ponykart::Launch;
 using namespace Ponykart::LKernel;
 using namespace Ponykart::Input;
@@ -21,7 +23,6 @@ using namespace Ponykart::UI;
 using namespace Extensions;
 using Ponykart::Core::Options;
 using Ponykart::UI::Splash;
-
 
 Uint32 Ponykart::Launch::tenthOfASecondEvent = 0;
 bool Ponykart::Launch::quit = false;
@@ -74,8 +75,10 @@ int main (int argc, char *argv[])
 		abort();
 	}
 	
+#if (CATCH_STD_STRING)
 	try
 	{
+#endif
 		Options::initialize();
 		initOgreGraphics();
 
@@ -90,17 +93,18 @@ int main (int argc, char *argv[])
 		shutdownOgre();
 		std::printf("Shutdown complete.\n");
 		return EXIT_SUCCESS;
+#if (CATCH_STD_STRING)
 	}
 	catch (std::string e) // If you can't guarantee that someone will catch your exceptions, throw a string.
 	{
-		log("[EXCEPTION] " + e);
+		log("[ERROR][EXCEPTION] " + e);
 	}
-	// TODO: Catch standard exceptions too. Log e.what()
 
-	log ("Exception thrown! Shutting down...");
+	log ("[ERROR] Exception thrown! Shutting down...");
 	shutdownOgre();
 	std::printf("Post-exception shutdown complete.\n");
 	return EXIT_FAILURE; // If we're here, we came from a catch
+#endif
 }
 
 

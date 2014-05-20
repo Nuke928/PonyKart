@@ -1,4 +1,6 @@
 #include "pch.h"
+#include "Actors/InstancedGeometryManager.h"
+#include "Actors/StaticGeometryManager.h"
 #include "Actors/Wheels/WheelFactory.h"
 #include "Core/Animation/AnimationManager.h"
 #include "Core/Cameras/CameraManager.h"
@@ -8,6 +10,7 @@
 #include "Core/Pauser.h"
 #include "Core/Spawner.h"
 #include "Kernel/LKernel.h"
+#include "Kernel/LKernelHandler.h"
 #include "Kernel/LKernelOgre.h"
 #include "Levels/LevelManager.h"
 #include "Networking/NetworkManager.h"
@@ -114,17 +117,17 @@ void LKernel::loadInitialObjects(Splash& splash)
 	//addGlobalObject(new ItemManager());
 
 	// Ogre : electric boogaloo
-	//splash.increment("Setting up static and instanced geometry managers...");
-	//addGlobalObject(new StaticGeometryManager());
-	//addGlobalObject(new InstancedGeometryManager());
+	splash.increment("Setting up static and instanced geometry managers...");
+	addGlobalObject(new StaticGeometryManager());
+	addGlobalObject(new InstancedGeometryManager());
 	//addGlobalObject(new ImposterBillboarder());
 
 	// Sound
 	addGlobalObject(new SoundMain());
 
 	// handlers
-	//splash.increment("Loading global handlers...");
-	//LoadGlobalHandlers();
+	splash.increment("Loading global handlers...");
+	loadGlobalHandlers();
 
 	// Post-init
 	//splash.increment("Running post-initialisation events...");

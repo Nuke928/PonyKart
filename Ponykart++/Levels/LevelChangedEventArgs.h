@@ -13,9 +13,9 @@ class LevelChangedEventArgs
 {
 	/// If you're reading this from OnLevelUnload or OnLevelPreUnload, keep in mind that the new level has not been fully initialised yet, so properties such as Type and stuff will probably not be correct!.
 public:
-	LevelChangedEventArgs(const Level& NewLevel, const Level& OldLevel, LevelChangeRequest& Request);
-	const Level& newLevel;
-	const Level& oldLevel;
+	LevelChangedEventArgs(Level& NewLevel, Level& OldLevel, LevelChangeRequest& Request);
+	Level& newLevel;
+	Level& oldLevel;
 	LevelChangeRequest& request;
 };
 

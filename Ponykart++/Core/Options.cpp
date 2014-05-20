@@ -35,7 +35,7 @@ void Options::setupDictionaries()
 		{"ShadowDetail","Some"}, // None, Some or Many
 		{"ShadowDistance","40"},
 		{"Twh","No"},
-		{"P1Controller", "Keyboard"},
+		{"Controller", "Keyboard"},
 		{"Mouse Sensitivity", "1.0"},
 	});
 	dict = defaults; // copy it into the regular dictionary

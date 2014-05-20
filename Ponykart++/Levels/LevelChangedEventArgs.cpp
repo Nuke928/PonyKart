@@ -3,7 +3,7 @@
 
 using namespace Ponykart::Levels;
 
-LevelChangedEventArgs::LevelChangedEventArgs(const Level& NewLevel, const Level& OldLevel, LevelChangeRequest& Request)
+LevelChangedEventArgs::LevelChangedEventArgs(Level& NewLevel, Level& OldLevel, LevelChangeRequest& Request)
 : newLevel(NewLevel), oldLevel(OldLevel), request(Request)
 {
 

@@ -14,6 +14,7 @@ namespace UI
 	{
 	public:
 		UIMain();
+		void changeSceneManager(Ogre::SceneManager* newSceneManager);
 
 	private:
 		bool frameStarted(const Ogre::FrameEvent& evt) override;

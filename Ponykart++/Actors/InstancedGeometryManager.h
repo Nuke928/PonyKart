@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <Ogre.h>
+#include "Kernel/LKernelObject.h"
 
 namespace PonykartParsers
 {
@@ -20,7 +21,7 @@ namespace Actors
 {
 	class ModelComponent;
 
-	class InstancedGeometryManager
+	class InstancedGeometryManager : public LKernel::LKernelObject
 	{
 	private:
 		struct Transform
@@ -33,6 +34,7 @@ namespace Actors
 	public:
 		InstancedGeometryManager();
 		void add(ModelComponent* mc, PonykartParsers::ThingBlock* thingTemplate, PonykartParsers::ModelBlock* block, PonykartParsers::ThingDefinition* def);
+		void build();
 	private:
 		void onLevelUnload(Levels::LevelChangedEventArgs* eventArgs);
 	public:
