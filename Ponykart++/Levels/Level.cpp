@@ -103,7 +103,7 @@ void Level::createEntities()
 {
 	// load up everything into this world
 	Spawner* spawner = getG<Spawner>();
-	for (ThingBlock& tb : definition->getThingBlocks())
+	for (ThingBlock& tb : definition->thingBlocks)
 		spawner->spawn(tb.getThingName(), &tb);
 }
 

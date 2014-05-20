@@ -19,7 +19,3 @@ std::vector<std::string> MuffinDefinition::getExtraFiles()
 	return extraFiles;
 }
 
-std::vector<ThingBlock> MuffinDefinition::getThingBlocks()
-{
-	return thingBlocks;
-}
