@@ -40,8 +40,9 @@ MainMenuManager::MainMenuManager()
 	Window* playButton = WindowManager::getSingleton().createWindow("Ponykart/Button", "playButton");
 	playButton->setYPosition({ 0.30f, 0 });
 	playButton->setText("Single Player");
-	auto playLambda = [](const EventArgs& e)
+	auto playLambda = [=](const EventArgs& e)
 	{
+		mainWindow->hide();
 		MainMenuUIHandler* menuUiHandler = getG<MainMenuUIHandler>();
 		MainMenuSinglePlayerHandler* menuSpHandler = getG<MainMenuSinglePlayerHandler>();
 		menuUiHandler->onGameType_SelectSinglePlayer();
