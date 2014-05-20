@@ -1,0 +1,3 @@
+<Imageset autoScaled="vertical" imagefile="loading.png" name="loading" nativeHorzRes="1145" nativeVertRes="700" version="2">
+    <Image height="700" name="background" width="1145" xPos="0" yPos="0" />
+</Imageset>

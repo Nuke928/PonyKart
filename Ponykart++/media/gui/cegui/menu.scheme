@@ -10,4 +10,5 @@
 	<Imageset filename="checkers.imageset" />
 	<Imageset filename="playmenu.imageset" />
     <Imageset filename="gui.imageset" />
+    <Imageset filename="loading.imageset" />
 </GUIScheme>

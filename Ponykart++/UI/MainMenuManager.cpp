@@ -19,6 +19,12 @@ MainMenuManager::MainMenuManager()
 
 	// Add a quick menu placeholder as a test
 	Window* mainWindow = CEGUI::System::getSingleton().getDefaultGUIContext().getRootWindow();
+
+	// Loading screen
+	Window* loadingWindow = WindowManager::getSingleton().createWindow("Generic/Image", "loadingWindow");
+	loadingWindow->setSize(USize(UDim(1, 0), UDim(1, 0)));
+	loadingWindow->setProperty("Image", "loading/background");
+
 	// Background
 	Window* dashbackground = WindowManager::getSingleton().createWindow("Generic/Image", "dashbackground");
 	dashbackground->setSize(USize(UDim(1, 0), UDim(1, 0)));
@@ -42,12 +48,26 @@ MainMenuManager::MainMenuManager()
 	playButton->setText("Single Player");
 	auto playLambda = [=](const EventArgs& e)
 	{
-		mainWindow->hide();
+		auto ogreRoot = getG<Ogre::Root>();
+		auto sdlWindow = getG<SDL_Window>();
+		auto ogreWindow = getG<Ogre::RenderWindow>();
+
+		// Show the loading screen and redraw
+		System::getSingleton().getDefaultGUIContext().setRootWindow(loadingWindow);
+		ogreRoot->_fireFrameStarted();
+		getG<Ogre::RenderWindow>()->update(true);
+		ogreRoot->_fireFrameRenderingQueued();
+		SDL_GL_SwapWindow(getG<SDL_Window>());
+
+		// Load a level
 		MainMenuUIHandler* menuUiHandler = getG<MainMenuUIHandler>();
 		MainMenuSinglePlayerHandler* menuSpHandler = getG<MainMenuSinglePlayerHandler>();
 		menuUiHandler->onGameType_SelectSinglePlayer();
 		menuSpHandler->onLevelSelect("SweetAppleAcres");  
 		menuSpHandler->onCharacterSelect("Applejack");
+
+		// Hide the loading screen so we can see the level
+		loadingWindow->hide();
 		return true; 
 	};
 	playButton->subscribeEvent(PushButton::EventClicked, Event::Subscriber(playLambda));
@@ -56,16 +76,19 @@ MainMenuManager::MainMenuManager()
 	Window* hostButton = WindowManager::getSingleton().createWindow("Ponykart/Button", "hostButton");
 	hostButton->setYPosition({ 0.40f, 0 });
 	hostButton->setText("Host Networked Game");
+	hostButton->setEnabled(false);
 	playmenu->addChild(hostButton);
 
 	Window* joinButton = WindowManager::getSingleton().createWindow("Ponykart/Button", "joinButton");
 	joinButton->setYPosition({ 0.50f, 0 });
 	joinButton->setText("Join Networked Game");
+	joinButton->setEnabled(false);
 	playmenu->addChild(joinButton);
 
 	Window* optionsButton = WindowManager::getSingleton().createWindow("Ponykart/Button", "optionsButton");
 	optionsButton->setYPosition({ 0.60f, 0 });
 	optionsButton->setText("Options");
+	optionsButton->setEnabled(false);
 	playmenu->addChild(optionsButton);
 
 	Window* quitButton = WindowManager::getSingleton().createWindow("Ponykart/Button", "quitButton");
