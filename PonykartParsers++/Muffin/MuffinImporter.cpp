@@ -52,6 +52,7 @@ MuffinDefinition* MuffinImporter::parseByFile(const string& filePath, MuffinDefi
 	char* rawcontent = new char[size];
 	file.read(rawcontent, size);
 	string contents(rawcontent,size);
+	delete rawcontent;
 	file.close();
 
 	// Parse
