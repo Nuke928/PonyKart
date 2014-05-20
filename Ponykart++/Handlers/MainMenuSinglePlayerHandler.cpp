@@ -36,6 +36,7 @@ void MainMenuSinglePlayerHandler::onCharacterSelect(const string& name)
 			std::vector<string> { characterSelection },
 			false
 		};
-		getG<LevelManager>()->loadLevel(request);
+		getG<LevelManager>()->loadLevel(request,0);
 	}
 }
+
