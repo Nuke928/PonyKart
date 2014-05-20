@@ -100,7 +100,6 @@ btCollisionShape* CollisionShapeManager::createAndRegisterShape(LThing* thing, T
 		// otherwise, make all of our shapes and stick them in a compound shape
 		else
 		{
-			shape = shapeIt->second;
 			btCompoundShape* comp = new btCompoundShape();
 
 			for (ShapeComponent* component : thing->getShapeComponents())
