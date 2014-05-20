@@ -21,6 +21,7 @@ using namespace Ponykart::Lua;
 using namespace Ponykart::Physics;
 using namespace Ponykart;
 using namespace Ogre;
+using namespace std;
 
 const float LevelManager::INITIAL_DELAY{0.1f};
 LevelProgressEvent LevelManager::onLevelLoadProgress;
@@ -197,4 +198,27 @@ void LevelManager::invokeLevelProgress(LevelChangedEventArgs* args, std::string 
 {
 	for (auto& f : onLevelLoadProgress)
 		f(args, message);
+}
+
+bool LevelManager::delayedRun_FrameStarted(const FrameEvent& evt, float delay,
+	function<void(LevelChangedEventArgs*)> action, LevelChangedEventArgs* args)
+{
+	if (!frameOneRendered && elapsed > delay) // rendered one frame
+	{
+		frameOneRendered = true;
+		elapsed = delay;
+	}
+	else if (!frameTwoRendered && elapsed > delay) // rendered two frames
+	{
+		frameTwoRendered = true;
+		elapsed = delay;
+	}
+	else if (frameTwoRendered && elapsed > delay) // rendered three frames! Detach and run our method
+	{
+		detach();
+		action(args);
+	}
+
+	elapsed += evt.timeSinceLastFrame;
+	return true;
 }
