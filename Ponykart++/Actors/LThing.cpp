@@ -39,6 +39,7 @@ using namespace Ponykart::Lua;
 using namespace Ponykart::Physics;
 
 LThing::LThing(ThingBlock* thingTemplate, ThingDefinition* def)
+: body{nullptr} // If we don't have shape components, we still need to give a value to body
 {
 	soundsNeedUpdate = false;
 	id = IDs::incremental();
