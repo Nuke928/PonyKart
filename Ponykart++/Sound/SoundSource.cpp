@@ -22,7 +22,8 @@ SoundSource::SoundSource (SoundSource &&other)
 }
 SoundSource &SoundSource::operator= (SoundSource &&other)
 {
-	deleter(source);
+	if (deleter)
+		deleter(source);
 
 	source = other.source;
 	deleter = other.deleter;
