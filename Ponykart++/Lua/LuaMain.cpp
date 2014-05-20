@@ -88,5 +88,6 @@ void LuaMain::initLuaState()
 
 void LuaMain::loadScriptFiles(const std::string& levelName)
 {
-	throw std::string("LuaMain::loadScriptFiles: Not implemented");
+	// TODO: Implement loadScriptFiles once we figure out Lua
+	//throw std::string("LuaMain::loadScriptFiles: Not implemented");
 }

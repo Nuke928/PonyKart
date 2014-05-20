@@ -93,11 +93,11 @@ int main (int argc, char *argv[])
 	}
 	catch (std::string e) // If you can't guarantee that someone will catch your exceptions, throw a string.
 	{
-		log("[EXCEPTION] " + e);
+		log("[ERROR][EXCEPTION] " + e);
 	}
 	// TODO: Catch standard exceptions too. Log e.what()
 
-	log ("Exception thrown! Shutting down...");
+	log ("[ERROR] Exception thrown! Shutting down...");
 	shutdownOgre();
 	std::printf("Post-exception shutdown complete.\n");
 	return EXIT_FAILURE; // If we're here, we came from a catch

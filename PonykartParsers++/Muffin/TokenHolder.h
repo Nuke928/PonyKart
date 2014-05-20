@@ -47,8 +47,8 @@ public:
 	DLLEXPORT void setQuatProperty(const std::string& propertyName, const Ogre::Quaternion& value); ///< Sets a quaternion property in the maps.
 	// Getters
 	DLLEXPORT const std::unordered_map<std::string, ThingEnum>& getEnumTokens() const;
-	DLLEXPORT 	const std::unordered_map<std::string, std::string>& getStringTokens() const;
-	DLLEXPORT 	const std::unordered_map<std::string, float>& getFloatTokens() const;
+	DLLEXPORT const std::unordered_map<std::string, std::string>& getStringTokens() const;
+	DLLEXPORT const std::unordered_map<std::string, float>& getFloatTokens() const;
 	DLLEXPORT const std::unordered_map<std::string, bool>& getBoolTokens() const;
 	DLLEXPORT const std::unordered_map<std::string, Ogre::Vector3>& getVectorTokens() const;
 	DLLEXPORT const std::unordered_map<std::string, Ogre::Quaternion>& getQuatTokens() const;

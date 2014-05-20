@@ -45,7 +45,7 @@ MainMenuManager::MainMenuManager()
 		MainMenuUIHandler* menuUiHandler = getG<MainMenuUIHandler>();
 		MainMenuSinglePlayerHandler* menuSpHandler = getG<MainMenuSinglePlayerHandler>();
 		menuUiHandler->onGameType_SelectSinglePlayer();
-		menuSpHandler->onLevelSelect("Sweet Apple Acres");  
+		menuSpHandler->onLevelSelect("SweetAppleAcres");  
 		menuSpHandler->onCharacterSelect("Applejack");
 		return true; 
 	};

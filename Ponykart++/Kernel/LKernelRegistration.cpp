@@ -1,4 +1,6 @@
 #include "pch.h"
+#include "Actors/InstancedGeometryManager.h"
+#include "Actors/StaticGeometryManager.h"
 #include "Actors/Wheels/WheelFactory.h"
 #include "Core/Animation/AnimationManager.h"
 #include "Core/Cameras/CameraManager.h"
@@ -115,9 +117,9 @@ void LKernel::loadInitialObjects(Splash& splash)
 	//addGlobalObject(new ItemManager());
 
 	// Ogre : electric boogaloo
-	//splash.increment("Setting up static and instanced geometry managers...");
-	//addGlobalObject(new StaticGeometryManager());
-	//addGlobalObject(new InstancedGeometryManager());
+	splash.increment("Setting up static and instanced geometry managers...");
+	addGlobalObject(new StaticGeometryManager());
+	addGlobalObject(new InstancedGeometryManager());
 	//addGlobalObject(new ImposterBillboarder());
 
 	// Sound

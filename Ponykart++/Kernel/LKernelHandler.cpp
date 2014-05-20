@@ -19,13 +19,13 @@ namespace LKernel
 	void loadLevelHandlers(Levels::Level& newLevel)
 	{
 		// TODO: Implement, requires implementing a RTTI mess
-		throw string("loadLevelHandlers(): Not implemented");
+		//throw string("loadLevelHandlers(): Not implemented");
 	}
 
 	void unloadLevelHandlers()
 	{
 		// TODO: Implement, requires implementing a RTTI mess
-		throw string("unloadLevelHandlers(): Not implemented");
+		//throw string("unloadLevelHandlers(): Not implemented");
 	}
 
 	void loadGlobalHandlers()

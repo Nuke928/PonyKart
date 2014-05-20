@@ -42,7 +42,8 @@ LevelManager::LevelManager()
 void LevelManager::loadLevel(LevelChangeRequest request, float delay)
 {
 	Pauser::isPaused = false;
-	LevelChangedEventArgs* eventArgs = new LevelChangedEventArgs(Level(request.newLevelName), *currentLevel, request);
+	Level* newLevel = new Level(request.newLevelName);
+	LevelChangedEventArgs* eventArgs = new LevelChangedEventArgs(*newLevel, *currentLevel, request);
 
 	// fire our preUnload events
 	for (auto f : onLevelPreUnload)

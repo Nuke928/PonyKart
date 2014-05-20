@@ -11,7 +11,7 @@ ThingEnum TokenHolder::getEnumProperty(const string& propertyName) const
 	if (it != enumTokens.end())
 		return it->second;
 	else
-		throw string("That property was not found in the .thing file!"+propertyName);
+		throw string("That property was not found in the .thing file : "+propertyName);
 }
 
 ThingEnum TokenHolder::getEnumProperty(const string& propertyName, const ThingEnum& defaultValue) const
@@ -31,7 +31,7 @@ Vector3 TokenHolder::getVectorProperty(const string& propertyName) const
 	if (vecIt != vectorTokens.end())
 		return vecIt->second;
 	else
-		throw string("That property was not found in the .thing file!"+propertyName);
+		throw string("That property was not found in the .thing file : "+propertyName);
 }
 
 Vector3 TokenHolder::getVectorProperty(const string& propertyName, const Vector3& defaultValue) const
@@ -51,7 +51,7 @@ Quaternion TokenHolder::getQuatProperty(const string& propertyName) const
 	if (it != quatTokens.end())
 		return it->second;
 	else
-		throw string("That property was not found in the .thing file!"+propertyName);
+		throw string("That property was not found in the .thing file : "+propertyName);
 }
 
 Quaternion TokenHolder::getQuatProperty(const string& propertyName, const Quaternion& defaultValue) const
@@ -71,7 +71,7 @@ string TokenHolder::getStringProperty(const string& propertyName) const
 	if (sIt != stringTokens.end())
 		return sIt->second;
 	else
-		throw string("That property was not found in the .thing file:"+propertyName);
+		throw string("That property was not found in the .thing file : "+propertyName);
 }
 
 string TokenHolder::getStringProperty(const string& propertyName, const string& defaultValue) const
@@ -91,7 +91,7 @@ float TokenHolder::getFloatProperty(const string& propertyName) const
 	if (fIt != floatTokens.end())
 		return fIt->second;
 	else
-		throw string("That property was not found in the .thing file:"+propertyName);
+		throw string("That property was not found in the .thing file : "+propertyName);
 }
 
 float TokenHolder::getFloatProperty(const string& propertyName, const float defaultValue) const
@@ -111,7 +111,7 @@ bool TokenHolder::getBoolProperty(const string& propertyName) const
 	if (it != boolTokens.end())
 		return it->second;
 	else
-		throw string("That property was not found in the .thing file:"+propertyName);
+		throw string("That property was not found in the .thing file : "+propertyName);
 }
 
 bool TokenHolder::getBoolProperty(const string& propertyName, const bool defaultValue) const

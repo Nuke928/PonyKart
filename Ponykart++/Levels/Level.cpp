@@ -114,12 +114,12 @@ void Level::runLevelScript()
 	{
 		// TODO: Implement this function. It depends on Lua stuff.
 		//getG<LuaMain>()->luaVM.Lua.GetFunction(name).call(this);
-		throw string("Level::runLevelScript(): Not implemented !");
+		//throw string("Level::runLevelScript(): Not implemented !");
 	}
 }
 
 void Level::runThingScripts() 
 {
-	for (pair<string,LThing*> l : things)
+	for (pair<const string, LThing*>& l : things)
 		l.second->runScript();
 }
