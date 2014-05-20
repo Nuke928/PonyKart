@@ -26,19 +26,18 @@ Player::Player(LevelChangedEventArgs* eventArgs, int Id, bool IsComputerControll
 	// don't want to create a player if it's ID isn't valid
 	if (Id < 0 || Id >= Settings::NumberOfPlayers)
 		throw string("ID number specified for kart spawn position is not valid!");
-	ostringstream oss; oss << id;
-	log(string("[Loading] Player with ID ") + oss.str() + " created");
+	log("[Loading] Player with ID " + to_string(Id) + " created");
 
 	isComputerControlled = IsComputerControlled;
 
 	// set up the spawn position/orientation
-	Vector3 spawnPos = eventArgs->newLevel.getDefinition()->getVectorProperty("KartSpawnPosition" + id);
-	Quaternion spawnOrient = eventArgs->newLevel.getDefinition()->getQuatProperty("KartSpawnOrientation" + id, Quaternion::IDENTITY);
+	Vector3 spawnPos = eventArgs->newLevel.getDefinition()->getVectorProperty("KartSpawnPosition" + to_string(Id));
+	Quaternion spawnOrient = eventArgs->newLevel.getDefinition()->getQuatProperty("KartSpawnOrientation" + to_string(Id), Quaternion::IDENTITY);
 
 	ThingBlock* block = new ThingBlock("TwiCutlass", spawnPos, spawnOrient);
 
 	string driverName, kartName;
-	string charName = eventArgs->request.characterNames[id];
+	string charName = eventArgs->request.characterNames[Id];
 	if (charName == "Twilight Sparkle")
 	{
 		driverName = "Twilight";
@@ -78,7 +77,7 @@ Player::Player(LevelChangedEventArgs* eventArgs, int Id, bool IsComputerControll
 	kart->player = this;
 	driver->player = this;
 
-	character = eventArgs->request.characterNames[id];
+	character = eventArgs->request.characterNames[Id];
 
 	kart->ownerID = Id;
 	id = Id;
