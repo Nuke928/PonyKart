@@ -23,6 +23,7 @@ namespace Extensions
 {
 	DLLEXPORT Ogre::Vector3 toOgreVector3(const btVector3& vec);
 	DLLEXPORT Ogre::Quaternion toOgreQuaternion(const btQuaternion& quat);
+	DLLEXPORT Ogre::ColourValue toColourValue(const Ogre::Vector3& vec);
 	DLLEXPORT Ogre::ColourValue toColourValue(const Ogre::Quaternion& quat);
 	DLLEXPORT Ogre::Vector3 degreeVectorToRadianVector(const Ogre::Vector3& vec); ///< If you have a vector to be used for rotation but it's in degrees and you want radians, use this!
 	DLLEXPORT Ogre::Vector3 radianVectorToDegreeVector(const Ogre::Vector3& vec); /// If you have a vector to be used for rotation but it's in radians and you want degrees, use this!

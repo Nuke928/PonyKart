@@ -1,7 +1,14 @@
 #include <LinearMath/btVector3.h>
 #include <LinearMath/btQuaternion.h>
+#include <OgreSceneManager.h>
+#include "Core/Options.h"
+#include "Core/OptionsEnums.h"
+#include "Levels/Level.h"
+#include "Muffin/MuffinDefinition.h"
 #include "Misc/ogreExtensions.h"
 
+using namespace Ponykart::Core;
+using namespace PonykartParsers;
 using namespace Ogre;
 
 namespace Extensions
@@ -14,6 +21,11 @@ namespace Extensions
 	Quaternion toOgreQuaternion(const btQuaternion& quat)
 	{
 		return Quaternion(quat.getW(), quat.getX(), quat.getY(), quat.getZ());
+	}
+
+	ColourValue toColourValue(const Vector3& vec)
+	{
+		return ColourValue(vec.x, vec.y, vec.z);
 	}
 
 	ColourValue toColourValue(const Quaternion& quat)
@@ -73,4 +85,43 @@ namespace Extensions
 
 		return q3 * q2 * q1;
 	}
+
+	void setupShadows(SceneManager* sceneMgr, Ponykart::Levels::Level& level)
+	{
+		if (Options::shadowDetail != ShadowDetailOption::None) 
+		{
+			sceneMgr->setShadowTechnique(ShadowTechnique::SHADOWTYPE_STENCIL_MODULATIVE);
+			sceneMgr->setShadowFarDistance(Options::getFloat("ShadowDistance"));
+			Vector3 colorVec = level.getDefinition()->getVectorProperty("ShadowColour", Vector3(0.8f, 0.8f, 0.8f));
+			sceneMgr->setShadowColour(toColourValue(colorVec));
+		}
+		else
+			sceneMgr->setShadowTechnique(ShadowTechnique::SHADOWTYPE_NONE);
+
+		/*
+		/// CODE COPYPASTED FROM THE C# PONYKART - UNTESTED AS OF YET ///
+		sceneMgr.ShadowTechnique = ShadowTechnique.SHADOWTYPE_TEXTURE_MODULATIVE_INTEGRATED;
+
+		sceneMgr.SetShadowTextureCountPerLightType(Light.LightTypes.LT_DIRECTIONAL, 3);
+		sceneMgr.ShadowTextureCount = 3;
+		sceneMgr.SetShadowTextureConfig(0, 1024, 1024, PixelFormat.PF_FLOAT32_R);
+		sceneMgr.SetShadowTextureConfig(1, 512, 512, PixelFormat.PF_FLOAT32_R);
+		sceneMgr.SetShadowTextureConfig(2, 512, 512, PixelFormat.PF_FLOAT32_R);
+		sceneMgr.ShadowTextureSelfShadow = true;
+		sceneMgr.ShadowCasterRenderBackFaces = false;
+		sceneMgr.ShadowFarDistance = 150;
+		sceneMgr.SetShadowTextureCasterMaterial("PSSM/shadow_caster");
+		sceneMgr.SetShadowTextureFadeStart(0.7f);
+
+		PSSMShadowCameraSetup pssm = new PSSMShadowCameraSetup();
+		pssm.SplitPadding = 1f;
+		pssm.CalculateSplitPoints(3, 0.01f, sceneMgr.ShadowFarDistance - 10);
+		pssm.SetOptimalAdjustFactor(0, 2);
+		pssm.SetOptimalAdjustFactor(1, 1f);
+		pssm.SetOptimalAdjustFactor(2, 0.5f);
+		pssm.UseSimpleOptimalAdjust = false;
+
+		sceneMgr.SetShadowCameraSetup(new ShadowCameraSetupPtr(pssm));*/
+	}
+
 } // Extensions
