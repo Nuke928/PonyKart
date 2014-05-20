@@ -56,16 +56,19 @@ MainMenuManager::MainMenuManager()
 	Window* hostButton = WindowManager::getSingleton().createWindow("Ponykart/Button", "hostButton");
 	hostButton->setYPosition({ 0.40f, 0 });
 	hostButton->setText("Host Networked Game");
+	hostButton->setEnabled(false);
 	playmenu->addChild(hostButton);
 
 	Window* joinButton = WindowManager::getSingleton().createWindow("Ponykart/Button", "joinButton");
 	joinButton->setYPosition({ 0.50f, 0 });
 	joinButton->setText("Join Networked Game");
+	joinButton->setEnabled(false);
 	playmenu->addChild(joinButton);
 
 	Window* optionsButton = WindowManager::getSingleton().createWindow("Ponykart/Button", "optionsButton");
 	optionsButton->setYPosition({ 0.60f, 0 });
 	optionsButton->setText("Options");
+	optionsButton->setEnabled(false);
 	playmenu->addChild(optionsButton);
 
 	Window* quitButton = WindowManager::getSingleton().createWindow("Ponykart/Button", "quitButton");
