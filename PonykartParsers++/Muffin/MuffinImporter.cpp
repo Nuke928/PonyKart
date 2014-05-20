@@ -37,26 +37,25 @@ MuffinDefinition* MuffinImporter::parseByName(const string& nameOfMuffin, Muffin
 /// @return A muffin definition with the stuff from the specified muffin file.
 MuffinDefinition* MuffinImporter::parseByFile(const string& filePath, MuffinDefinition* worldDef)
 {
-	string fileContents;
-
 	if (Ogre::LogManager::getSingletonPtr() != nullptr)
 		Ogre::LogManager::getSingletonPtr()->logMessage("[MuffinImporter] Importing and parsing world: " + filePath);
 
 	// read stuff
 	ifstream file;
-	file.open(filePath);
+	file.open(filePath, ios_base::binary);
 	if (!file.is_open())
 		throw string("MuffinImporter::parseByFile: Can't open file");
 
-	file.seekg(fstream::end);
+	file.seekg(0, ios::end);
 	int size = file.tellg();
-	string contents;
-	contents.reserve(size);
+	file.seekg(0, ios::beg);
 	char* rawcontent = new char[size];
-	contents = rawcontent;
+	file.read(rawcontent, size);
+	string contents(rawcontent,size);
+	file.close();
 
 	MuffinParser::Parser* p = new MuffinParser::Parser();
-	root = p->parse(fileContents);
+	root = p->parse(contents);
 
 
 	if (worldDef == nullptr)
