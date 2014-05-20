@@ -85,3 +85,8 @@ void LuaMain::initLuaState()
     luaopen_string(lua);
     luaopen_math(lua);
 }
+
+void LuaMain::loadScriptFiles(const std::string& levelName)
+{
+	throw std::string("LuaMain::loadScriptFiles: Not implemented");
+}
