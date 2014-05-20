@@ -33,6 +33,7 @@ using namespace Ponykart::Physics;
 CollisionShapeManager::CollisionShapeManager()
 {
 	LevelManager::onLevelLoad.push_back(function<void (LevelChangedEventArgs*)>(bind(&CollisionShapeManager::onLevelLoad,this,placeholders::_1)));
+	buildFileList();
 }
 
 /// Gets a bullet file's full path
@@ -47,14 +48,14 @@ string CollisionShapeManager::getBulletFile(const string& filename)
 	return result;
 }
 
-void CollisionShapeManager::onLevelLoad(LevelChangedEventArgs* eventArgs)
+void CollisionShapeManager::buildFileList()
 {
-#if !DEBUG
+#if (!DEBUG || 1)
 	ResourceGroupManager& resGM = ResourceGroupManager::getSingleton();
 	for (string group : resGM.getResourceGroups())
 	{
 		if (!resGM.isResourceGroupInitialised(group) || group == "Bootstrap")
-				continue;
+			continue;
 
 
 		auto resourceLocations = *(resGM.listResourceLocations(group));
@@ -63,7 +64,7 @@ void CollisionShapeManager::onLevelLoad(LevelChangedEventArgs* eventArgs)
 			auto scripts = direntSearch(loc, ".bullet");
 
 			for (string file : scripts)
-				bulletFiles[getFilenameWithoutExtension(file)] = file;
+				bulletFiles[getFilenameWithoutExtension(file)] = loc+'/'+file;
 		}
 	}
 #else
@@ -71,6 +72,11 @@ void CollisionShapeManager::onLevelLoad(LevelChangedEventArgs* eventArgs)
 	for (string file : files)
 		bulletFiles[getFilenameWithoutExtension(file)] = file;
 #endif
+}
+
+void CollisionShapeManager::onLevelLoad(LevelChangedEventArgs* eventArgs)
+{
+
 }
 
 btCollisionShape* CollisionShapeManager::createAndRegisterShape(LThing* thing, ThingDefinition* def)
