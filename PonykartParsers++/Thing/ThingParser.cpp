@@ -55,8 +55,15 @@ RuleInstance* Parser::parse(const std::string& Source)
 	{
 		r = matchStart();
 	}
+	catch (std::string& e)
+	{
+		throw string("Parser::parse (ThingParser):  Error in matchStart, line "
+			+ to_string(currLine) + " column " + to_string(currChar) +" : " + e);
+	}
 	catch (...)
 	{
+		throw string("Parser::parse (ThingParser):  Unknown error in matchStart, line "
+					+to_string(currLine)+" column "+to_string(currChar));
 	}
 	source = string();
 	fetchedTokens.clear();
