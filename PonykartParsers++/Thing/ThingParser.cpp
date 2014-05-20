@@ -19,6 +19,15 @@ Token::Token(vector<Token* > PrecedingFillerTokens, NodeType Type, const string&
  : Node(specializeType(Type, Image)), precedingFillerTokens(PrecedingFillerTokens),
 	image(Image), lineNr(LineNr), charNr(CharNr)
 {
+	specForTok_Name.clear();
+	specForTok_Name["false"] = NodeType::Tok_KeyFalse;
+	specForTok_Name["Model"] = NodeType::Tok_KeyModel;
+	specForTok_Name["Shape"] = NodeType::Tok_KeyShape;
+	specForTok_Name["Ribbon"] = NodeType::Tok_KeyRibbon;
+	specForTok_Name["Billboard"] = NodeType::Tok_KeyBillboard;
+	specForTok_Name["BillboardSet"] = NodeType::Tok_KeyBillboardSet;
+	specForTok_Name["Sound"] = NodeType::Tok_KeySound;
+	specForTok_Name["true"] = NodeType::Tok_KeyTrue;
 }
 
 NodeType Token::specializeType(NodeType Type, const string& Image)
@@ -88,7 +97,8 @@ RuleInstance* Parser::matchStart()
 			laOffsets.push(laOffset);
 			laSuccess.push(true);
 			lookaheadAnyName();
-			if (laSuccess.top()) {
+			if (laSuccess.top()) 
+			{
 				if (fetchToken(laOffset)->type == NodeType::Tok_Assign)
 					laOffset++;
 				else
