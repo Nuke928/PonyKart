@@ -32,6 +32,7 @@ namespace Extensions
 		std::string result;
 		auto pos = path.rfind('/');
 		if (pos != std::string::npos)	result = std::string(path, pos+1);
+		else							result = path;
 		pos = result.rfind('\\');
 		if (pos != std::string::npos)	result = std::string(result, pos+1);
 		pos = result.rfind('.');
