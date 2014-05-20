@@ -306,7 +306,6 @@ void LThing::deleteIfStaticOrInstanced(PonykartParsers::ThingDefinition* def)
 			else
 			{
 				sceneMgr->destroySceneNode(rootNode);
-				delete rootNode;
 				rootNode = nullptr;
 			}
 		}
@@ -360,35 +359,27 @@ void LThing::setUpBodyInfo(PonykartParsers::ThingDefinition* def)
 
 	// collision group
 	ThingEnum teCollisionGroup = def->getEnumProperty("CollisionGroup", defaultGroup);
-	int pcg=0;
-	if (teCollisionGroup&ThingEnum::All) {pcg=(int)PonykartCollisionGroups::All; goto enumPCGConversionDone;}
-	if (teCollisionGroup&ThingEnum::Default) pcg|=(int)PonykartCollisionGroups::Default;
-	if (teCollisionGroup&ThingEnum::Environment) pcg|=(int)PonykartCollisionGroups::Environment;
-	if (teCollisionGroup&ThingEnum::Affectors) pcg|=(int)PonykartCollisionGroups::Affectors;
-	if (teCollisionGroup&ThingEnum::Road) pcg|=(int)PonykartCollisionGroups::Road;
-	if (teCollisionGroup&ThingEnum::Triggers) pcg|=(int)PonykartCollisionGroups::Triggers;
-	if (teCollisionGroup&ThingEnum::Karts) pcg|=(int)PonykartCollisionGroups::Karts;
-	if (teCollisionGroup&ThingEnum::InvisibleWalls) pcg|=(int)PonykartCollisionGroups::InvisibleWalls;
-	enumPCGConversionDone:
-	if (pcg!=(int)teCollisionGroup)
-		throw string("Invalid collision group!");
-	collisionGroup = (PonykartCollisionGroups)pcg;
+	if (teCollisionGroup == ThingEnum::All)					collisionGroup = PonykartCollisionGroups::All;
+	else if (teCollisionGroup == ThingEnum::Default)		collisionGroup = PonykartCollisionGroups::Default;
+	else if (teCollisionGroup == ThingEnum::Environment)	collisionGroup = PonykartCollisionGroups::Environment;
+	else if (teCollisionGroup == ThingEnum::Affectors)		collisionGroup = PonykartCollisionGroups::Affectors;
+	else if (teCollisionGroup == ThingEnum::Road)			collisionGroup = PonykartCollisionGroups::Road;
+	else if (teCollisionGroup == ThingEnum::Triggers)		collisionGroup = PonykartCollisionGroups::Triggers;
+	else if (teCollisionGroup == ThingEnum::Karts)			collisionGroup = PonykartCollisionGroups::Karts;
+	else if (teCollisionGroup == ThingEnum::InvisibleWalls)	collisionGroup = PonykartCollisionGroups::InvisibleWalls;
+	else throw string("Invalid collision group!");
 
 	// collides-with group
 	ThingEnum teCollidesWith = def->getEnumProperty("CollidesWith", defaultGroup);
-	int pcwg=0;
-	if (teCollidesWith&ThingEnum::All) {pcwg=(int)PonykartCollidesWithGroups::All; goto enumPCWGConversionDone;}
-	if (teCollidesWith&ThingEnum::Default) pcwg|=(int)PonykartCollidesWithGroups::Default;
-	if (teCollidesWith&ThingEnum::Environment) pcwg|=(int)PonykartCollidesWithGroups::Environment;
-	if (teCollidesWith&ThingEnum::Affectors) pcwg|=(int)PonykartCollidesWithGroups::Affectors;
-	if (teCollidesWith&ThingEnum::Road) pcwg|=(int)PonykartCollidesWithGroups::Road;
-	if (teCollidesWith&ThingEnum::Triggers) pcwg|=(int)PonykartCollidesWithGroups::Triggers;
-	if (teCollidesWith&ThingEnum::Karts) pcwg|=(int)PonykartCollidesWithGroups::Karts;
-	if (teCollidesWith&ThingEnum::InvisibleWalls) pcwg|=(int)PonykartCollidesWithGroups::InvisibleWalls;
-	enumPCWGConversionDone:
-	if (pcwg!=(int)teCollidesWith)
-		throw string("Invalid collides-with group!");
-	collidesWith = (PonykartCollidesWithGroups)pcwg;
+	if (teCollidesWith == ThingEnum::All)					collidesWith = PonykartCollidesWithGroups::All;
+	else if (teCollidesWith == ThingEnum::Default)			collidesWith = PonykartCollidesWithGroups::Default;
+	else if (teCollidesWith == ThingEnum::Environment)		collidesWith = PonykartCollidesWithGroups::Environment;
+	else if (teCollidesWith == ThingEnum::Affectors)		collidesWith = PonykartCollidesWithGroups::Affectors;
+	else if (teCollidesWith == ThingEnum::Road)				collidesWith = PonykartCollidesWithGroups::Road;
+	else if (teCollidesWith == ThingEnum::Triggers)			collidesWith = PonykartCollidesWithGroups::Triggers;
+	else if (teCollidesWith == ThingEnum::Karts)			collidesWith = PonykartCollidesWithGroups::Karts;
+	else if (teCollidesWith == ThingEnum::InvisibleWalls)	collidesWith = PonykartCollidesWithGroups::InvisibleWalls;
+	else throw string("Invalid collides-with group!");
 
 	// update the transforms
 	Matrix4 trans;
