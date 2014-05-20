@@ -222,3 +222,12 @@ bool LevelManager::delayedRun_FrameStarted(const FrameEvent& evt, float delay,
 	elapsed += evt.timeSinceLastFrame;
 	return true;
 }
+
+void LevelManager::detach()
+{
+	// TODO: BUG:? Too simple to JustWerk(tm). See also : 
+	// - No ones frees the lambdas. And if someone news a new one, we lose track of the old one.
+	// - What if someone new'd a new lambda and we're now detaching the new ? Keeping the old attached forever ?
+	get<Root>()->removeFrameListener(preUnloadFrameStartedHandler);
+	get<Root>()->removeFrameListener(postLoadFrameStartedHandler);
+}
