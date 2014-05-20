@@ -48,6 +48,11 @@ Kart* Spawner::spawnKart(std::string thingName, PonykartParsers::ThingBlock* thi
 		_spawnLock.unlock();
 		return kart;
 	}
+	catch (const std::string& e)
+	{
+		_spawnLock.unlock();
+		throw string("Spawner::spawnKart: Exception caught ! Emergency unlock of _spawnLock. Exception : "+e);
+	}
 	catch (...)
 	{
 		_spawnLock.unlock();

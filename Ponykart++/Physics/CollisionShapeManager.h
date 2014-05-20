@@ -40,7 +40,8 @@ namespace Physics
 		btCollisionShape* importCollisionShape(const std::string& bulletfile); ///< Imports a collision shape from a .bullet file.
 		void serializeShape(btCollisionShape* shape, const std::string& name); ///< Serializes a collision shape and exports a .bullet file.
 	private:
-		void onLevelLoad(Levels::LevelChangedEventArgs* eventArgs); ///< Enumerates through our resource group paths and finds all of the .bullet files
+		void onLevelLoad(Levels::LevelChangedEventArgs* eventArgs); // TODO: Remove this, it's pointless now.
+		void buildFileList(); ///< Enumerates through our resource group paths and finds all of the .bullet files
 		btCollisionShape* createShapeForComponent(Actors::ShapeComponent* component); ///< Creates a collision shape for a shape component
 	public:
 		std::unordered_map<std::string, btCollisionShape*> shapes;

@@ -46,6 +46,8 @@ public:
 	// Getters
 	ALCcontext *getContext() const;
 	Extensions::ALBuffer loadSoundData(std::string filename); // Gets a sound source. The engine keeps track of all of these. Don't include the "media/sound/" bit.
+private:
+	void SoundMain::buildFileList(); ///< Build the internal map of sound/music filenames to file paths
 
 private:
 	Extensions::ALBuffer loadWavData (std::string filename);

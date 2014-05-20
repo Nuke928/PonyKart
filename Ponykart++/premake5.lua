@@ -6,7 +6,7 @@ solution "Ponykart++"
 
 
 	configuration { "Debug" }
-		defines { "DEBUG" }
+		defines { "_DEBUG" }
 		flags { "Symbols" }
 		targetsuffix "-d"
 	configuration { "Release" }
@@ -54,11 +54,6 @@ solution "Ponykart++"
 			os.findlib("ogg"),
 			os.findlib("openal-soft"),
 			os.findlib("boost_system"), 		
-			-- Try in C:/
-			"C:/Lua/5.1/lib",
-			"C:/irrKlang-1.4.0/lib/Win32-visualStudio",
-			"C:/libsndfile32/lib",
-			"C:/libsndfile64/lib",
 		}
 		includedirs {
 			"C:/boost_1_55_0/",
@@ -67,6 +62,7 @@ solution "Ponykart++"
 			"C:/OGRE/include/OGRE",
 			"C:/OGRE/include/OGRE/Overlay",
 			"C:/OGRE/include/OIS",
+			"C:/CEGUI/include",
 			"C:/irrKlang-1.4.0/include",
 			"C:/BULLET_PHYSICS/include/bullet",
 			"C:/libvorbis-1.3.4/include/vorbis",
@@ -96,6 +92,18 @@ solution "Ponykart++"
 			"C:/libopusfile-0.5/lib/Win32-Debug",
 			-- Creative's OpenAL is dead, we'll use OpenAL-soft as a drop-in replacement.
 			"C:/openal-soft-1.15.1-bin/lib/Win32-MSVC12-Debug",
+			"C:/libsndfile32/lib",
+			"C:/libsndfile64/lib",
+			"C:/Lua/5.1/lib",
+			"C:/irrKlang-1.4.0/lib/Win32-visualStudio",
+			"C:/CEGUI/lib",
+		}
+		links {
+			"CEGUIOgreRenderer-0_d",
+			"CEGUIBase-0_d",
+			"OgreMain_d",
+			"OgreOverlay_d",
+			"OIS_d",
 		}
 	configuration { "Windows", "Release" }	
 		libdirs { 
@@ -112,6 +120,18 @@ solution "Ponykart++"
 			"C:/libopusfile-0.5/lib/Win32-Release",
 			-- Creative's OpenAL is dead, we'll use OpenAL-soft as a drop-in replacement.
 			"C:/openal-soft-1.15.1-bin/lib/Win32-MSVC12-Release",
+			"C:/libsndfile32/lib",
+			"C:/libsndfile64/lib",
+			"C:/Lua/5.1/lib",
+			"C:/irrKlang-1.4.0/lib/Win32-visualStudio",
+			"C:/CEGUI/lib",
+		}
+		links {
+			"CEGUIOgreRenderer-0",
+			"CEGUIBase-0",
+			"OgreMain",
+			"OgreOverlay",
+			"OIS",
 		}
 	configuration {}
 
@@ -158,9 +178,6 @@ solution "Ponykart++"
 				"PonykartParsers++",
 				"SDL2main",
 				"SDL2",
-				"OgreMain",
-				"OgreOverlay",
-				"OIS",
 				"BulletDynamics",
 				"BulletCollision",
 				"BulletFileLoader",

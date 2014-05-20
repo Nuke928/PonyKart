@@ -188,3 +188,8 @@ void PhysicsMain::createGroundPlane(float yposition)
 	groundBody->setCollisionFlags(btCollisionObject::CF_STATIC_OBJECT | btCollisionObject::CF_DISABLE_VISUALIZE_OBJECT);
 	world->addRigidBody(groundBody, (short)PonykartCollisionGroups::Environment, (short)PonykartCollidesWithGroups::Environment);
 }
+
+void PhysicsMain::startSimulation()
+{
+	getG<Root>()->addFrameListener(this);
+}

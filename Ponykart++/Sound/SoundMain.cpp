@@ -59,7 +59,12 @@ SoundMain::SoundMain()
 	alcMakeContextCurrent(context);
 	ALenum alerror = alGetError();
 	if (alerror != AL_NO_ERROR)
-		throw string("Failed to initialize OpenAL! (error "+to_string(alerror)+")");
+	{
+		if (alerror == 40964) // FIXME: BUG: TODO: This error happens at random during launch
+			log("[WARNING] OpenAL error 40964 during initialization");
+		else
+			throw string("Failed to initialize OpenAL! (error " + to_string(alerror) + ")");
+	}
 
 	alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 
@@ -78,6 +83,8 @@ SoundMain::SoundMain()
 			this_thread::sleep_for(chrono::milliseconds(125));
 		}
 	});
+
+	buildFileList();
 
 	log("[Loading] OpenAL and SoundMain initialised.");
 }
@@ -138,7 +145,7 @@ ALBuffer SoundMain::loadSoundData (string filename)
 	string path= LKernel::basePath + "media/sound/" + filename;
 	filename = getFilename(filename);
 
-	auto fullpathIt = fileList.find(path);
+	auto fullpathIt = fileList.find(filename);
 	if (fullpathIt != fileList.end()) {
 		auto ext = getFileExtension(fullpathIt->second);
 		for (char &c : ext)
@@ -369,7 +376,7 @@ void SoundMain::onPostPlayerCreation()
 }
 
 
-void SoundMain::onLevelLoad(LevelChangedEventArgs* eventArgs)
+void SoundMain::buildFileList()
 {
 	auto& rgMan = ResourceGroupManager::getSingleton();
 	for (string group : rgMan.getResourceGroups())
@@ -380,16 +387,21 @@ void SoundMain::onLevelLoad(LevelChangedEventArgs* eventArgs)
 		auto resourceLocations = *(rgMan.listResourceLocations(group));
 		for (string loc : resourceLocations)
 		{
-			std::vector<string> soundfiles = direntSearch(loc, "*.ogg");
-			std::vector<string> tmpVec = direntSearch(loc, "*.opus");
-			std::vector<string> tmpVec2 = direntSearch(loc, "*.wav");
+			std::vector<string> soundfiles = direntSearch(loc, ".ogg");
+			std::vector<string> tmpVec = direntSearch(loc, ".opus");
+			std::vector<string> tmpVec2 = direntSearch(loc, ".wav");
 			soundfiles.insert(end(soundfiles), begin(tmpVec), end(tmpVec));
 			soundfiles.insert(end(soundfiles), begin(tmpVec2), end(tmpVec2));
 
 			for (string file : soundfiles)
-				fileList[getFilename(file)] = file;
+				fileList[getFilename(file)] = loc+'/'+file;
 		}
 	}
+}
+
+void SoundMain::onLevelLoad(LevelChangedEventArgs* eventArgs)
+{
+	
 }
 
 

@@ -1,0 +1,3 @@
+<Imageset autoScaled="vertical" imagefile="playmenu.png" name="playmenu" nativeHorzRes="450" nativeVertRes="450" version="2">
+    <Image height="600" name="playmenu" width="725" xPos="0" yPos="0" />
+</Imageset>

@@ -15,6 +15,7 @@
 
 using namespace Ogre;
 using namespace Ponykart;
+using namespace Ponykart::UI;
 using namespace LKernel;
 using Ponykart::Core::Options;
 

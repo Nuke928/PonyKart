@@ -5,6 +5,7 @@
 #include "Actors/Components/ModelComponent.h"
 #include "Core/Options.h"
 #include "Kernel/LKernel.h"
+#include "Kernel/LKernelOgre.h"
 #include "Levels/LevelManager.h"
 #include "Thing/ThingDefinition.h"
 #include "Thing/Blocks/ModelBlock.h"
@@ -89,6 +90,22 @@ void StaticGeometryManager::add(ModelComponent* mc, ThingBlock* thingTemplate, M
 		sg=sgIt->second;
 
 	sg->addEntity(ent, pos, orient, sca);
+}
+
+void StaticGeometryManager::build()
+{
+	for (pair<String, StaticGeometry*> sg : sgeoms) 
+	{
+		log("Building static geometry: " + sg.second->getName());
+		sg.second->build();
+	}
+
+	SceneManager* sceneMgr = get<SceneManager>();
+	for (pair<string,Entity*> e : ents) 
+	{
+		sceneMgr->destroyEntity(e.second);
+		//delete e.second; TODO: FIXME: Memory leak. Uncommenting crashes.
+	}
 }
 
 void StaticGeometryManager::onLevelUnload(LevelChangedEventArgs* eventArgs)

@@ -36,12 +36,30 @@ public:
 
 private:
 	void unloadLevel(LevelChangedEventArgs* eventArgs); ///< Unloads the current level
-	void loadLevelNow(LevelChangedEventArgs* args); ///<s Unloads the current level and loads the new level
-	// TODO: Fix FrameEvent not being defined
-	//bool DelayedRun_FrameStarted(FrameEvent evt, float delay, void (*action)(LevelChangedEventArgs), LevelChangedEventArgs args); ///< Runs something after both the specified time has passed and two frames have been rendered.
+	void loadLevelNow(LevelChangedEventArgs* args); ///< Unloads the current level and loads the new level
+	bool delayedRun_FrameStarted(const Ogre::FrameEvent& evt, float delay, 
+					std::function<void(LevelChangedEventArgs*)> action, LevelChangedEventArgs* args); ///< Runs something after both the specified time has passed and two frames have been rendered.
 	void detach(); ///< Unhook from the frame started event
 	void invoke(LevelEvent e, LevelChangedEventArgs* args); ///< Helper
 	void invokeLevelProgress(LevelChangedEventArgs* args, std::string message);
+
+private:
+	/// This class is an ogre FrameListener taking a lambda to be called in frameStarted as ctor argument
+	class LambdaFrameStartedHandler : public Ogre::FrameListener
+	{
+	public:
+		LambdaFrameStartedHandler(std::function<bool(const Ogre::FrameEvent& evt)> lambda)
+			: frameStartedLambda(lambda) {}
+		bool frameStarted(const Ogre::FrameEvent& evt) override
+		{
+			return frameStartedLambda(evt);
+		}
+
+	private:
+		std::function<bool(const Ogre::FrameEvent& evt)> frameStartedLambda;
+	};
+	LambdaFrameStartedHandler* preUnloadFrameStartedHandler;
+	LambdaFrameStartedHandler* postLoadFrameStartedHandler;
 
 private:
 	Level* currentLevel;

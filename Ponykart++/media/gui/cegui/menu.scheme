@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<GUIScheme version="5" name="menu">
+    <LookNFeel filename="menu.looknfeel" />
+    <WindowRendererSet filename="CEGUICoreWindowRendererSet" />
+    <Font filename="zil.font" />
+    
+    <FalagardMapping windowType="Ponykart/Button" targetType="CEGUI/PushButton" renderer="Core/Button" lookNFeel="Ponykart/Button" />
+    
+    <Imageset filename="dashbackground.imageset" />
+	<Imageset filename="checkers.imageset" />
+	<Imageset filename="playmenu.imageset" />
+    <Imageset filename="gui.imageset" />
+</GUIScheme>

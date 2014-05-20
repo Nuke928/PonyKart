@@ -1,0 +1,6 @@
+<Imageset autoScaled="vertical" imagefile="gui.png" name="gui" nativeHorzRes="1024" nativeVertRes="1024" version="2">
+    <Image height="64" name="button.normal" width="255" xPos="513" yPos="65" />
+    <Image height="64" name="button.disabled" width="255" xPos="513" yPos="0" />
+    <Image height="64" name="button.hover" width="255" xPos="513" yPos="195" />
+    <Image height="64" name="button.pushed" width="255" xPos="513" yPos="130" />
+</Imageset>

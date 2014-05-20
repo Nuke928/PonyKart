@@ -25,6 +25,9 @@
 // SDL2
 #include <SDL.h>
 
+// CEGUI
+#include <CEGUI/CEGUI.h>
+
 // Bullet
 #include <BulletDynamics/btBulletDynamicsCommon.h>
 #include <BulletCollision/btBulletCollisionCommon.h>

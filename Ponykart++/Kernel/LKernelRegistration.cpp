@@ -1,4 +1,6 @@
 #include "pch.h"
+#include "Actors/InstancedGeometryManager.h"
+#include "Actors/StaticGeometryManager.h"
 #include "Actors/Wheels/WheelFactory.h"
 #include "Core/Animation/AnimationManager.h"
 #include "Core/Cameras/CameraManager.h"
@@ -8,6 +10,7 @@
 #include "Core/Pauser.h"
 #include "Core/Spawner.h"
 #include "Kernel/LKernel.h"
+#include "Kernel/LKernelHandler.h"
 #include "Kernel/LKernelOgre.h"
 #include "Levels/LevelManager.h"
 #include "Networking/NetworkManager.h"
@@ -19,6 +22,8 @@
 #include "Players/PlayerManager.h"
 #include "Sound/SoundMain.h"
 #include "Thing/ThingDatabase.h"
+#include "UI/UIMain.h"
+#include "UI/MainMenuManager.h"
 
 using namespace Ogre;
 using namespace Ponykart;
@@ -29,6 +34,7 @@ using namespace Ponykart::Networking;
 using namespace Ponykart::Physics;
 using namespace Ponykart::Players;
 using namespace Ponykart::Sound;
+using namespace Ponykart::UI;
 using namespace PonykartParsers;
 using namespace LKernel::details;
 
@@ -84,11 +90,11 @@ void LKernel::loadInitialObjects(Splash& splash)
 	addGlobalObject(new NetworkManager());
 
 	// GUI
-	//splash.increment("Initialising Miyagi...");
+	splash.increment("Initialising the GUI...");
 	//addGlobalObject(new DebugOverlayManager());
-	//addGlobalObject(new UIMain());
+	addGlobalObject(new UIMain());
 	//addGlobalObject(new LuaConsoleManager());
-	//addGlobalObject(new MainMenuManager());
+	addGlobalObject(new MainMenuManager());
 	//addGlobalObject(new GameUIManager());
 
 	// lua
@@ -111,17 +117,17 @@ void LKernel::loadInitialObjects(Splash& splash)
 	//addGlobalObject(new ItemManager());
 
 	// Ogre : electric boogaloo
-	//splash.increment("Setting up static and instanced geometry managers...");
-	//addGlobalObject(new StaticGeometryManager());
-	//addGlobalObject(new InstancedGeometryManager());
+	splash.increment("Setting up static and instanced geometry managers...");
+	addGlobalObject(new StaticGeometryManager());
+	addGlobalObject(new InstancedGeometryManager());
 	//addGlobalObject(new ImposterBillboarder());
 
 	// Sound
 	addGlobalObject(new SoundMain());
 
 	// handlers
-	//splash.increment("Loading global handlers...");
-	//LoadGlobalHandlers();
+	splash.increment("Loading global handlers...");
+	loadGlobalHandlers();
 
 	// Post-init
 	//splash.increment("Running post-initialisation events...");

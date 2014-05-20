@@ -77,15 +77,24 @@ void InputMain::processEvent (const SDL_Event &event)
 
 	case SDL_MOUSEMOTION:
 		onMouseMove(event.motion);
+		CEGUI::System::getSingleton().getDefaultGUIContext().injectMousePosition(event.motion.x, event.motion.y);
 		break;
 	case SDL_MOUSEWHEEL:
 		onMouseWheelMove(event.wheel);
 		break;
 	case SDL_MOUSEBUTTONDOWN:
 		onMouseButtonPress(event.button);
+		if (event.button.button == (int)SDL_BUTTON_LEFT)
+			CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonDown(CEGUI::MouseButton::LeftButton);
+		else if (event.button.button == (int)SDL_BUTTON_RIGHT)
+			CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonDown(CEGUI::MouseButton::RightButton);
 		break;
 	case SDL_MOUSEBUTTONUP:
 		onMouseButtonRelease(event.button);
+		if (event.button.button == (int)SDL_BUTTON_LEFT)
+			CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonUp(CEGUI::MouseButton::LeftButton);
+		else if (event.button.button == (int)SDL_BUTTON_RIGHT)
+			CEGUI::System::getSingleton().getDefaultGUIContext().injectMouseButtonUp(CEGUI::MouseButton::RightButton);
 		break;
 
 	case SDL_JOYDEVICEADDED:
@@ -182,4 +191,3 @@ int InputMain::pollAxis (Extensions::SDLInputID inputID, SDL_JoystickID controll
 {
 	return pollAxis(inputID, getController(controllerID));
 }
-

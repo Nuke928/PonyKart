@@ -6,18 +6,20 @@ using namespace PonykartParsers;
 
 ThingEnum TokenHolder::getEnumProperty(const string& propertyName) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto it = enumTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto it = enumTokens.find(lowerPropName);
 	if (it != enumTokens.end())
 		return it->second;
 	else
-		throw string("That property was not found in the .thing file!"+propertyName);
+		throw string("That property was not found in the .thing file : "+propertyName);
 }
 
 ThingEnum TokenHolder::getEnumProperty(const string& propertyName, const ThingEnum& defaultValue) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto it = enumTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto it = enumTokens.find(lowerPropName);
 	if (it != enumTokens.end())
 		return it->second;
 	else
@@ -26,18 +28,20 @@ ThingEnum TokenHolder::getEnumProperty(const string& propertyName, const ThingEn
 
 Vector3 TokenHolder::getVectorProperty(const string& propertyName) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto vecIt = vectorTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto vecIt = vectorTokens.find(lowerPropName);
 	if (vecIt != vectorTokens.end())
 		return vecIt->second;
 	else
-		throw string("That property was not found in the .thing file!"+propertyName);
+		throw string("That property was not found in the .thing file : "+propertyName);
 }
 
 Vector3 TokenHolder::getVectorProperty(const string& propertyName, const Vector3& defaultValue) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto vecIt = vectorTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto vecIt = vectorTokens.find(lowerPropName);
 	if (vecIt != vectorTokens.end())
 		return vecIt->second;
 	else
@@ -46,18 +50,20 @@ Vector3 TokenHolder::getVectorProperty(const string& propertyName, const Vector3
 
 Quaternion TokenHolder::getQuatProperty(const string& propertyName) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto it = quatTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto it = quatTokens.find(lowerPropName);
 	if (it != quatTokens.end())
 		return it->second;
 	else
-		throw string("That property was not found in the .thing file!"+propertyName);
+		throw string("That property was not found in the .thing file : "+propertyName);
 }
 
 Quaternion TokenHolder::getQuatProperty(const string& propertyName, const Quaternion& defaultValue) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto it = quatTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto it = quatTokens.find(lowerPropName);
 	if (it != quatTokens.end())
 		return it->second;
 	else
@@ -66,18 +72,20 @@ Quaternion TokenHolder::getQuatProperty(const string& propertyName, const Quater
 
 string TokenHolder::getStringProperty(const string& propertyName) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto sIt=stringTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto sIt = stringTokens.find(lowerPropName);
 	if (sIt != stringTokens.end())
 		return sIt->second;
 	else
-		throw string("That property was not found in the .thing file:"+propertyName);
+		throw string("That property was not found in the .thing file : "+propertyName);
 }
 
 string TokenHolder::getStringProperty(const string& propertyName, const string& defaultValue) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto sIt=stringTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto sIt = stringTokens.find(lowerPropName);
 	if (sIt != stringTokens.end())
 		return sIt->second;
 	else
@@ -86,18 +94,20 @@ string TokenHolder::getStringProperty(const string& propertyName, const string& 
 
 float TokenHolder::getFloatProperty(const string& propertyName) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto fIt=floatTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto fIt = floatTokens.find(lowerPropName);
 	if (fIt != floatTokens.end())
 		return fIt->second;
 	else
-		throw string("That property was not found in the .thing file:"+propertyName);
+		throw string("That property was not found in the .thing file : "+propertyName);
 }
 
 float TokenHolder::getFloatProperty(const string& propertyName, const float defaultValue) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto fIt=floatTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto fIt = floatTokens.find(lowerPropName);
 	if (fIt != floatTokens.end())
 		return fIt->second;
 	else
@@ -106,18 +116,20 @@ float TokenHolder::getFloatProperty(const string& propertyName, const float defa
 
 bool TokenHolder::getBoolProperty(const string& propertyName) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto it=boolTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto it = boolTokens.find(lowerPropName);
 	if (it != boolTokens.end())
 		return it->second;
 	else
-		throw string("That property was not found in the .thing file:"+propertyName);
+		throw string("That property was not found in the .thing file : "+propertyName);
 }
 
 bool TokenHolder::getBoolProperty(const string& propertyName, const bool defaultValue) const
 {
-	// TODO: We should convert propertyName to lowercase before using it
-	auto it=boolTokens.find(propertyName);
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	auto it = boolTokens.find(lowerPropName);
 	if (it != boolTokens.end())
 		return it->second;
 	else
@@ -146,30 +158,42 @@ const unordered_map<string, string>& TokenHolder::getStringTokens() const
 
 void TokenHolder::setEnumProperty(const std::string& propertyName, ThingEnum value)
 {
-	enumTokens[propertyName] = value;
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	enumTokens[lowerPropName] = value;
 }
 
 void TokenHolder::setStringProperty(const std::string& propertyName, const std::string& value)
 {
-	stringTokens[propertyName] = value;
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	stringTokens[lowerPropName] = value;
 }
 
 void TokenHolder::setFloatProperty(const std::string& propertyName, float value)
 {
-	floatTokens[propertyName] = value;
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	floatTokens[lowerPropName] = value;
 }
 
 void TokenHolder::setBoolProperty(const std::string& propertyName, bool value)
 {
-	boolTokens[propertyName] = value;
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	boolTokens[lowerPropName] = value;
 }
 
 void TokenHolder::setVectorProperty(const std::string& propertyName, const Ogre::Vector3& value)
 {
-	vectorTokens[propertyName] = value;
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	vectorTokens[lowerPropName] = value;
 }
 
 void TokenHolder::setQuatProperty(const std::string& propertyName, const Ogre::Quaternion& value)
 {
-	quatTokens[propertyName] = value;
+	string lowerPropName = propertyName;
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	quatTokens[lowerPropName] = value;
 }

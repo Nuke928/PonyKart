@@ -24,7 +24,15 @@ namespace Levels
 class Level // TODO: Translate the whole class correctly
 {
 public:
+	Level(const std::string& name);
 	void addThing(Actors::LThing* newThing); ///< Runs whenever we spawn something. This just adds it to the level's dictionary of Things.
+	void readMuffin(); ///< Reads the main .muffin file for this level and loads any extra ones that were "linked" from the main one
+	void readDotSceneAndSetupPhysics(); ///< Parses a .scene file and sets up physics stuff
+	void createEntities(); ///< Parses the level's save file and creates all of the Things that will be in it. Also creates the player.
+	/// Runs the lua function that uses this level's name, if it exists.
+	/// If this documentation is up to date, it should be in "media/scripts/levelNameGoesHere"
+	void runLevelScript();
+	void runThingScripts(); ///< Runs all of the scripts that the .things have defined, if any
 	// Getters
 	const std::string& getName() const;
 	LevelType getType() const;

@@ -30,7 +30,7 @@ void LKernel::initOgreRoot()
 	prefPath = string(prefPtr);
 	SDL_free(prefPtr);
 
-#if defined(DEBUG) && defined(WIN32)
+#if defined(_DEBUG) && defined(WIN32)
 	gRoot = new Ogre::Root("media_debug/config/plugins.cfg", "", "Ponykart.log");
 #else
 	gRoot = new Ogre::Root("media/config/plugins.cfg", "", "Ponykart.log");
