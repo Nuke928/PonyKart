@@ -75,8 +75,9 @@ const PonykartParsers::MuffinDefinition* const Level::getDefinition() const
 void Level::readMuffin()
 {
 	MuffinImporter importer;
-	definition =  importer.parseByName(name);
-	for (string& file : definition->getExtraFiles())
+	definition = new MuffinDefinition(name);
+	importer.parseByName(name, definition);
+	for (string& file : definition->extraFiles)
 		definition = importer.parseByName(file, definition);
 
 	// get the type of the level

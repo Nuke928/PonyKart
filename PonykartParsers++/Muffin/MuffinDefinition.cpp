@@ -14,8 +14,4 @@ void MuffinDefinition::finish()
 		tb.finish();
 }
 
-std::vector<std::string> MuffinDefinition::getExtraFiles()
-{
-	return extraFiles;
-}
 

@@ -16,12 +16,11 @@ public:
 	void finish() override;
 	// Getters
 	std::string getName();
-	std::vector<std::string> getExtraFiles();
 public:
 	std::vector<ThingBlock> thingBlocks;
+	std::vector<std::string> extraFiles; // Other .muffin files this one should load.
 private: // Set-private public members
 	std::string name;
-	std::vector<std::string> extraFiles; // Other .muffin files this one should load.
 };
 } // PonykartParsers
 

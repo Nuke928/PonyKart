@@ -54,9 +54,9 @@ MuffinDefinition* MuffinImporter::parseByFile(const string& filePath, MuffinDefi
 	string contents(rawcontent,size);
 	file.close();
 
+	// Parse
 	MuffinParser::Parser* p = new MuffinParser::Parser();
 	root = p->parse(contents);
-
 
 	if (worldDef == nullptr)
 		worldDef = new MuffinDefinition(filePath);
@@ -64,13 +64,13 @@ MuffinDefinition* MuffinImporter::parseByFile(const string& filePath, MuffinDefi
 	parse(worldDef);
 
 	for (auto file : extraFiles)
-		worldDef->getExtraFiles().push_back(file);
+		worldDef->extraFiles.push_back(file);
+	extraFiles.clear();
+
 
 	worldDef->finish();
 
 	return worldDef;
-
-	throw string("MuffinImporter::parseByFile: Not implemented !");
 }
 
 void MuffinImporter::parse(MuffinDefinition* worldDef)
