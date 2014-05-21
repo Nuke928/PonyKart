@@ -247,7 +247,8 @@ void LevelManager::runPostInitEvents()
 	// run level loading events
 	LevelChangeRequest request;
 	request.newLevelName = Settings::MainMenuName;
-	auto args = new LevelChangedEventArgs(*currentLevel, Level(nullptr),request);
+	Level nullLevel("");
+	auto args = new LevelChangedEventArgs(*currentLevel, nullLevel,request);
 	invoke(onLevelLoad, args);
 	loadLevelHandlers(args->newLevel);
 
