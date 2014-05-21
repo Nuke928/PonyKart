@@ -15,6 +15,8 @@
 #include <vector>
 #include "direntSearch.h"
 
+using namespace std;
+
 namespace Extensions
 {
 	std::string __cdecl getFilename(const std::string& path)
@@ -81,13 +83,16 @@ namespace Extensions
 			if (entry->d_type == DT_DIR){				// if entry is a directory
 				std::string fname = entry->d_name;
 				if (fname != "." && fname != "..")
-					direntSearchRec(directory + "/" +entry->d_name, extension);	// search through it
+				{
+					std::vector<std::string> tmp=direntSearchRec(directory + "/" + entry->d_name, extension); // search through it
+					results.insert(end(results), begin(tmp), end(tmp));
+				}
 			}
 			else if (entry->d_type == DT_REG){		// if entry is a regular file
 				std::string fname = entry->d_name;	// filename
 													// if filename's last characters are extension
 				if (fname.find(extension, (fname.length() - extension.length())) != std::string::npos)
-					results.push_back(fname);		// add filename to results vector
+					results.push_back(directory+'/'+fname);		// add filename to results vector
 			}
 			entry = readdir(dir_point);
 		}
