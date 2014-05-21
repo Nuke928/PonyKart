@@ -36,6 +36,7 @@ Kart::Kart(ThingBlock* block, ThingDefinition* def) : LThing (block, def),
 	isInAir = false;
 
 	// Call our overriden LThing methods, LThing::LThing() can't possible call them.
+	postInitialiseComponents(block, def);
 	postCreateBody(def);
 }
 
@@ -308,4 +309,14 @@ void Kart::onCountdown(RaceCountdownState state)
 		if (it != end(RaceCountdown::onCountdown))
 			RaceCountdown::onCountdown.erase(it);
 	}
+}
+
+void Kart::postInitialiseComponents(PonykartParsers::ThingBlock* thingTemplate, ThingDefinition* def)
+{
+	Vector3 frontleft = def->getVectorProperty("FrontLeftWheelPosition", {});
+	Vector3 frontright = def->getVectorProperty("FrontRightWheelPosition", {});
+	Vector3 backleft = def->getVectorProperty("BackLeftWheelPosition", {});
+	Vector3 backright = def->getVectorProperty("BackRightWheelPosition", {});
+	leftParticleNode = rootNode->createChildSceneNode(frontleft.midPoint(backleft));
+	rightParticleNode = rootNode->createChildSceneNode(frontright.midPoint(backright));
 }

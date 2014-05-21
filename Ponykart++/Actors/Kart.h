@@ -63,7 +63,8 @@ public:
 	void setAcceleration(float newAcceleration);
 protected:
 //	MotionState initializationMotionState() override; // TODO: Find MotionState definition and implement
-	virtual void postCreateBody(PonykartParsers::ThingDefinition* td) override; ///< After we create our RigidBody, we turn it into a vehicle
+	virtual void postCreateBody(PonykartParsers::ThingDefinition* def) override; ///< After we create our RigidBody, we turn it into a vehicle
+	virtual void postInitialiseComponents(PonykartParsers::ThingBlock* thingTemplate, PonykartParsers::ThingDefinition* def) override; /// Make some nodes for us to attach wheel particles to
 private:
 	void stopDrifting_WheelFunction(Wheel* w);
 	void startDrifting_WheelFunction(Wheel* w);
