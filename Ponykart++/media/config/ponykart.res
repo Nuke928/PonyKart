@@ -30,10 +30,9 @@ FileSystem=media/characters/rainbow dash
 FileSystem=media/characters/rarity
 FileSystem=media/characters/twilight sparkle
 FileSystem=media/particles
-FileSystem=media/gui
+FileSystem=media/gui/img
 FileSystem=media/gui/fonts
-FileSystem=media/gui/cegui
-FileSystem=media/gui/menu
+FileSystem=media/gui/xml
 FileSystem=media/worlds
 
 

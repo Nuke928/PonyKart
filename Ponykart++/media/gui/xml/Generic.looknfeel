@@ -56,6 +56,7 @@
         <PropertyDefinition redrawOnWrite="true" initialValue="Stretched" type="HorizontalFormatting" name="HorzFormatting"/>
         <PropertyDefinition redrawOnWrite="true" initialValue="" type="Image" name="Image"/>
         <Property name="Size" value="{{0, 128}, {0, 128}}" />
+        <Property name="RiseOnClickEnabled" value="false"  />
 
         <ImagerySection name="imageSection">
             <ImageryComponent>
