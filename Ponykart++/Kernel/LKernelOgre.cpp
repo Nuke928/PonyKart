@@ -179,12 +179,9 @@ void LKernel::details::loadOgreResourceGroups()
 			SkeletonManager::getSingleton().setVerbose(false);
 #endif
 
-#if DEBUG
 			ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
-#else
 			//ResourceGroupManager::getSingleton().initialiseResourceGroup("Bootstrap");
 			ResourceGroupManager::getSingleton().initialiseResourceGroup("Main");
-#endif
 }
 
 void LKernel::shutdownOgre ()

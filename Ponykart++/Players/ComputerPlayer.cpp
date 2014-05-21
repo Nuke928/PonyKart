@@ -15,12 +15,12 @@ ComputerPlayer::ComputerPlayer(LevelChangedEventArgs* eventArgs, int id)
 : Player(eventArgs,id,true)
 {
 	//LKernel.GetG<CollisionReporter>().AddEvent(PonykartCollisionGroups.Karts, PonykartCollisionGroups.Environment, OnCol);
-#if DEBUG
+/*#if DEBUG
 	axis = LKernel::getG<Core::Spawner>()->spawn("Axis", kart->getRootNode()->getPosition());
 	axis->getModelComponents()[0]->getNode()->setScale(0.1f, 0.1f, 0.1f);
 	axis2 = LKernel::getG<Core::Spawner>()->spawn("Axis", kart->getRootNode()->getPosition());
 	axis2->getModelComponents()[0]->getNode()->setScale(0.1f, 0.1f, 0.1f);
-#endif
+#endif*/
 
 	LKernel::onEveryUnpausedTenthOfASecondEvent.connect(std::bind(&ComputerPlayer::everyTenth,this,std::placeholders::_1));
 }
