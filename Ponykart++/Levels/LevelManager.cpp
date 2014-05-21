@@ -148,9 +148,9 @@ void LevelManager::loadLevelNow(LevelChangedEventArgs* args)
 		frameOneRendered = frameTwoRendered = false;
 
 		// set up our handler
-		auto lambda = [&](const Ogre::FrameEvent& evt)
+		auto lambda = [=](const Ogre::FrameEvent& evt)
 		{
-			auto invokeLambda = [&](LevelChangedEventArgs* a){invoke(onLevelPostLoad, a); };
+			auto invokeLambda = [=](LevelChangedEventArgs* a){invoke(onLevelPostLoad, a); };
 			return delayedRun_FrameStarted(evt, INITIAL_DELAY, invokeLambda, args);
 		};
 		postLoadFrameStartedHandler = new LambdaFrameStartedHandler(lambda);
