@@ -17,8 +17,8 @@ BasicCamera::BasicCamera(const std::string& name)
 	camera->setFarClipDistance(600.f);
 	camera->setAutoAspectRatio(true);
 
-	camera->setPosition(Vector3(0, 5, -20));
-	camera->lookAt(Vector3(0, 3, 0));
+	camera->setPosition(Vector3(15, 2, 64));
+	camera->lookAt(Vector3(0, 2, 64));
 
 	sceneMgr->getRootSceneNode()->attachObject(camera);
 }
