@@ -1,3 +1,6 @@
+#ifndef RACECOUNTDOWN_H_INCLUDED
+#define RACECOUNTDOWN_H_INCLUDED
+
 #include <functional>
 #include <vector>
 
@@ -26,3 +29,4 @@ namespace Core
 	};
 }
 }
+#endif // RACECOUNTDOWN_H_INCLUDED
