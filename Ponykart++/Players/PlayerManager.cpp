@@ -1,6 +1,7 @@
 #include "pch.h"
 #include <map>
 #include "Core/Options.h"
+#include "Core/IDs.h"
 #include "Kernel/LKernel.h"
 #include "Kernel/LKernelOgre.h"
 #include "Levels/LevelChangedEventArgs.h"
@@ -30,10 +31,11 @@ const string PlayerManager::defaultCharacter = "Twilight Sparkle";
 PlayerManager::PlayerManager()
 {
 	log("[Loading] Creating PlayerManager...");
+	eventId = IDs::incremental();
 	LevelManager::onLevelLoad.push_back(bind(&PlayerManager::onLevelLoad,this,placeholders::_1));
 	LevelManager::onLevelUnload.push_back(bind(&PlayerManager::onLevelUnload, this, placeholders::_1));
 
-	RaceCountdown::onCountdown.push_back(bind(&PlayerManager::raceCountdown_onCountdown, this, placeholders::_1));
+	RaceCountdown::onCountdown.push_back({ eventId, bind(&PlayerManager::raceCountdown_onCountdown, this, placeholders::_1) });
 }
 
 const Player* const PlayerManager::getMainPlayer() const

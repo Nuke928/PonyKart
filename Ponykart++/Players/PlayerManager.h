@@ -37,6 +37,7 @@ public:
 private:
 	Player* mainPlayer;
 	std::vector<Player*> players;
+	unsigned eventId; ///< Used internally to register/unregister from events
 };
 
 } // Players

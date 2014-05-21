@@ -17,7 +17,7 @@ namespace Core
 		OneSecondAfterGo = -1
 	};
 
-	using RaceCountdownEvent = std::vector<std::function<void(RaceCountdownState)>>;
+	using RaceCountdownEvent = std::vector<std::pair<int,std::function<void(RaceCountdownState)>>>;
 
 	class RaceCountdown
 	{

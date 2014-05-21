@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "Actors/Kart.h"
+#include "Actors/Wheels/WheelFactory.h"
+#include "Kernel/LKernel.h"
 #include "Misc/ogreExtensions.h"
+#include "Misc/bulletExtensions.h"
+#include "Physics/PhysicsMain.h"
 #include "Physics/MotionStates/KartMotionState.h"
 #include "Thing/ThingDefinition.h"
 #include "Thing/Blocks/ThingBlock.h"
@@ -10,6 +14,8 @@ using namespace Extensions;
 using namespace PonykartParsers;
 using namespace Ponykart::Actors;
 using namespace Ponykart::Actors::KartDriftStateExtensions;
+using namespace Ponykart::Core;
+using namespace Ponykart::LKernel;
 using namespace Ponykart::Physics;
 
 // Static members
@@ -28,6 +34,9 @@ Kart::Kart(ThingBlock* block, ThingDefinition* def) : LThing (block, def),
 	maxReverseSpeedSquared = maxReverseSpeed * maxReverseSpeed;
 
 	isInAir = false;
+
+	// Call our overriden LThing methods, LThing::LThing() can't possible call them.
+	postCreateBody(def);
 }
 
 float Kart::getMaxSpeed() const
@@ -211,5 +220,92 @@ void Kart::startDrifting_WheelFunction(Wheel* w)
 			w->idealSteerAngle = -frontDriftAngle;
 			_vehicle->getWheelInfo(w->intWheelID).m_bIsFrontWheel = true;
 		}
+	}
+}
+
+void Kart::postCreateBody(ThingDefinition* def)
+{
+	kartMotionState = (KartMotionState*)motionState;
+
+	body->setCcdMotionThreshold(0.001f);
+	body->setCcdSweptSphereRadius(0.04f);
+
+	raycaster = new btDefaultVehicleRaycaster(getG<PhysicsMain>()->getWorld());
+	tuning = new btRaycastVehicle::btVehicleTuning();
+	_vehicle = new btRaycastVehicle(*tuning, body, raycaster);
+	_vehicle->setCoordinateSystem(0, 1, 2); // I have no idea what this does... I'm assuming something to do with a rotation matrix?
+
+	getG<PhysicsMain>()->getWorld()->addAction(_vehicle);
+
+	WheelFactory* wheelFac = getG<WheelFactory>();
+	std::string frontWheelName = def->getStringProperty("FrontWheel", "");
+	std::string backWheelName = def->getStringProperty("BackWheel", "");
+	wheelFL = wheelFac->createWheel(frontWheelName, WheelID::FrontLeft, this, def->getVectorProperty("FrontLeftWheelPosition", {}), def->getStringProperty("FrontLeftWheelMesh", ""));
+	wheelFR = wheelFac->createWheel(frontWheelName, WheelID::FrontRight, this, def->getVectorProperty("FrontRightWheelPosition", {}), def->getStringProperty("FrontRightWheelMesh", ""));
+	wheelBL = wheelFac->createWheel(backWheelName, WheelID::BackLeft, this, def->getVectorProperty("BackLeftWheelPosition", {}), def->getStringProperty("BackLeftWheelMesh", ""));
+	wheelBR = wheelFac->createWheel(backWheelName, WheelID::BackRight, this, def->getVectorProperty("BackRightWheelPosition", {}), def->getStringProperty("BackRightWheelMesh", ""));
+
+	leftParticleNode->setPosition(leftParticleNode->getPosition()-Vector3(0, wheelBL->defaultRadius * 0.7f, 0));
+	rightParticleNode->setPosition(rightParticleNode->getPosition()-Vector3(0, wheelBR->defaultRadius * 0.7f, 0));
+
+	body->setLinearVelocity(btVector3(0, 1, 0));
+
+	PhysicsMain::finaliseBeforeSimulation.push_back(std::bind(&Kart::finaliseBeforeSimulation,this,std::placeholders::_1,std::placeholders::_2));
+	RaceCountdown::onCountdown.push_back({ ownerID, std::bind(&Kart::onCountdown, this, std::placeholders::_1) });
+}
+
+void Kart::finaliseBeforeSimulation(btDiscreteDynamicsWorld* world, const FrameEvent& evt)
+{
+	float currentSpeed = _vehicle->getCurrentSpeedKmHour();
+	bool isDriftingAtAll = ::isDriftingAtAll(driftState);
+
+	if (!isInAir) 
+	{
+		// going forwards
+		// using 20 because we don't need to check the kart's linear velocity if it's going really slowly
+		if ((currentSpeed > 20.f && !isDriftingAtAll)
+			|| currentSpeed < -20.f && isDriftingAtAll
+			|| currentSpeed > 20.f && isDriftingAtAll)
+		{
+			// check its velocity against the max velocity (both are squared to avoid unnecessary square roots)
+			if (toOgreVector3(body->getLinearVelocity()).squaredLength() > maxSpeedSquared) 
+			{
+				Vector3 vec = toOgreVector3(body->getLinearVelocity());
+				vec.normalise();
+				vec *= maxSpeed;
+				body->setLinearVelocity(toBtVector3(vec));
+			}
+		}
+		// going in reverse, so we want to limit the speed even more
+		else if (currentSpeed < -20.f && !isDriftingAtAll) 
+		{
+			if (toOgreVector3(body->getLinearVelocity()).squaredLength() > maxReverseSpeedSquared) 
+			{
+				Vector3 vec = toOgreVector3(body->getLinearVelocity());
+				vec.normalise();
+				vec *= maxReverseSpeed;
+				body->setLinearVelocity(toBtVector3(vec));
+			}
+		}
+		else if (currentSpeed < 4.f && currentSpeed > -4.f)
+		{
+			if (canDisableKarts && acceleration == 0.f)
+				body->forceActivationState(WANTS_DEACTIVATION);
+		}
+	}
+}
+
+void Kart::onCountdown(RaceCountdownState state)
+{
+	if (state == RaceCountdownState::Two) 
+	{
+		canDisableKarts = true; 
+
+		auto a = std::bind(&Kart::onCountdown, this, std::placeholders::_1);
+
+		auto it = find_if(begin(RaceCountdown::onCountdown), end(RaceCountdown::onCountdown),
+			[&](std::pair<int, std::function<void(RaceCountdownState)>> a){return a.first == ownerID; });
+		if (it != end(RaceCountdown::onCountdown))
+			RaceCountdown::onCountdown.erase(it);
 	}
 }
