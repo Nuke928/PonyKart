@@ -33,6 +33,7 @@ void LuaMain::runRegisterEvent()
 
 void LuaMain::doFunctionForLThing(std::string& functionName, Actors::LThing* thing)
 {
+	/* TODO: Implement
     if(LKernel::getG<LevelManager>()->getIsValidLevel()) {
         luaMutex.lock();
 
@@ -41,21 +42,27 @@ void LuaMain::doFunctionForLThing(std::string& functionName, Actors::LThing* thi
 
         luaMutex.unlock();
     }
+	*/
 }
 
 void LuaMain::doFile(const std::string &filename)
 {
+	/* TODO: Implement
     if(LKernel::getG<LevelManager>()->getIsValidLevel()) {
         LKernel::log("[LuaMain] Running file: " + filename);
         luaL_dofile(lua, filename.c_str());
     }
+	*/
 }
 
 void LuaMain::doString(const std::string &s)
 {
+	// TODO: Implement
+	/*
     if(LKernel::getG<LevelManager>()->getIsValidLevel()) {
         luaL_dostring(lua, s.c_str());
     }
+	*/
 }
 
 void LuaMain::quit()
@@ -77,6 +84,7 @@ void LuaMain::print(const std::string &s)
 
 void LuaMain::initLuaState()
 {
+	// TODO: BUG: This just terminates, not even an exception. Thanks, lua.
     lua = luaL_newstate();
 
     luaopen_io(lua);
