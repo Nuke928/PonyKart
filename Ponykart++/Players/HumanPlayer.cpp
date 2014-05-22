@@ -70,7 +70,7 @@ void HumanPlayer::releaseHandler (int playerID, Input::GameInputID inputID)
 		onAccelerateChanged(bindings->pollAxis(id, GameInputID::AccelerateAxis));
 		break;
 	case GameInputID::Reverse:
-        onAccelerateChanged(bindings->pollAxis(id, GameInputID::BrakeAxis));
+        onBrakeChanged(bindings->pollAxis(id, GameInputID::BrakeAxis));
 		break;
 	case GameInputID::Drift:
 		onStopDrift();
