@@ -117,9 +117,9 @@ float Kart::getAcceleration() const
 
 void Kart::setAcceleration(float newAcceleration)
 {
+	acceleration = newAcceleration;
 	if (acceleration != 0.f)
 		body->activate();
-	acceleration = newAcceleration;
 
 	wheelFL->accelerateMultiplier = newAcceleration;
 	wheelFL->isBrakeOn = false;
