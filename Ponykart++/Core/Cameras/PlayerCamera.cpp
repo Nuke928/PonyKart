@@ -75,7 +75,7 @@ bool PlayerCamera::updateCamera(const Ogre::FrameEvent& evt)
 	auto Zdiff = kartRoll - sin((camOr.getRoll() + Radian(M_PI)).valueRadians());
 	if (Zdiff > 0 || Zdiff < 0)
 	{
-		camera->roll(Radian(-0.1f * asin(Zdiff) * M_PI / 180.0));
+		camera->roll(Radian(-0.1f * Math::ASin(Zdiff) * M_PI / 180.0));
 	}
 	auto callback = castRay(derivedCam, derivedTarget);
 
