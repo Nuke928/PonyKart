@@ -34,17 +34,14 @@ void HumanPlayer::pressHandler (int playerID, Input::GameInputID inputID)
 	if (playerID != id)
 		return;
 
-	log("Human press handler OK");
-
 	switch (inputID) {
 	case GameInputID::TurnLeft:
-		onSteeringChanged(bindings->pollKey(id, GameInputID::TurnRight) ? 0 : -1.f);
+		onSteeringChanged(bindings->pollKey(id, GameInputID::TurnRight) ? 0 : 1.f);
 		break;
 	case GameInputID::TurnRight:
-		onSteeringChanged(bindings->pollKey(id, GameInputID::TurnLeft) ? 0 : 1.f);
+		onSteeringChanged(bindings->pollKey(id, GameInputID::TurnLeft) ? 0 : -1.f);
 		break;
 	case GameInputID::Accelerate:
-		log("Human accelerate");
 		onAccelerateChanged(1.f);
 		break;
 	case GameInputID::Reverse:
@@ -122,17 +119,10 @@ void HumanPlayer::onSteeringChanged (float value)
 
 void HumanPlayer::onAccelerateChanged (float value)
 {
-	log("Human accel changed");
-
     Player::onAccelerateChanged(value);
 
 	if (isControlEnabled)
-	{
-		log("Control enabled");
 		kart->setAcceleration(accelAxis - brakeAxis);
-	}
-	else
-		log("Control is disabled !");
 }
 
 void HumanPlayer::onBrakeChanged (float value)

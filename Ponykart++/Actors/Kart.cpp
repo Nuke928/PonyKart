@@ -127,8 +127,6 @@ void Kart::setAcceleration(float newAcceleration)
 	wheelBL->isBrakeOn = false;
 	wheelBR->accelerateMultiplier = newAcceleration;
 	wheelBR->isBrakeOn = false;
-
-	log("Accell set to " + std::to_string(newAcceleration));
 }
 
 void Kart::stopDrifting()
