@@ -6,6 +6,8 @@
 #include "Levels/LevelManager.h"
 #include "UI/MainMenuManager.h"
 
+#include <iostream>
+
 using namespace Ponykart::Handlers;
 using namespace Ponykart::Levels;
 using namespace Ponykart::LKernel;

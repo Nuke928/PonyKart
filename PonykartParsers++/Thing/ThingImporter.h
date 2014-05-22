@@ -34,9 +34,7 @@ namespace PonykartParsers
 	private:
 		ThingParser::RuleInstance* root;
 		static std::unordered_map<std::string, std::string> fileList;
-		#if !DEBUG
-			static bool hasPreparedFileList;
-		#endif
+		static bool hasPreparedFileList;
 	};
 } // PonykartParsers
 

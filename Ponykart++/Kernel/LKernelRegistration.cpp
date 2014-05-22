@@ -13,6 +13,7 @@
 #include "Kernel/LKernelHandler.h"
 #include "Kernel/LKernelOgre.h"
 #include "Levels/LevelManager.h"
+#include "Lua/LuaMain.h"
 #include "Networking/NetworkManager.h"
 #include "Physics/PhysicsMain.h"
 #include "Physics/CollisionShapeManager.h"
@@ -30,6 +31,7 @@ using namespace Ponykart;
 using namespace Ponykart::Actors;
 using namespace Ponykart::Core;
 using namespace Ponykart::Input;
+using namespace Ponykart::Lua;
 using namespace Ponykart::Networking;
 using namespace Ponykart::Physics;
 using namespace Ponykart::Players;
@@ -108,7 +110,7 @@ void LKernel::loadInitialObjects(Splash& splash)
 	// players
 	splash.increment("Spawning players...");
 	addGlobalObject(new PlayerManager());
-	//addGlobalObject(new RaceCountdown());
+	addGlobalObject(new RaceCountdown());
 	//addGlobalObject(new LapCounter());
 	//addGlobalObject(new LThingHelperManager());
 

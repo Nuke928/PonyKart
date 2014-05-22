@@ -173,18 +173,15 @@ void LKernel::details::loadOgreResourceGroups()
 			// which were created in photoshop to look a lot nicer than the blurry mess ogre creates on the fly.
 			TextureManager::getSingleton().setDefaultNumMipmaps(8);
 
-#if !DEBUG
+#if !DEBUG || 1
 			TextureManager::getSingleton().setVerbose(false);
 			MeshManager::getSingleton().setVerbose(false);
 			SkeletonManager::getSingleton().setVerbose(false);
 #endif
 
-#if DEBUG
 			ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
-#else
 			//ResourceGroupManager::getSingleton().initialiseResourceGroup("Bootstrap");
 			ResourceGroupManager::getSingleton().initialiseResourceGroup("Main");
-#endif
 }
 
 void LKernel::shutdownOgre ()

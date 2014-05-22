@@ -90,13 +90,13 @@ protected:
 	btRigidBody::btRigidBodyConstructionInfo* info;
 	Physics::PonykartCollisionGroups collisionGroup; ///< The body's collision group
 	Physics::PonykartCollidesWithGroups collidesWith; ///< What does the body collide with?
+	btMotionState* motionState; ///< The actual motion state.
 private:
 	Ogre::Vector3 spawnPosition; ///< The thing's initial position when it's first created
 	Ogre::Quaternion spawnOrientation; ///< The thing's initial orientation when it's first created
 	Ogre::Vector3 spawnScale; ///< The thing's initial scale when it's first created. This is only used if it doesn't have any shape components.
 	bool soundsNeedUpdate;
 	std::string script;
-	btMotionState* motionState; ///< The actual motion state.
 };
 } // Actors
 } // Ponykart

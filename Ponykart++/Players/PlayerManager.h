@@ -23,7 +23,8 @@ public:
 	 PlayerManager(); // Hook up to the level load/unload events
 	// Getters
 	const Player* const getMainPlayer() const;
-	const std::vector<Player*>* const getPlayers() const;
+	Player* getMainPlayer();
+	const std::vector<Player*>& getPlayers() const;
 public:
 	PlayerEvent onPostPlayerCreation;
 	/// When a level loads, we create the players. For now, we just have one human player and 7 computer-controlled ones
@@ -37,6 +38,7 @@ public:
 private:
 	Player* mainPlayer;
 	std::vector<Player*> players;
+	unsigned eventId; ///< Used internally to register/unregister from events
 };
 
 } // Players

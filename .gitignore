@@ -28,6 +28,7 @@ tmp/
 
 # Archives
 *.rar
+Progress!/
 
 # vim swap files
 *.swp

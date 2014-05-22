@@ -19,6 +19,7 @@ public:
 	virtual void detach();
 	// Getters
 	const Actors::Kart* const getKart() const;
+	Actors::Kart* getKart();
 	const Actors::Driver* const getDriver() const;
 	const btRigidBody* const getBody() const; ///< Gets the kart's Body
 	int getId() const;

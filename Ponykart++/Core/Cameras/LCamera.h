@@ -15,10 +15,12 @@ namespace Ponykart
 namespace Core
 {
 /// All camera classes should subclass from this.
-class LCamera
+class LCamera : Ogre::FrameListener
 {
 public:
 	LCamera(const std::string& Name);
+	void registerCam(); ///< Shortand
+	void makeActiveCamera(); ///< Make sure you register the camera before calling this!
 	// Getters
 	const Ogre::Camera* const getCamera() const; ///< Gets the Ogre camera
 	const Ogre::SceneNode* const getCameraNode() const; ///< Gets the scene node
@@ -28,7 +30,8 @@ public:
 	virtual void onSwitchToInactive(LCamera *newCamera); ///< Is ran when we switch from this camera to another camera
 
 protected:
-	virtual bool updateCamera(const Ogre::FrameEvent& evt); ///< Called every frame when the camera is the active camera
+	virtual bool updateCamera(const Ogre::FrameEvent& evt) = 0; ///< Called every frame when the camera is the active camera
+	virtual bool frameStarted(const Ogre::FrameEvent& evt) override; ///< Calls updateCamera
 
 protected:
 	friend class CameraManager; ///< CameraManager needs to access the Ogre camera

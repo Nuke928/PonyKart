@@ -17,9 +17,8 @@ using namespace PonykartParsers;
 using namespace PonykartParsers::ThingParser;
 
 std::unordered_map<std::string, std::string> ThingImporter::fileList;
-#if !DEBUG
-	bool ThingImporter::hasPreparedFileList(false);
-#endif
+bool ThingImporter::hasPreparedFileList(false);
+
 
 ThingImporter::ThingImporter()
 {
@@ -76,10 +75,8 @@ string ThingImporter::getNameFromProperty(RuleInstance* prop)
 
 void ThingImporter::prepareFileList()
 {
-#if !DEBUG
 	if (!hasPreparedFileList)
 	{
-#endif
 		Ogre::ResourceGroupManager& rgm = Ogre::ResourceGroupManager::getSingleton();
 		for (string group : rgm.getResourceGroups())
 		{
@@ -96,10 +93,8 @@ void ThingImporter::prepareFileList()
 					fileList[getFilenameWithoutExtension(file)] = loc+'/'+file;
 			}
 		}
-#if !DEBUG
 		hasPreparedFileList = true;
 	}
-#endif
 }
 
 void ThingImporter::parse(ThingDefinition* thingDef)

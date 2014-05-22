@@ -3,6 +3,7 @@
 #include "Input/KeyBindingManager.h"
 #include "Items/ItemManager.h"
 #include "Kernel/LKernel.h"
+#include "Kernel/LKernelOgre.h"
 #include "Players/HumanPlayer.h"
 #include "UI/GameUIManager.h"
 
@@ -35,10 +36,10 @@ void HumanPlayer::pressHandler (int playerID, Input::GameInputID inputID)
 
 	switch (inputID) {
 	case GameInputID::TurnLeft:
-		onSteeringChanged(bindings->pollKey(id, GameInputID::TurnRight) ? 0 : -1.f);
+		onSteeringChanged(bindings->pollKey(id, GameInputID::TurnRight) ? 0 : 1.f);
 		break;
 	case GameInputID::TurnRight:
-		onSteeringChanged(bindings->pollKey(id, GameInputID::TurnLeft) ? 0 : 1.f);
+		onSteeringChanged(bindings->pollKey(id, GameInputID::TurnLeft) ? 0 : -1.f);
 		break;
 	case GameInputID::Accelerate:
 		onAccelerateChanged(1.f);
@@ -70,7 +71,7 @@ void HumanPlayer::releaseHandler (int playerID, Input::GameInputID inputID)
 		onAccelerateChanged(bindings->pollAxis(id, GameInputID::AccelerateAxis));
 		break;
 	case GameInputID::Reverse:
-		onAccelerateChanged(bindings->pollAxis(id, GameInputID::BrakeAxis));
+        onBrakeChanged(bindings->pollAxis(id, GameInputID::BrakeAxis));
 		break;
 	case GameInputID::Drift:
 		onStopDrift();
@@ -118,7 +119,7 @@ void HumanPlayer::onSteeringChanged (float value)
 
 void HumanPlayer::onAccelerateChanged (float value)
 {
-	Player::onAccelerateChanged(value);
+    Player::onAccelerateChanged(value);
 
 	if (isControlEnabled)
 		kart->setAcceleration(accelAxis - brakeAxis);

@@ -7,7 +7,7 @@
 #include <OgreFrameListener.h>
 #include "Actors/LThing.h"
 #include "Actors/Wheels/Wheel.h"
-
+#include "Core/RaceCountdown.h"
 
 class btRaycastVehicle;
 namespace PonykartParsers
@@ -63,9 +63,13 @@ public:
 	void setAcceleration(float newAcceleration);
 protected:
 //	MotionState initializationMotionState() override; // TODO: Find MotionState definition and implement
+	virtual void postCreateBody(PonykartParsers::ThingDefinition* def) override; ///< After we create our RigidBody, we turn it into a vehicle
+	virtual void postInitialiseComponents(PonykartParsers::ThingBlock* thingTemplate, PonykartParsers::ThingDefinition* def) override; /// Make some nodes for us to attach wheel particles to
 private:
 	void stopDrifting_WheelFunction(Wheel* w);
 	void startDrifting_WheelFunction(Wheel* w);
+	void finaliseBeforeSimulation(btDiscreteDynamicsWorld* world, const Ogre::FrameEvent& evt); ///< limit the wheels' speed!
+	void onCountdown(Core::RaceCountdownState state); ///< Give it a second or two to get the wheels in the right positions before we can deactivate the karts when they're stopped
 public:
 	int ownerID; ///< A special ID number just for the karts. 0 is usually the player kart, but don't rely on this.
 	const float defaultMaxSpeed;
@@ -85,6 +89,7 @@ protected:
 	Wheel* wheelBR;
 	btRaycastVehicle* _vehicle;
 	btRaycastVehicle::btVehicleTuning* tuning;
+	btVehicleRaycaster* raycaster;
 	float turnMultiplier;
 	float acceleration;
 private:
@@ -94,6 +99,7 @@ private:
 	float maxReverseSpeedSquared;
 	Ogre::SceneNode* leftParticleNode;
 	Ogre::SceneNode* rightParticleNode;
+	bool canDisableKarts = false;
 };
 } // Actors
 } // Ponykart

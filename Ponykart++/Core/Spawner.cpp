@@ -5,6 +5,7 @@
 #include "Core/Pauser.h"
 #include "Core/Spawner.h"
 #include "Kernel/LKernel.h"
+#include "Kernel/LKernelOgre.h"
 #include "Levels/LevelManager.h"
 #include "Thing/ThingDatabase.h"
 
@@ -127,5 +128,6 @@ LThing* Spawner::spawn(std::string thingName, PonykartParsers::ThingBlock* thing
 	catch (...)
 	{
 		_spawnLock.unlock();
+        throw string("Spawner::spawn: Unknown exception caught ! Emergency unlock of _spawnLock.");
 	}
 }

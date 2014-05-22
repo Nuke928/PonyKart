@@ -92,7 +92,7 @@ LThing::LThing(ThingBlock* thingTemplate, ThingDefinition* def)
 		runScript();
 	}
 
-	deleteIfStaticOrInstanced(def);
+    deleteIfStaticOrInstanced(def);
 }
 
 LThing::~LThing() // TODO: The C# version takes "bool disposing" as an argument. Check if this is correct.
@@ -301,7 +301,7 @@ void LThing::deleteIfStaticOrInstanced(PonykartParsers::ThingDefinition* def)
 		if (removedAllModelComponents && !ribbonComponents.size() && !billboardSetComponents.size() && !soundComponents.size())
 		{
 			if (!shapeComponents.size()) // if we have no shapes, we can get rid of everything
-				delete this;
+                ; // TODO: We're supposed to do some cleanup here. (C# dispose(true))
 			// but otherwise we can still get rid of the root scene node
 			else
 			{

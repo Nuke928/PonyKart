@@ -72,8 +72,8 @@ Wheel::Wheel(Kart* owner, const Vector3& connectionPoint, WheelID wheelID,
 	axlePoint = connectionPoint + Vector3(0, -defaultSuspensionRestLength, 0);
 
 	// create our node and entity
-	node = owner->getRootNode()->createChildSceneNode("wheelNode" + kart->getID() + id, axlePoint);
-	entity = LKernel::getG<SceneManager>()->createEntity("wheelNode" + kart->getID() + id, meshName);
+	node = owner->getRootNode()->createChildSceneNode("wheelNode" + to_string(kart->getID()) + to_string(id), axlePoint);
+	entity = LKernel::getG<SceneManager>()->createEntity("wheelNode" + to_string(kart->getID()) + to_string(id), meshName);
 	node->attachObject(entity);
 	node->setInheritOrientation(false);
 

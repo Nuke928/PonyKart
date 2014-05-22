@@ -3,10 +3,13 @@
 #include <OgreCamera.h>
 #include <OgreRoot.h>
 #include <OgreSceneNode.h>
+#include "Core/Cameras/CameraManager.h"
 #include "Core/Cameras/LCamera.h"
 #include "Kernel/LKernel.h"
 
 using namespace Ponykart::Core;
+using namespace Ponykart::LKernel;
+using namespace Ogre;
 
 LCamera::LCamera(const std::string& Name)
  : name(Name)
@@ -32,16 +35,29 @@ bool LCamera::updateCamera(const Ogre::FrameEvent& evt)
 	return true;
 }
 
-/// \todo Implement this
 void LCamera::onSwitchToActive(LCamera *oldCamera)
 {
-	// TODO
 	isActive = true;
+	getG<Root>()->addFrameListener(this);
 }
 
-/// \todo Implement this
 void LCamera::onSwitchToInactive(LCamera *oldCamera)
 {
-	// TODO
 	isActive = false;
+	getG<Root>()->removeFrameListener(this);
+}
+
+void LCamera::registerCam()
+{
+	getG<CameraManager>()->registerCamera(this);
+}
+
+void LCamera::makeActiveCamera()
+{
+	getG<CameraManager>()->switchCurrentCamera(this);
+}
+
+bool LCamera::frameStarted(const FrameEvent& evt)
+{
+	return updateCamera(evt);
 }

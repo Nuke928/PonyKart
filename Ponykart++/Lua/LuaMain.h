@@ -4,6 +4,7 @@
 #include <vector>
 #include <functional>
 #include <mutex>
+#include "Kernel/LKernelObject.h"
 
 struct lua_State;
 
@@ -17,7 +18,7 @@ namespace Lua
 
 using LuaEvent = std::vector<std::function<void ()>>;
 
-class LuaMain
+class LuaMain : public LKernel::LKernelObject
 {
 public:
 	explicit LuaMain();

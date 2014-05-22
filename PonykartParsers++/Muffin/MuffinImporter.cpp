@@ -1,4 +1,5 @@
 #include "pch.h"
+#include <algorithm>
 #include <fstream>
 #include "Core/Settings.h"
 #include "Muffin/MuffinImporter.h"
@@ -94,7 +95,7 @@ void MuffinImporter::parse(MuffinDefinition* worldDef)
 void MuffinImporter::parseProperty(TokenHolder* holder, MuffinParser::RuleInstance* prop)
 {
 	string propName = getNameFromProperty(prop);
-	transform(begin(propName), end(propName), begin(propName), tolower);
+	transform(begin(propName), end(propName), begin(propName), ::tolower);
 	
 	if (propName == "loadfile") // if we have some extra files, load these too
 		extraFiles.push_back(parseStringProperty(prop));
@@ -179,8 +180,8 @@ ThingEnum MuffinImporter::parseEnumProperty(RuleInstance* prop)
 	{
 		string s1{ ThingEnumMap[i] };
 		string s2{ valTok->image };
-		transform(s1.begin(), s1.end(), s1.begin(), tolower);
-		transform(s2.begin(), s2.end(), s2.begin(), tolower);
+		transform(s1.begin(), s1.end(), s1.begin(), ::tolower);
+		transform(s2.begin(), s2.end(), s2.begin(), ::tolower);
 		if (s1 == s2)
 			result = i;
 	}

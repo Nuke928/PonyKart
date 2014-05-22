@@ -17,7 +17,7 @@ using namespace Ponykart::LKernel;
 using namespace Ponykart::Players;
 using namespace PonykartParsers;
 
-Player::Player() : hasItem(false)
+Player::Player() : hasItem(false), isControlEnabled(false)
 {
 }
 
@@ -118,6 +118,11 @@ const Ogre::Vector3 Player::getNodePosition() const
 }
 
 const Kart* const Player::getKart() const
+{
+	return kart;
+}
+
+Kart* Player::getKart()
 {
 	return kart;
 }

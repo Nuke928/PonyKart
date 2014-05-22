@@ -31,6 +31,8 @@ solution "Ponykart++"
 			"/usr/include/vorbis",
 			"/usr/local/include/opus",
 			"/usr/include/opus",
+			"/usr/include/cegui-0",
+			"/usr/local/include/cegui-0",
 		}
 	configuration { "MacOSX" }
 		buildoptions "-std=c++11"
@@ -168,6 +170,8 @@ solution "Ponykart++"
 				"opus",
 				"ogg",
 				"boost_system",
+				"CEGUIBase-0",
+				"CEGUIOgreRenderer-0",
 			}
 			linkoptions  "-pthread -lluajit-5.1"
 		configuration { "MacOSX" }

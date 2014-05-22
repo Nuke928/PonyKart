@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "Core/Cameras/BasicCamera.h"
 #include "Core/Cameras/CameraManager.h"
 #include "Kernel/LKernel.h"
 #include "Levels/LevelManager.h"
@@ -14,18 +15,17 @@ CameraEvent CameraManager::onPostCameraSwitch;
 CameraEvent CameraManager::onCameraRegistration;
 
 CameraManager::CameraManager()
+: currentCamera{nullptr}
 {
 	LevelManager::onLevelLoad.push_back(bind(&CameraManager::onLevelLoad,this,placeholders::_1));
 	LevelManager::onLevelUnload.push_back(bind(&CameraManager::onLevelUnload,this,placeholders::_1));
 }
 
-/// \todo Implement this.
 void CameraManager::onLevelLoad(LevelChangedEventArgs *args)
 {
-	//TODO: Implement this.
-	//BasicCamera basicCamera = new BasicCamera("BasicCamera");
-	//cameras.Add(basicCamera);
-	//SwitchCurrentCamera(basicCamera);	
+	BasicCamera* basicCamera = new BasicCamera("BasicCamera");
+	cameras.push_back(basicCamera);
+	switchCurrentCamera(basicCamera);	
 }
 
 void CameraManager::onLevelUnload(LevelChangedEventArgs *args)
@@ -64,7 +64,7 @@ void CameraManager::registerCamera(LCamera *camera)
 
 void CameraManager::switchCurrentCamera(LCamera *camera)
 {
-	if(std::find(cameras.begin(),cameras.end(),camera)!=cameras.end()) {
+	if(std::find(cameras.begin(),cameras.end(),camera)==cameras.end()) {
 		throw std::string("Tried to switch to a camera that wasn't registered to the CameraManager!");
 	}
 

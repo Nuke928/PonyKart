@@ -2,6 +2,7 @@
 #include "Actors/StaticGeometryManager.h"
 #include "Actors/InstancedGeometryManager.h"
 #include "Core/Pauser.h"
+#include "Input/InputSwallowerManager.h"
 #include "Kernel/LKernel.h"
 #include "Kernel/LKernelCleanup.h"
 #include "Kernel/LKernelHandler.h"
@@ -15,6 +16,7 @@
 using namespace Extensions;
 using namespace Ponykart::Actors;
 using namespace Ponykart::Core;
+using namespace Ponykart::Input;
 using namespace Ponykart::Levels;
 using namespace Ponykart::LKernel;
 using namespace Ponykart::Lua;
@@ -146,9 +148,9 @@ void LevelManager::loadLevelNow(LevelChangedEventArgs* args)
 		frameOneRendered = frameTwoRendered = false;
 
 		// set up our handler
-		auto lambda = [&](const Ogre::FrameEvent& evt)
+		auto lambda = [=](const Ogre::FrameEvent& evt)
 		{
-			auto invokeLambda = [&](LevelChangedEventArgs* a){invoke(onLevelPostLoad, a); };
+			auto invokeLambda = [=](LevelChangedEventArgs* a){invoke(onLevelPostLoad, a); };
 			return delayedRun_FrameStarted(evt, INITIAL_DELAY, invokeLambda, args);
 		};
 		postLoadFrameStartedHandler = new LambdaFrameStartedHandler(lambda);
@@ -231,4 +233,31 @@ void LevelManager::detach()
 	// - What if someone new'd a new lambda and we're now detaching the new ? Keeping the old attached forever ?
 	get<Root>()->removeFrameListener(preUnloadFrameStartedHandler);
 	get<Root>()->removeFrameListener(postLoadFrameStartedHandler);
+}
+
+void LevelManager::runPostInitEvents()
+{
+	// don't let this run twice
+	if (hasRunPostInitEvents)
+		throw string("The LevelManager has already run its post-initialisation events!");
+
+	currentLevel = new Level(Settings::MainMenuName);
+	currentLevel->readMuffin();
+
+	// run level loading events
+	LevelChangeRequest request;
+	request.newLevelName = Settings::MainMenuName;
+	Level nullLevel("");
+	auto args = new LevelChangedEventArgs(*currentLevel, nullLevel,request);
+	invoke(onLevelLoad, args);
+	loadLevelHandlers(args->newLevel);
+
+	isValidLevel = true;
+
+	// make sure this won't run again
+	hasRunPostInitEvents = true;
+	// pause it for the main menu
+	Pauser::isPaused = true;
+	// we don't want any input to go while we're in the middle of changing levels
+	getG<InputSwallowerManager>()->addSwallower([&](){ return !isValidLevel; }, this);
 }

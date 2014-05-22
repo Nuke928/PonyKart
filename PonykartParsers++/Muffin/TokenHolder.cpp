@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "TokenHolder.h"
 
 using namespace std;
@@ -7,7 +8,7 @@ using namespace PonykartParsers;
 ThingEnum TokenHolder::getEnumProperty(const string& propertyName) const
 {
 	string lowerPropName = propertyName;
-	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), ::tolower);
 	auto it = enumTokens.find(lowerPropName);
 	if (it != enumTokens.end())
 		return it->second;
@@ -18,7 +19,7 @@ ThingEnum TokenHolder::getEnumProperty(const string& propertyName) const
 ThingEnum TokenHolder::getEnumProperty(const string& propertyName, const ThingEnum& defaultValue) const
 {
 	string lowerPropName = propertyName;
-	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), ::tolower);
 	auto it = enumTokens.find(lowerPropName);
 	if (it != enumTokens.end())
 		return it->second;
@@ -29,7 +30,7 @@ ThingEnum TokenHolder::getEnumProperty(const string& propertyName, const ThingEn
 Vector3 TokenHolder::getVectorProperty(const string& propertyName) const
 {
 	string lowerPropName = propertyName;
-	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), ::tolower);
 	auto vecIt = vectorTokens.find(lowerPropName);
 	if (vecIt != vectorTokens.end())
 		return vecIt->second;
@@ -40,7 +41,7 @@ Vector3 TokenHolder::getVectorProperty(const string& propertyName) const
 Vector3 TokenHolder::getVectorProperty(const string& propertyName, const Vector3& defaultValue) const
 {
 	string lowerPropName = propertyName;
-	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), ::tolower);
 	auto vecIt = vectorTokens.find(lowerPropName);
 	if (vecIt != vectorTokens.end())
 		return vecIt->second;
@@ -51,7 +52,7 @@ Vector3 TokenHolder::getVectorProperty(const string& propertyName, const Vector3
 Quaternion TokenHolder::getQuatProperty(const string& propertyName) const
 {
 	string lowerPropName = propertyName;
-	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), ::tolower);
 	auto it = quatTokens.find(lowerPropName);
 	if (it != quatTokens.end())
 		return it->second;
@@ -62,7 +63,7 @@ Quaternion TokenHolder::getQuatProperty(const string& propertyName) const
 Quaternion TokenHolder::getQuatProperty(const string& propertyName, const Quaternion& defaultValue) const
 {
 	string lowerPropName = propertyName;
-	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), ::tolower);
 	auto it = quatTokens.find(lowerPropName);
 	if (it != quatTokens.end())
 		return it->second;
@@ -73,7 +74,7 @@ Quaternion TokenHolder::getQuatProperty(const string& propertyName, const Quater
 string TokenHolder::getStringProperty(const string& propertyName) const
 {
 	string lowerPropName = propertyName;
-	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), ::tolower);
 	auto sIt = stringTokens.find(lowerPropName);
 	if (sIt != stringTokens.end())
 		return sIt->second;
@@ -84,7 +85,7 @@ string TokenHolder::getStringProperty(const string& propertyName) const
 string TokenHolder::getStringProperty(const string& propertyName, const string& defaultValue) const
 {
 	string lowerPropName = propertyName;
-	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), ::tolower);
 	auto sIt = stringTokens.find(lowerPropName);
 	if (sIt != stringTokens.end())
 		return sIt->second;
@@ -95,7 +96,7 @@ string TokenHolder::getStringProperty(const string& propertyName, const string& 
 float TokenHolder::getFloatProperty(const string& propertyName) const
 {
 	string lowerPropName = propertyName;
-	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), ::tolower);
 	auto fIt = floatTokens.find(lowerPropName);
 	if (fIt != floatTokens.end())
 		return fIt->second;
@@ -106,7 +107,7 @@ float TokenHolder::getFloatProperty(const string& propertyName) const
 float TokenHolder::getFloatProperty(const string& propertyName, const float defaultValue) const
 {
 	string lowerPropName = propertyName;
-	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), ::tolower);
 	auto fIt = floatTokens.find(lowerPropName);
 	if (fIt != floatTokens.end())
 		return fIt->second;
@@ -117,7 +118,7 @@ float TokenHolder::getFloatProperty(const string& propertyName, const float defa
 bool TokenHolder::getBoolProperty(const string& propertyName) const
 {
 	string lowerPropName = propertyName;
-	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), ::tolower);
 	auto it = boolTokens.find(lowerPropName);
 	if (it != boolTokens.end())
 		return it->second;
@@ -128,7 +129,7 @@ bool TokenHolder::getBoolProperty(const string& propertyName) const
 bool TokenHolder::getBoolProperty(const string& propertyName, const bool defaultValue) const
 {
 	string lowerPropName = propertyName;
-	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), ::tolower);
 	auto it = boolTokens.find(lowerPropName);
 	if (it != boolTokens.end())
 		return it->second;
@@ -159,41 +160,41 @@ const unordered_map<string, string>& TokenHolder::getStringTokens() const
 void TokenHolder::setEnumProperty(const std::string& propertyName, ThingEnum value)
 {
 	string lowerPropName = propertyName;
-	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), ::tolower);
 	enumTokens[lowerPropName] = value;
 }
 
 void TokenHolder::setStringProperty(const std::string& propertyName, const std::string& value)
 {
 	string lowerPropName = propertyName;
-	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), ::tolower);
 	stringTokens[lowerPropName] = value;
 }
 
 void TokenHolder::setFloatProperty(const std::string& propertyName, float value)
 {
 	string lowerPropName = propertyName;
-	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), ::tolower);
 	floatTokens[lowerPropName] = value;
 }
 
 void TokenHolder::setBoolProperty(const std::string& propertyName, bool value)
 {
 	string lowerPropName = propertyName;
-	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), ::tolower);
 	boolTokens[lowerPropName] = value;
 }
 
 void TokenHolder::setVectorProperty(const std::string& propertyName, const Ogre::Vector3& value)
 {
 	string lowerPropName = propertyName;
-	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), ::tolower);
 	vectorTokens[lowerPropName] = value;
 }
 
 void TokenHolder::setQuatProperty(const std::string& propertyName, const Ogre::Quaternion& value)
 {
 	string lowerPropName = propertyName;
-	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), tolower);
+	transform(begin(lowerPropName), end(lowerPropName), begin(lowerPropName), ::tolower);
 	quatTokens[lowerPropName] = value;
 }
