@@ -23,6 +23,7 @@ public:
 	 PlayerManager(); // Hook up to the level load/unload events
 	// Getters
 	const Player* const getMainPlayer() const;
+	Player* getMainPlayer();
 	const std::vector<Player*>* const getPlayers() const;
 public:
 	PlayerEvent onPostPlayerCreation;

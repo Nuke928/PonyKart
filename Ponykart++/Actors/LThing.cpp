@@ -92,7 +92,7 @@ LThing::LThing(ThingBlock* thingTemplate, ThingDefinition* def)
 		runScript();
 	}
 
-    deleteIfStaticOrInstanced(def); // BUG: May wreck this ! Can completely scramble our members.
+    deleteIfStaticOrInstanced(def);
 }
 
 LThing::~LThing() // TODO: The C# version takes "bool disposing" as an argument. Check if this is correct.

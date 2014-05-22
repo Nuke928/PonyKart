@@ -121,3 +121,8 @@ const Kart* const Player::getKart() const
 {
 	return kart;
 }
+
+Kart* Player::getKart()
+{
+	return kart;
+}

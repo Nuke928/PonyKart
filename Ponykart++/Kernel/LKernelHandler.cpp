@@ -2,6 +2,7 @@
 #include "Handlers/UI/MainMenuUIHandler.h"
 #include "Handlers/MainMenuSinglePlayerHandler.h"
 #include "Handlers/SceneEnvironmentHandler.h"
+#include "Handlers/CameraCreator.h"
 #include "Kernel/LKernel.h"
 #include "Kernel/LKernelHandler.h"
 #include "Kernel/LKernelOgre.h"
@@ -20,7 +21,7 @@ namespace LKernel
 	void loadLevelHandlers(Levels::Level& newLevel)
 	{
 		// TODO: Implement, requires implementing a RTTI mess
-		//throw string("loadLevelHandlers(): Not implemented");
+		addGlobalObject(new CameraCreatorHandler());
 	}
 
 	void unloadLevelHandlers()
@@ -33,9 +34,9 @@ namespace LKernel
 	{
 		// TODO: Add the rest of the handlers
 		log("[Loading] Initialising global handlers...");
+		addGlobalObject(new SceneEnvironmentHandler());
 		addGlobalObject(new MainMenuUIHandler());
 		addGlobalObject(new MainMenuSinglePlayerHandler());
-		addGlobalObject(new SceneEnvironmentHandler());
 	}
 }
 }

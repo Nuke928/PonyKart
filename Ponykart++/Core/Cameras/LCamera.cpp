@@ -3,10 +3,12 @@
 #include <OgreCamera.h>
 #include <OgreRoot.h>
 #include <OgreSceneNode.h>
+#include "Core/Cameras/CameraManager.h"
 #include "Core/Cameras/LCamera.h"
 #include "Kernel/LKernel.h"
 
 using namespace Ponykart::Core;
+using namespace Ponykart::LKernel;
 
 LCamera::LCamera(const std::string& Name)
  : name(Name)
@@ -44,4 +46,14 @@ void LCamera::onSwitchToInactive(LCamera *oldCamera)
 {
 	// TODO
 	isActive = false;
+}
+
+void LCamera::registerCam()
+{
+	getG<CameraManager>()->registerCamera(this);
+}
+
+void LCamera::makeActiveCamera()
+{
+	getG<CameraManager>()->switchCurrentCamera(this);
 }

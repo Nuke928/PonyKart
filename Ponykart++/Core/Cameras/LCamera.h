@@ -19,6 +19,8 @@ class LCamera
 {
 public:
 	LCamera(const std::string& Name);
+	void registerCam(); ///< Shortand
+	void makeActiveCamera(); ///< Make sure you register the camera before calling this!
 	// Getters
 	const Ogre::Camera* const getCamera() const; ///< Gets the Ogre camera
 	const Ogre::SceneNode* const getCameraNode() const; ///< Gets the scene node
