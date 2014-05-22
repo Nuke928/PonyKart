@@ -51,10 +51,13 @@ PlayerCamera::PlayerCamera(const std::string& name)
 	// initialise some stuff for the ray casting
 	rayLength = (cameraNode->getPosition() - targetNode->getPosition()).length();
 	world = getG<PhysicsMain>()->getWorld();
+
+	camera->setAutoTracking(true, followKart->getRootNode(), Vector3(0, 0.4f, 0));
 }
 
 bool PlayerCamera::updateCamera(const Ogre::FrameEvent& evt)
 {
+	cameraNode->setPosition(kartCamNode->_getDerivedPosition());
 	return true; // TODO: BUG: FIXME: The camera update is causing all the physics madness and jitter !
 	// TODO: Also might want to bisect to find where the bug that blocks the wheels was introduced
 	Vector3 camDisplacement, targetDisplacement,
