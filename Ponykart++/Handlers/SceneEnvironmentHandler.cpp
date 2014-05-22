@@ -76,11 +76,6 @@ void SceneEnvironmentHandler::onLevelPostLoad(LevelChangedEventArgs* eventArgs)
 				def->getFloatProperty("FogStart", 20),
 				def->getFloatProperty("FogEnd", 100));
 		}
-
-#if DEBUG
-		// make some axes
-		getG<Spawner>()->spawn("Axis", Vector3::ZERO);
-#endif
 	}
 	else if (eventArgs->newLevel.getType() == LevelType::Menu)
 		getG<SceneManager>()->setAmbientLight(ColourValue(1, 1, 1));
