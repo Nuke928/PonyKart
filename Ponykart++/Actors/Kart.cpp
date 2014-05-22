@@ -2,6 +2,7 @@
 #include "Actors/Kart.h"
 #include "Actors/Wheels/WheelFactory.h"
 #include "Kernel/LKernel.h"
+#include "Kernel/LKernelOgre.h"
 #include "Misc/ogreExtensions.h"
 #include "Misc/bulletExtensions.h"
 #include "Physics/PhysicsMain.h"
@@ -126,6 +127,8 @@ void Kart::setAcceleration(float newAcceleration)
 	wheelBL->isBrakeOn = false;
 	wheelBR->accelerateMultiplier = newAcceleration;
 	wheelBR->isBrakeOn = false;
+
+	log("Accell set to " + std::to_string(newAcceleration));
 }
 
 void Kart::stopDrifting()

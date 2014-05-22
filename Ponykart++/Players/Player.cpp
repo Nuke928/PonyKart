@@ -17,7 +17,7 @@ using namespace Ponykart::LKernel;
 using namespace Ponykart::Players;
 using namespace PonykartParsers;
 
-Player::Player() : hasItem(false)
+Player::Player() : hasItem(false), isControlEnabled(false)
 {
 }
 

@@ -55,6 +55,11 @@ void PlayerManager::raceCountdown_onCountdown(RaceCountdownState state)
 			player->isControlEnabled = true;
 }
 
+const std::vector<Player*>& PlayerManager::getPlayers() const
+{
+	return players;
+}
+
 void PlayerManager::onLevelUnload(LevelChangedEventArgs* eventArgs)
 {
 	if (eventArgs->oldLevel.getType() == LevelType::Race) 

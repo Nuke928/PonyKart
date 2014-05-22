@@ -24,7 +24,7 @@ public:
 	// Getters
 	const Player* const getMainPlayer() const;
 	Player* getMainPlayer();
-	const std::vector<Player*>* const getPlayers() const;
+	const std::vector<Player*>& getPlayers() const;
 public:
 	PlayerEvent onPostPlayerCreation;
 	/// When a level loads, we create the players. For now, we just have one human player and 7 computer-controlled ones

@@ -16,7 +16,7 @@ public:
 	LevelChangedEventArgs(Level& NewLevel, Level& OldLevel, LevelChangeRequest& Request);
 	Level& newLevel;
 	Level& oldLevel;
-	LevelChangeRequest& request;
+	LevelChangeRequest request;
 };
 
 } // Levels

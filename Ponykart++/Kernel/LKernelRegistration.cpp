@@ -110,7 +110,7 @@ void LKernel::loadInitialObjects(Splash& splash)
 	// players
 	splash.increment("Spawning players...");
 	addGlobalObject(new PlayerManager());
-	//addGlobalObject(new RaceCountdown());
+	addGlobalObject(new RaceCountdown());
 	//addGlobalObject(new LapCounter());
 	//addGlobalObject(new LThingHelperManager());
 
