@@ -11,6 +11,7 @@ namespace Core
 	{
 	public:
 		BasicCamera(const std::string& name);
+		virtual bool updateCamera(const Ogre::FrameEvent& evt) override;
 	};
 }
 }

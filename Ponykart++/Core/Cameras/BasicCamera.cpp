@@ -22,3 +22,8 @@ BasicCamera::BasicCamera(const std::string& name)
 
 	sceneMgr->getRootSceneNode()->attachObject(camera);
 }
+
+bool BasicCamera::updateCamera(const Ogre::FrameEvent& evt)
+{
+	return true;
+}

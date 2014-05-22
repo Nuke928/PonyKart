@@ -7,7 +7,7 @@ using namespace Ponykart::Handlers;
 
 CameraCreatorHandler::CameraCreatorHandler()
 {
-	auto pcam = new PlayerCamera("PlayerCamera");
+	PlayerCamera* pcam = new PlayerCamera("PlayerCamera");
 	pcam->registerCam();
 	pcam->makeActiveCamera();
 }
