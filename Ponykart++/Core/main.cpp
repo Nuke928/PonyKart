@@ -117,11 +117,6 @@ void Ponykart::Launch::enterGameLoop ()
 	tenthOfASecondEvent = SDL_RegisterEvents(1);
 	auto tenthOfASecondTimer = SDL_AddTimer(100, &tenthOfASecondCallback, nullptr);
 
-	auto binder = LKernel::getG<KeyBindingManager>();
-	binder->pressEvent.connect([](int playerID, GameInputID input) {
-		std::cout << "PRESS" << std::endl;
-	});
-
 	while (!quit) {
 		ogreRoot->_fireFrameStarted();
 		ogreWindow->update(false);

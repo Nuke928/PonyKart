@@ -2,6 +2,9 @@
 #include <random>
 #include "Core/IDs.h"
 
+#include "Kernel/LKernelOgre.h"
+#include <string>
+
 using namespace Ponykart;
 
 unsigned IDs::counter = 0;

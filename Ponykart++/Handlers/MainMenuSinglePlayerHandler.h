@@ -18,9 +18,9 @@ namespace Handlers
 
 		/// Since character selection at the moment is the final stage in the menus, this loads the new level based on the previous
 		/// level selection and current character selection
-		void onCharacterSelect(const std::string& characterSelection);
+        void onCharacterSelect(const std::string& characterSelection);
 		/// Saves the chosen level for later
-		void onLevelSelect(const std::string& levelSelection);
+        void onLevelSelect(const std::string& levelSelection);
 
 	public:
 		std::string levelSelection;

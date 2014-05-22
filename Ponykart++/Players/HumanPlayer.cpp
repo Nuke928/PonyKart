@@ -70,7 +70,7 @@ void HumanPlayer::releaseHandler (int playerID, Input::GameInputID inputID)
 		onAccelerateChanged(bindings->pollAxis(id, GameInputID::AccelerateAxis));
 		break;
 	case GameInputID::Reverse:
-		onAccelerateChanged(bindings->pollAxis(id, GameInputID::BrakeAxis));
+        onAccelerateChanged(bindings->pollAxis(id, GameInputID::BrakeAxis));
 		break;
 	case GameInputID::Drift:
 		onStopDrift();
@@ -118,7 +118,7 @@ void HumanPlayer::onSteeringChanged (float value)
 
 void HumanPlayer::onAccelerateChanged (float value)
 {
-	Player::onAccelerateChanged(value);
+    Player::onAccelerateChanged(value);
 
 	if (isControlEnabled)
 		kart->setAcceleration(accelAxis - brakeAxis);

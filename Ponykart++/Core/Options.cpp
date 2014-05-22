@@ -43,7 +43,7 @@ void Options::setupDictionaries()
 
 void Options::initialize()
 {
-	log("[Loading] Loading configuration...");
+    log("[Loading] Loading configuration... ("+LKernel::prefPath + "ponykart.cfg)");
 
 	setupDictionaries();
 
