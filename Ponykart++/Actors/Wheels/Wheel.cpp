@@ -107,8 +107,8 @@ void Wheel::postSimulate(btDiscreteDynamicsWorld* world, const Ogre::FrameEvent&
 		// the wheel sorta "comes off" when it's moving quickly in the air, so we only need to update the z translation then
 		if (!kart->isInAir)
 		{
-			Vector3 trans = toOgreVector3(info.m_worldTransform.getOrigin());
-			node->setPosition(axlePoint.x, kart->getRootNode()->convertWorldToLocalPosition(trans).y, axlePoint.z);
+			//Vector3 trans = toOgreVector3(info.m_worldTransform.getOrigin());
+			//node->setPosition(axlePoint.x, kart->getRootNode()->convertWorldToLocalPosition(trans).y, axlePoint.z);
 		}
 		else
 			node->setPosition(axlePoint);

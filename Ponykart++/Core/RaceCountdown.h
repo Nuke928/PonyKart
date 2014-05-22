@@ -35,7 +35,7 @@ namespace Core
 		void invoke(RaceCountdownState state); ///< Helper method
 
 	public:
-		static RaceCountdownEvent onCountdown;
+		RaceCountdownEvent onCountdown;
 	private:
 		bool three, two, one, go, oneSecondAfterGo;
 		float elapsed;

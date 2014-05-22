@@ -158,6 +158,7 @@ void PhysicsMain::createWorld(const std::string& levelName)
 	solver = new btSequentialImpulseConstraintSolver();
 	dcc = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(dcc);
+
 	// set up this stuff... not quite sure what it's for, but you need it if you want the CCD to work for the karts
 	dispatcher->registerCollisionCreateFunc(CONVEX_HULL_SHAPE_PROXYTYPE, CONVEX_HULL_SHAPE_PROXYTYPE,
 		dcc->getCollisionAlgorithmCreateFunc(TRIANGLE_MESH_SHAPE_PROXYTYPE, TRIANGLE_MESH_SHAPE_PROXYTYPE));

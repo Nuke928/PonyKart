@@ -35,7 +35,7 @@ PlayerManager::PlayerManager()
 	LevelManager::onLevelLoad.push_back(bind(&PlayerManager::onLevelLoad,this,placeholders::_1));
 	LevelManager::onLevelUnload.push_back(bind(&PlayerManager::onLevelUnload, this, placeholders::_1));
 
-	RaceCountdown::onCountdown.push_back({ eventId, bind(&PlayerManager::raceCountdown_onCountdown, this, placeholders::_1) });
+	getG<RaceCountdown>()->onCountdown.push_back({ eventId, bind(&PlayerManager::raceCountdown_onCountdown, this, placeholders::_1) });
 }
 
 const Player* const PlayerManager::getMainPlayer() const

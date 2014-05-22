@@ -55,6 +55,8 @@ PlayerCamera::PlayerCamera(const std::string& name)
 
 bool PlayerCamera::updateCamera(const Ogre::FrameEvent& evt)
 {
+	return true; // TODO: BUG: FIXME: The camera update is causing all the physics madness and jitter !
+	// TODO: Also might want to bisect to find where the bug that blocks the wheels was introduced
 	Vector3 camDisplacement, targetDisplacement,
 		derivedCam = kartCamNode->_getDerivedPosition(),
 		derivedTarget = kartTargetNode->_getDerivedPosition();
@@ -75,6 +77,7 @@ bool PlayerCamera::updateCamera(const Ogre::FrameEvent& evt)
 	auto Zdiff = kartRoll - sin((camOr.getRoll() + Radian(M_PI)).valueRadians());
 	if (Zdiff > 0 || Zdiff < 0)
 	{
+		assert(Zdiff<1.0f && Zdiff>-1.0f, "Param of ASin isn't in [-1,1] !");
 		camera->roll(Radian(-0.1f * Math::ASin(Zdiff) * M_PI / 180.0));
 	}
 	auto callback = castRay(derivedCam, derivedTarget);
