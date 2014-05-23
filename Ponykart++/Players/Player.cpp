@@ -68,6 +68,11 @@ Player::Player(LevelChangedEventArgs* eventArgs, int Id, bool IsComputerControll
 		driverName = "PinkiePie";
 		kartName = "TwiCutlass";
 	}
+	else if (charName == "Test")
+	{
+		driverName = "PinkiePie";
+		kartName = "test";
+	}
 	else
 		throw string("Invalid character name : "+charName);
 

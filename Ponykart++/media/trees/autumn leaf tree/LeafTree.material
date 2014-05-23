@@ -1,12 +1,12 @@
 material WTW_LeafTree_trunk {
 	technique {
 		pass {
-			vertex_program_ref fresnelTex_vp {
-			}
-			fragment_program_ref fresnelTex_Self_fp {
-				param_named GlowExpon float 2
-				param_named Alpha float 0.5
-			}
+			//vertex_program_ref fresnelTex_vp {
+			//}
+			//fragment_program_ref fresnelTex_Self_fp {
+			//	param_named GlowExpon float 2
+			//	param_named Alpha float 0.5
+			//}
 
 			texture_unit {
 				texture "WTW_LeafTree_trunk.dds"
@@ -20,12 +20,12 @@ material WTW_LeafTree_foliage {
 	
 	technique {
 		pass {
-			vertex_program_ref fresnelTex_vp {
-			}
-			fragment_program_ref fresnelTex_Self_fp {
-				param_named GlowExpon float 2
-				param_named Alpha float 0.25
-			}
+			//vertex_program_ref fresnelTex_vp {
+			//}
+			//fragment_program_ref fresnelTex_Self_fp {
+			//	param_named GlowExpon float 2
+			//	param_named Alpha float 0.25
+			//}
 
 			alpha_rejection greater 225
 			lighting off
@@ -40,12 +40,12 @@ material WTW_LeafTree_foliage {
 material WoodsTrunk {
 	technique {
 		pass {
-			vertex_program_ref fresnelTex_vp {
-			}
-			fragment_program_ref fresnelTex_Self_fp {
-				param_named GlowExpon float 2
-				param_named Alpha float 0.5
-			}
+			//vertex_program_ref fresnelTex_vp {
+			//}
+			//fragment_program_ref fresnelTex_Self_fp {
+			//	param_named GlowExpon float 2
+			//	param_named Alpha float 0.5
+			//}
 
 			texture_unit {
 				texture "WTW_Tree_Woods_color.dds"
@@ -59,12 +59,12 @@ material WoodsFoliage {
 	
 	technique {
 		pass {
-			vertex_program_ref fresnelTex_vp {
-			}
-			fragment_program_ref fresnelTex_Self_fp {
-				param_named GlowExpon float 2
-				param_named Alpha float 0.25
-			}
+			//vertex_program_ref fresnelTex_vp {
+			//}
+			//fragment_program_ref fresnelTex_Self_fp {
+			//	param_named GlowExpon float 2
+			//	param_named Alpha float 0.25
+			//}
 
 			alpha_rejection greater 225
 			lighting off

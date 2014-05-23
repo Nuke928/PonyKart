@@ -1,5 +1,5 @@
 
-[AJKartFrontWheel]
+[TestKartFrontWheel]
 
 Radius = 0.1871
 Width = 0.14960
@@ -25,7 +25,7 @@ SteerIncrementTurn = 0.3
 SteerDecrementTurn = 0.8
 
 
-[AJKartBackWheel]
+[TestKartBackWheel]
 
 Radius = 0.1871
 Width = 0.348

@@ -7,6 +7,7 @@ FileSystem=media/vehicles
 FileSystem=media/vehicles/ajkart
 FileSystem=media/vehicles/cutlass
 FileSystem=media/vehicles/javelin
+FileSystem=media/vehicles/test
 #FileSystem=media/background ponies/cutiemarks
 #FileSystem=media/background ponies
 FileSystem=media/physicsmaterials

@@ -1,0 +1,44 @@
+Physics = Dynamic
+Mass = 45
+CollisionGroup = Karts
+CollidesWith = Karts
+MaxSpeed = 19.6 // 14 * 1.4
+MaxReverseSpeed = 5
+FrontWheel = "TestKartFrontWheel"
+FrontLeftWheelMesh = "testKartLeftWheel.mesh"
+FrontRightWheelMesh = "testKartRightWheel.mesh"
+BackWheel = "TestKartBackWheel"
+BackLeftWheelMesh = "testKartLeftWheel.mesh"
+BackRightWheelMesh = "testKartRightWheel.mesh"
+PhysicsMaterial = "Kart"
+
+CollisionEvents = true
+
+FrontLeftWheelPosition = 0.324, 0, 0.52
+FrontRightWheelPosition = -0.324, 0, 0.52
+BackLeftWheelPosition = 0.28, 0, -0.56
+BackRightWheelPosition = -0.28, 0, -0.56
+
+FrontDriftAngle = 44
+BackDriftAngle = 55
+DriftTransitionAngle = 50
+
+Model {
+	Mesh = "test.mesh"
+	Material = "TestKart"
+	Position = 0, 0.24, 0.15
+	CastsShadows = Some
+}
+
+
+Shape {
+	Type = Mesh
+	Mesh = "test.bullet"
+	Position = 0, 0.23, 0
+}
+
+Sound {
+	File = "Generic Kart idle Loop.ogg"
+	Looping = true
+	MinDistance = 20
+}
