@@ -28,6 +28,8 @@ Kart::Kart(ThingBlock* block, ThingDefinition* def) : LThing (block, def),
 	backDriftAngle(Degree(def->getFloatProperty("BackDriftAngle", 55)).valueRadians()),
 	driftTransitionAngle(Degree(def->getFloatProperty("DriftTransitionAngle", 40)))
 {
+	acceleration = 0;
+
 	maxSpeed = defaultMaxSpeed;
 	maxReverseSpeed = def->getFloatProperty("maxreversespeed", 4);
 
@@ -115,9 +117,9 @@ float Kart::getAcceleration() const
 
 void Kart::setAcceleration(float newAcceleration)
 {
+	acceleration = newAcceleration;
 	if (acceleration != 0.f)
 		body->activate();
-	acceleration = newAcceleration;
 
 	wheelFL->accelerateMultiplier = newAcceleration;
 	wheelFL->isBrakeOn = false;
@@ -227,10 +229,13 @@ void Kart::startDrifting_WheelFunction(Wheel* w)
 
 void Kart::postCreateBody(ThingDefinition* def)
 {
+	if (body == nullptr)
+		throw std::string("[ERROR] Kart::postCreateBody: The kart doesn't have a body !");
+
 	kartMotionState = (KartMotionState*)motionState;
 
-	body->setCcdMotionThreshold(0.001f);
-	body->setCcdSweptSphereRadius(0.04f);
+	//body->setCcdMotionThreshold(0.001f);
+	//body->setCcdSweptSphereRadius(0.04f);
 
 	raycaster = new btDefaultVehicleRaycaster(getG<PhysicsMain>()->getWorld());
 	tuning = new btRaycastVehicle::btVehicleTuning();
@@ -253,7 +258,7 @@ void Kart::postCreateBody(ThingDefinition* def)
 	body->setLinearVelocity(btVector3(0, 1, 0));
 
 	PhysicsMain::finaliseBeforeSimulation.push_back(std::bind(&Kart::finaliseBeforeSimulation,this,std::placeholders::_1,std::placeholders::_2));
-	RaceCountdown::onCountdown.push_back({ ownerID, std::bind(&Kart::onCountdown, this, std::placeholders::_1) });
+	getG<RaceCountdown>()->onCountdown.push_back({ id, std::bind(&Kart::onCountdown, this, std::placeholders::_1) });
 }
 
 void Kart::finaliseBeforeSimulation(btDiscreteDynamicsWorld* world, const FrameEvent& evt)
@@ -304,11 +309,12 @@ void Kart::onCountdown(RaceCountdownState state)
 		canDisableKarts = true; 
 
 		auto a = std::bind(&Kart::onCountdown, this, std::placeholders::_1);
+		auto& RCOnCountdown = getG<RaceCountdown>()->onCountdown;
 
-		auto it = find_if(begin(RaceCountdown::onCountdown), end(RaceCountdown::onCountdown),
-			[&](std::pair<int, std::function<void(RaceCountdownState)>> a){return a.first == ownerID; });
-		if (it != end(RaceCountdown::onCountdown))
-			RaceCountdown::onCountdown.erase(it);
+		auto it = find_if(begin(RCOnCountdown), end(RCOnCountdown),
+			[&](std::pair<int, std::function<void(RaceCountdownState)>> a){return a.first == id; });
+		if (it != end(RCOnCountdown))
+			RCOnCountdown.erase(it);
 	}
 }
 

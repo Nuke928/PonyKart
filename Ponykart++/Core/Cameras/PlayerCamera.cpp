@@ -51,51 +51,22 @@ PlayerCamera::PlayerCamera(const std::string& name)
 	// initialise some stuff for the ray casting
 	rayLength = (cameraNode->getPosition() - targetNode->getPosition()).length();
 	world = getG<PhysicsMain>()->getWorld();
+
+	//camera->setAutoTracking(true, followKart->getRootNode(), Vector3(0, 0.4f, 0));
 }
 
 bool PlayerCamera::updateCamera(const Ogre::FrameEvent& evt)
 {
+	// TODO: BUG: FIXME: Still somewhat jittery.
 	Vector3 camDisplacement, targetDisplacement,
 		derivedCam = kartCamNode->_getDerivedPosition(),
 		derivedTarget = kartTargetNode->_getDerivedPosition();
 
-	Vector3 axisA = Vector3(0, 1, 0);
-	Quaternion quat1;
-	quat1 = followKart->getActualOrientation().xAxis().getRotationTo(axisA);
-	Radian rollMain(quat1.w);
-	auto kartRoll = sin(((rollMain - Radian(0.7f)) * 2).valueRadians());
-	if (0.5f < kartRoll) {
-		kartRoll = 0.5f;
-	}
-	else if (-0.5f > kartRoll) {
-		kartRoll = -0.5f;
-	}
+	camDisplacement = derivedCam - cameraNode->getPosition();
+	targetDisplacement = derivedTarget - targetNode->getPosition();
 
-	auto camOr = camera->getOrientation();
-	auto Zdiff = kartRoll - sin((camOr.getRoll() + Radian(M_PI)).valueRadians());
-	if (Zdiff > 0 || Zdiff < 0)
-	{
-		camera->roll(Radian(-0.1f * Math::ASin(Zdiff) * M_PI / 180.0));
-	}
-	auto callback = castRay(derivedCam, derivedTarget);
-
-	if (callback.hasHit()) 
-	{
-		camDisplacement = toOgreVector3(callback.m_hitPointWorld) - cameraNode->getPosition();
-
-		Vector3 newTarget = derivedTarget;
-		newTarget.y -= (_cameraTargetYOffset * (1 - ((derivedTarget - toOgreVector3(callback.m_hitPointWorld)).length() / rayLength)));
-
-		targetDisplacement = (newTarget - targetNode->getPosition());
-	}
-	else {
-		camDisplacement = derivedCam - cameraNode->getPosition();
-		targetDisplacement = derivedTarget - targetNode->getPosition();
-	}
 	cameraNode->translate(camDisplacement * _cameraTightness * evt.timeSinceLastFrame);
 	targetNode->translate(targetDisplacement * _cameraTightness * evt.timeSinceLastFrame);
-
-	cameraNode->roll(Radian(10.f));
 	return true;
 }
 

@@ -14,9 +14,6 @@ using namespace Ponykart::Players;
 using namespace std;
 using namespace Ogre;
 
-// Define static members
-RaceCountdownEvent RaceCountdown::onCountdown;
-
 RaceCountdown::RaceCountdown()
 {
 	LevelManager::onLevelPostLoad.push_back(bind(&RaceCountdown::onLevelPostLoad, this, placeholders::_1));
@@ -110,6 +107,6 @@ bool RaceCountdown::frameStarted(const Ogre::FrameEvent& evt)
 
 void RaceCountdown::invoke(RaceCountdownState state)
 {
-	for (auto f : onCountdown)
-		f.second(state);
+	for (unsigned i = 0; i < onCountdown.size(); i++) // DO NOT use iterators, the array can lose elements during the loop
+		onCountdown[i].second(state);
 }

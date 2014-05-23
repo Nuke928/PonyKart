@@ -62,7 +62,7 @@ Wheel::Wheel(Kart* owner, const Vector3& connectionPoint, WheelID wheelID,
 	vehicle->addWheel(toBtVector3(connectionPoint), toBtVector3(wheelDirection), toBtVector3(wheelAxle),
 		defaultSuspensionRestLength, defaultRadius, *kart->getTuning(), isFrontWheel);
 
-	btWheelInfo info = vehicle->getWheelInfo(intWheelID); /// TODO: WARNING: Set but not used
+	btWheelInfo& info = vehicle->getWheelInfo(intWheelID);
 	info.m_suspensionStiffness = defaultSpringStiffness;
 	info.m_wheelsDampingRelaxation = defaultSpringDamping;
 	info.m_wheelsDampingCompression = defaultSpringCompression;
@@ -107,8 +107,8 @@ void Wheel::postSimulate(btDiscreteDynamicsWorld* world, const Ogre::FrameEvent&
 		// the wheel sorta "comes off" when it's moving quickly in the air, so we only need to update the z translation then
 		if (!kart->isInAir)
 		{
-			Vector3 trans = toOgreVector3(info.m_worldTransform.getOrigin());
-			node->setPosition(axlePoint.x, kart->getRootNode()->convertWorldToLocalPosition(trans).y, axlePoint.z);
+			//Vector3 trans = toOgreVector3(info.m_worldTransform.getOrigin());
+			//node->setPosition(axlePoint.x, kart->getRootNode()->convertWorldToLocalPosition(trans).y, axlePoint.z);
 		}
 		else
 			node->setPosition(axlePoint);

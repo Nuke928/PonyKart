@@ -274,12 +274,11 @@ btCollisionShape* CollisionShapeManager::importCollisionShape(const std::string&
 btCollisionShape* CollisionShapeManager::getShapeFromFile(const std::string& filename, 
 												Ogre::Entity* ent, Ogre::SceneNode* node)
 {
-	btCollisionShape* shape;
+	btCollisionShape* shape=nullptr;
 	auto it = shapes.find(filename);
 
-	if (it != end(shapes)) 
+	if (it == end(shapes)) 
 	{
-		shape = it->second;
 		// check to see if the .bullet file exists
 		string bulletfile = getBulletFile(filename);
 		if (!bulletfile.empty()) 
@@ -300,6 +299,8 @@ btCollisionShape* CollisionShapeManager::getShapeFromFile(const std::string& fil
 		// add the shape to the dictionary, including the .bullet extension
 		shapes.emplace(filename, shape);
 	}
+	else
+		shape = it->second;
 
 	return shape;
 }
