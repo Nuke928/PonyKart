@@ -32,27 +32,20 @@ SoundComponent::SoundComponent(LThing* lthing, ThingBlock* thingTemplate, SoundB
 	auto soundMain = LKernel::getG<SoundMain>();
 	auto soundData = soundMain->loadSoundData(block->getStringProperty("File"));
 
-	bool looping = block->getBoolProperty("looping", true);
+	bool looping = block->getBoolProperty("Looping", true);
 	bool sfx = block->getBoolProperty("SpecialEffects", false);
-	relativePosition = block->getVectorProperty("position", Vector3::ZERO);
-	bool startPaused = block->getBoolProperty("StartPaused", true);
+	relativePosition = block->getVectorProperty("Position", Vector3::ZERO);
+	bool startPaused = block->getBoolProperty("StartPaused", false);
 
 	sound = soundMain->play3D(soundData, relativePosition, looping, startPaused, sfx);
 
-	alSourcef(sound, AL_PITCH, block->getFloatProperty("Speed", 1));
-	auto volumeIt=block->getFloatTokens().find("volume");
-	if (volumeIt!=block->getFloatTokens().end())
-		alSourcef(sound, AL_GAIN, volumeIt->second);
+	alSourcef(sound, AL_PITCH, block->getFloatProperty("Speed", 1.0f));
+	alSourcef(sound, AL_GAIN, block->getFloatProperty("Volume", 1.0f) * soundMain->getSoundVolume());
+	alSourcef(sound, AL_REFERENCE_DISTANCE, block->getFloatProperty("MinDistance", soundMain->getDefaultReferenceDistance()));
 
-	alSourcef(sound, AL_REFERENCE_DISTANCE, block->getFloatProperty("mindistance", soundMain->getDefaultReferenceDistance()));
-
-	// TODO: effects, if we end up using any of them
+//	 TODO: effects, if we end up using any of them
 
 	update();
-	ALint state;
-	alGetSourcei(sound, AL_SOURCE_STATE, &state);
-	if (state == AL_PAUSED)
-		alSourcePlay(sound);
 
 	soundMain->addSoundComponent(this);
 }
