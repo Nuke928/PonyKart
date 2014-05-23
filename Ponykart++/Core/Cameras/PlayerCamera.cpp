@@ -52,7 +52,7 @@ PlayerCamera::PlayerCamera(const std::string& name)
 	rayLength = (cameraNode->getPosition() - targetNode->getPosition()).length();
 	world = getG<PhysicsMain>()->getWorld();
 
-	camera->setAutoTracking(true, followKart->getRootNode(), Vector3(0, 0.4f, 0));
+	//camera->setAutoTracking(true, followKart->getRootNode(), Vector3(0, 0.4f, 0));
 }
 
 bool PlayerCamera::updateCamera(const Ogre::FrameEvent& evt)
@@ -62,30 +62,11 @@ bool PlayerCamera::updateCamera(const Ogre::FrameEvent& evt)
 		derivedCam = kartCamNode->_getDerivedPosition(),
 		derivedTarget = kartTargetNode->_getDerivedPosition();
 
-	Vector3 axisA = Vector3(0, 1, 0);
-	Quaternion quat1;
-	quat1 = followKart->getActualOrientation().xAxis().getRotationTo(axisA);
-	Radian rollMain(quat1.w);
-	auto kartRoll = sin(((rollMain - Radian(0.7f)) * 2).valueRadians());
-	if (0.5f < kartRoll)
-		kartRoll = 0.5f;
-	else if (-0.5f > kartRoll)
-		kartRoll = -0.5f;
-
-	auto camOr = camera->getOrientation();
-	auto Zdiff = kartRoll - sin((camOr.getRoll() + Radian(M_PI)).valueRadians());
-	if (Zdiff != 0 && Zdiff<1.0f && Zdiff>-1.0f)
-	{
-		camera->roll(Radian(-0.1f * Math::ASin(Zdiff) * M_PI / 180.0));
-	}
-
 	camDisplacement = derivedCam - cameraNode->getPosition();
 	targetDisplacement = derivedTarget - targetNode->getPosition();
 
 	cameraNode->translate(camDisplacement * _cameraTightness * evt.timeSinceLastFrame);
 	targetNode->translate(targetDisplacement * _cameraTightness * evt.timeSinceLastFrame);
-
-	cameraNode->roll(Radian(10.f));
 	return true;
 }
 
