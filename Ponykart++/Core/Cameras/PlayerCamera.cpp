@@ -57,9 +57,6 @@ PlayerCamera::PlayerCamera(const std::string& name)
 
 bool PlayerCamera::updateCamera(const Ogre::FrameEvent& evt)
 {
-	cameraNode->setPosition(kartCamNode->_getDerivedPosition());
-	return true; // TODO: BUG: FIXME: The camera update is causing all the physics madness and jitter !
-	// TODO: Also might want to bisect to find where the bug that blocks the wheels was introduced
 	Vector3 camDisplacement, targetDisplacement,
 		derivedCam = kartCamNode->_getDerivedPosition(),
 		derivedTarget = kartTargetNode->_getDerivedPosition();
@@ -69,12 +66,10 @@ bool PlayerCamera::updateCamera(const Ogre::FrameEvent& evt)
 	quat1 = followKart->getActualOrientation().xAxis().getRotationTo(axisA);
 	Radian rollMain(quat1.w);
 	auto kartRoll = sin(((rollMain - Radian(0.7f)) * 2).valueRadians());
-	if (0.5f < kartRoll) {
+	if (0.5f < kartRoll)
 		kartRoll = 0.5f;
-	}
-	else if (-0.5f > kartRoll) {
+	else if (-0.5f > kartRoll)
 		kartRoll = -0.5f;
-	}
 
 	auto camOr = camera->getOrientation();
 	auto Zdiff = kartRoll - sin((camOr.getRoll() + Radian(M_PI)).valueRadians());
@@ -83,21 +78,10 @@ bool PlayerCamera::updateCamera(const Ogre::FrameEvent& evt)
 		assert(Zdiff<1.0f && Zdiff>-1.0f, "Param of ASin isn't in [-1,1] !");
 		camera->roll(Radian(-0.1f * Math::ASin(Zdiff) * M_PI / 180.0));
 	}
-	auto callback = castRay(derivedCam, derivedTarget);
 
-	if (callback.hasHit()) 
-	{
-		camDisplacement = toOgreVector3(callback.m_hitPointWorld) - cameraNode->getPosition();
+	camDisplacement = derivedCam - cameraNode->getPosition();
+	targetDisplacement = derivedTarget - targetNode->getPosition();
 
-		Vector3 newTarget = derivedTarget;
-		newTarget.y -= (_cameraTargetYOffset * (1 - ((derivedTarget - toOgreVector3(callback.m_hitPointWorld)).length() / rayLength)));
-
-		targetDisplacement = (newTarget - targetNode->getPosition());
-	}
-	else {
-		camDisplacement = derivedCam - cameraNode->getPosition();
-		targetDisplacement = derivedTarget - targetNode->getPosition();
-	}
 	cameraNode->translate(camDisplacement * _cameraTightness * evt.timeSinceLastFrame);
 	targetNode->translate(targetDisplacement * _cameraTightness * evt.timeSinceLastFrame);
 
