@@ -65,7 +65,7 @@ MainMenuManager::MainMenuManager()
 		menuUiHandler->onGameType_SelectSinglePlayer();
 		//menuSpHandler->onLevelSelect("WhitetailWoods");
 		menuSpHandler->onLevelSelect("SweetAppleAcres");
-		menuSpHandler->onCharacterSelect("Applejack");
+		menuSpHandler->onCharacterSelect("Rarity");
 
 		// Hide the loading screen so we can see the level
 		loadingWindow->hide();
