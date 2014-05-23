@@ -490,26 +490,20 @@ void SoundMain::everyTenth (void *p)
 	// Enjoy your RTTI
 	const PlayerCamera* PCam = dynamic_cast<const PlayerCamera*>(cam);
 	const KnightyCamera* KCam = dynamic_cast<const KnightyCamera*>(cam);
-	Vector3 pos, rot;
-	btVector3 vel;
-	if (PCam || KCam)
-	{
-		pos = toOgreVector3(body->getCenterOfMassPosition());
-		rot = toOgreQuaternion(body->getOrientation()).yAxis();
-		vel = body->getLinearVelocity();
-	}
-	else
-	{
-		const Quaternion& derivedOrientation = cam->getCamera()->getDerivedOrientation();
-		pos = cam->getCamera()->getDerivedPosition();
-		rot = derivedOrientation.yAxis();
-		vel = body->getLinearVelocity();
-	}
 
-	// TODO: BUG:? Is everyone using the same axes ?
+	Vector3 pos = cam->getCamera()->getDerivedPosition();
+	btVector3 vel = (PCam || KCam) ? body->getLinearVelocity() : btVector3(0, 0, 0);
 	alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
-	alListener3f(AL_DIRECTION, rot.x, rot.y, rot.z);
 	alListener3f(AL_VELOCITY, vel.x(), vel.y(), vel.z());
+
+	const Quaternion& derivedOrientation = cam->getCamera()->getDerivedOrientation();
+	Vector3 forward = -derivedOrientation.zAxis();
+	Vector3 up = derivedOrientation.yAxis();
+	float orientation[6] = {
+		forward.x, forward.y, forward.z,
+		up.x, up.y, up.z,
+	};
+	alListenerfv(AL_ORIENTATION, orientation);
 
 	for (auto component : components) 
 	{
