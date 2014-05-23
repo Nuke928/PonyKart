@@ -35,16 +35,15 @@ using namespace Ponykart::LKernel;
 using namespace Ponykart::Players;
 using namespace Ponykart::Sound;
 
-
 SoundMain::SoundMain()
-	: defaultReferenceDistance(1.f)
+	: defaultReferenceDistance(1.0f)
 {
 	log("[Loading] Creating OpenAL and SoundMain...");
 
 	enableSounds = Options::getBool("Sounds");
 	enableMusic = Options::getBool("Music");
-	soundVolume = Options::getInt("Sound Volume") / 100.0f;
-	musicVolume = Options::getInt("Music Volume") / 100.0f;
+	soundVolume = std::min(Options::getInt("Sound Volume") / 100.0f, 1.0f);
+	musicVolume = std::min(Options::getInt("Music Volume") / 100.0f, 1.0f);
 
 	playerManager = LKernel::getG<PlayerManager>();
 	cameraManager = LKernel::getG<CameraManager>();
@@ -60,8 +59,8 @@ SoundMain::SoundMain()
 	ALenum alerror = alGetError();
 	if (alerror != AL_NO_ERROR)
 	{
-		if (alerror == 40964) // FIXME: BUG: TODO: This error happens at random during launch
-			log("[WARNING] OpenAL error 40964 during initialization");
+		if (alerror == AL_INVALID_OPERATION) // FIXME: BUG: TODO: This error happens at random during launch
+			log("[WARNING] AL_INVALID_OPERATION during initialization");
 		else
 			throw string("Failed to initialize OpenAL! (error " + to_string(alerror) + ")");
 	}
@@ -70,6 +69,7 @@ SoundMain::SoundMain()
 
 	idleSoundSources.resize(32);
 	alGenSources(idleSoundSources.size(), idleSoundSources.data());
+
 	forgottenSoundSources.reserve(32);
 
 	musicQuit = false;
@@ -86,6 +86,7 @@ SoundMain::SoundMain()
 
 	buildFileList();
 
+	LKernel::onEveryUnpausedTenthOfASecondEvent.connect(bind(&SoundMain::everyTenth,this,std::placeholders::_1));
 	log("[Loading] OpenAL and SoundMain initialised.");
 }
 
@@ -130,6 +131,46 @@ void SoundMain::stopAllSources ()
 }
 
 
+float SoundMain::getSoundVolume ()
+{
+	return soundVolume;
+}
+float SoundMain::setSoundVolume (float value)
+{
+	float scale = value / soundVolume;
+	soundVolume = std::min(value, 1.0f);
+
+	for (auto it = activeSoundSources.begin(); it != activeSoundSources.end(); it++) {
+		auto src = *it;
+		float gain;
+		alGetSourcef(src, AL_GAIN, &gain);
+		alSourcef(src, AL_GAIN, gain * scale);
+	}
+
+	return soundVolume;
+}
+
+
+float SoundMain::getMusicVolume ()
+{
+	return musicVolume;
+}
+float SoundMain::setMusicVolume (float value)
+{
+	float scale = value / musicVolume;
+	musicVolume = std::min(value, 1.0f);
+
+	for (auto it = musicSources.begin(); it != musicSources.end(); it++) {
+		auto src = (*it)->getSource();
+		float gain;
+		alGetSourcef(src, AL_GAIN, &gain);
+		alSourcef(src, AL_GAIN, gain * scale);
+	}
+
+	return musicVolume;
+}
+
+
 float SoundMain::getDefaultReferenceDistance ()
 {
 	return defaultReferenceDistance;
@@ -162,8 +203,10 @@ ALBuffer SoundMain::loadSoundData (string filename)
 			throw string("Unsupported sound format: " + ext);
 
 		bufferNames.insert(decltype(bufferNames)::value_type(buf, std::string(filename)));
+		return buf;
 	} else
 		throw string("SoundMain::getSource: "+ path + " was not found!");
+
 }
 
 
@@ -200,6 +243,7 @@ ALBuffer SoundMain::loadWavData(string filename)
 
 ALBuffer SoundMain::loadVorbisData(string filename)
 {
+	std::cout << "SOUND: " << filename << std::endl;
 	OggVorbis_File vf;
 	if (ov_fopen(filename.c_str(), &vf) < 0)
 		throw string("Error openning vorbis file: " + filename);
@@ -226,7 +270,7 @@ ALBuffer SoundMain::loadVorbisData(string filename)
 		offset += result;
 	}
 
-	ALBuffer buf = 0;
+	ALBuffer buf;
 	alGenBuffers(1, &buf);
 
 	switch (info->channels) {
@@ -303,7 +347,7 @@ void SoundMain::addSoundComponent(SoundComponent* sc)
 
 ALSource SoundMain::activateSource ()
 {
-	ALSource src = 0;
+	ALSource src;
 
 	if (idleSoundSources.size() > 0) {
 		src = idleSoundSources[idleSoundSources.size() - 1];
@@ -323,14 +367,17 @@ SoundSource SoundMain::play3D(ALBuffer sound, const Vector3& pos, bool looping, 
 #endif
 
 	auto src = activateSource();
+	int state;
+	alGetSourcei(src, AL_SOURCE_STATE, &state);
 	alSourcei(src, AL_BUFFER, sound);
 	alSource3f(src, AL_POSITION, pos.x, pos.y, pos.z);
-	alSourcei(src, AL_LOOPING, true);
+	alSourcei(src, AL_LOOPING, looping);
 	alSourcef(src, AL_GAIN, soundVolume);
 	if (startPaused)
 		alSourcePause(src);
-	else
+	else {
 		alSourcePlay(src);
+	}
 
 	// TODO: Look into EFX support.
 
@@ -347,7 +394,7 @@ SoundSource SoundMain::play3D(ALBuffer sound, const Vector3& pos, bool looping, 
 }
 
 
-SoundMain::MusicSourcePtr SoundMain::PlayMusic (const string filename, bool startPaused, bool efx)
+SoundMain::MusicSourcePtr SoundMain::playMusic (const string filename, bool startPaused, bool efx)
 {
 	auto musicSrc = new MusicSource(filename, startPaused, musicVolume);
 
@@ -407,8 +454,6 @@ void SoundMain::onLevelLoad(LevelChangedEventArgs* eventArgs)
 
 void SoundMain::onLevelUnload(LevelChangedEventArgs* eventArgs)
 {
-	everyTenthToken.disconnect();
-
 	stopAllSources();
 	alListener3f(AL_POSITION, 0, 0, 0);
 	alListener3f(AL_DIRECTION, 0, 0, -1);
@@ -435,36 +480,36 @@ void SoundMain::everyTenth (void *p)
 			it++;
 	}
 
-// TODO: Fix PlayerManager
-//	if (playerManager->getMainPlayer() == nullptr)
-//		return;
+	// TODO: Fix PlayerManager
+	if (playerManager->getMainPlayer() == nullptr)
+		return;
 
-//	const LCamera* cam = cameraManager->getCurrentCamera();
-//	const btRigidBody* body = playerManager->getMainPlayer()->getBody();
+	const LCamera* cam = cameraManager->getCurrentCamera();
+	const btRigidBody* body = playerManager->getMainPlayer()->getBody();
 
-//	// Enjoy your RTTI
-//	const PlayerCamera* PCam = dynamic_cast<const PlayerCamera*>(cam);
-//	const KnightyCamera* KCam = dynamic_cast<const KnightyCamera*>(cam);
-//	Vector3 pos, rot;
-//	btVector3 vel;
-//	if (PCam || KCam)
-//	{
-//		pos = toOgreVector3(body->getCenterOfMassPosition());
-//		rot = toOgreQuaternion(body->getOrientation()).yAxis();
-//		vel = body->getLinearVelocity();
-//	}
-//	else
-//	{
-//		const Quaternion& derivedOrientation = cam->getCamera()->getDerivedOrientation();
-//		pos = cam->getCamera()->getDerivedPosition();
-//		rot = derivedOrientation.yAxis();
-//		vel = body->getLinearVelocity();
-//	}
+	// Enjoy your RTTI
+	const PlayerCamera* PCam = dynamic_cast<const PlayerCamera*>(cam);
+	const KnightyCamera* KCam = dynamic_cast<const KnightyCamera*>(cam);
+	Vector3 pos, rot;
+	btVector3 vel;
+	if (PCam || KCam)
+	{
+		pos = toOgreVector3(body->getCenterOfMassPosition());
+		rot = toOgreQuaternion(body->getOrientation()).yAxis();
+		vel = body->getLinearVelocity();
+	}
+	else
+	{
+		const Quaternion& derivedOrientation = cam->getCamera()->getDerivedOrientation();
+		pos = cam->getCamera()->getDerivedPosition();
+		rot = derivedOrientation.yAxis();
+		vel = body->getLinearVelocity();
+	}
 
-//	// TODO: BUG:? Is everyone using the same axes ?
-//	alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
-//	alListener3f(AL_DIRECTION, rot.x, rot.y, rot.z);
-//	alListener3f(AL_VELOCITY, vel.x(), vel.y(), vel.z());
+	// TODO: BUG:? Is everyone using the same axes ?
+	alListener3f(AL_POSITION, pos.x, pos.y, pos.z);
+	alListener3f(AL_DIRECTION, rot.x, rot.y, rot.z);
+	alListener3f(AL_VELOCITY, vel.x(), vel.y(), vel.z());
 
 	for (auto component : components) 
 	{
