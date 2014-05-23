@@ -57,6 +57,7 @@ PlayerCamera::PlayerCamera(const std::string& name)
 
 bool PlayerCamera::updateCamera(const Ogre::FrameEvent& evt)
 {
+	// TODO: BUG: FIXME: Still somewhat jittery.
 	Vector3 camDisplacement, targetDisplacement,
 		derivedCam = kartCamNode->_getDerivedPosition(),
 		derivedTarget = kartTargetNode->_getDerivedPosition();

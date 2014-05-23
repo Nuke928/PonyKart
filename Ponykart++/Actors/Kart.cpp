@@ -268,12 +268,6 @@ void Kart::finaliseBeforeSimulation(btDiscreteDynamicsWorld* world, const FrameE
 
 	if (!isInAir) 
 	{
-		// tux3/mlkj TEST: Try to mitigate the rotations so we stay on our wheels
-		btVector3 angularVelocity = body->getAngularVelocity();
-		angularVelocity.setX(angularVelocity.x() / 2);
-		angularVelocity.setZ(angularVelocity.z() / 2);
-		body->setAngularVelocity(angularVelocity);
-
 		// going forwards
 		// using 20 because we don't need to check the kart's linear velocity if it's going really slowly
 		if ((currentSpeed > 20.f && !isDriftingAtAll)
