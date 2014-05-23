@@ -28,6 +28,7 @@ using namespace PonykartParsers;
 using namespace Ponykart;
 using namespace Ponykart::Actors;
 using namespace Ponykart::Levels;
+using namespace Ponykart::LKernel;
 using namespace Ponykart::Physics;
 
 CollisionShapeManager::CollisionShapeManager()
@@ -182,27 +183,27 @@ btCollisionShape* CollisionShapeManager::createShapeForComponent(ShapeComponent*
 			shape = importCollisionShape(name); // so it has a file
 		else
 		{
-			/* Was commented out in the C# files
-			Launch.Log("[CollisionShapeManager] " + bulletFilePath + " does not exist, converting Ogre mesh into physics trimesh and exporting new .bullet file...");
+			log("[WARNING] CollisionShapeManager: " + bulletFilePath + " does not exist, converting Ogre mesh into physics trimesh and exporting new .bullet file...");
 
 			// it does not have a file, so we need to convert our ogre mesh
-			var sceneMgr = LKernel.GetG<SceneManager>();
-			Entity ent = sceneMgr.HasEntity(component.Mesh) ? sceneMgr.GetEntity(component.Mesh) : sceneMgr.CreateEntity(component.Mesh, component.Mesh);
+			SceneManager* sceneMgr = getG<SceneManager>();
+			Entity* ent = sceneMgr->hasEntity(component->getModelMesh()) ? sceneMgr->getEntity(component->getModelMesh()) 
+															: sceneMgr->createEntity(component->getModelMesh(), component->getModelMesh());
 
-			shape = new BvhTriangleMeshShape(
-				OgreToBulletMesh.Convert(
-					ent.GetMesh(),
-					component.Transform.GetTrans(),
-					component.Transform.ExtractQuaternion(),
-					Vector3.UNIT_SCALE),
+			shape = new btBvhTriangleMeshShape(
+				OgreToBulletMesh::convert(
+					ent->getMesh(),
+					component->transform.getTrans(),
+					component->transform.extractQuaternion(),
+					Vector3::UNIT_SCALE),
 				true,
 				true);
 
-			(shape as BvhTriangleMeshShape).BuildOptimizedBvh();
+			((btBvhTriangleMeshShape*)shape)->buildOptimizedBvh();
 
 			// and then export it as a .bullet file
-			SerializeShape(shape, name);*/
-			throw string("Your \"Mesh\" property did not point to an existing .bullet file!" + component->getMesh());
+			serializeShape(shape, name);
+//			throw string("Your \"Mesh\" property did not point to an existing .bullet file!" + component->getMesh());
 		}
 		return shape;
 	}

@@ -17,7 +17,7 @@ btTriangleMesh* OgreToBulletMesh::convert(MeshPtr mesh, const Vector3& pos,
 	// get our two main objects
 	btTriangleMesh* bulletMesh = new btTriangleMesh(true, false);
 
-	LKernel::log("[Loading] Converting " + mesh->getName() + " to a BulletSharp.TriangleMesh");
+	LKernel::log("[Loading] Converting " + mesh->getName() + " to a TriangleMesh");
 
 	unsigned vertex_count, index_count;
 	std::vector<Vector3> vertices;
@@ -67,9 +67,9 @@ void OgreToBulletMesh::getMeshInformation(MeshPtr mesh, unsigned& vertex_count, 
 	}
 
 	vertices.clear();
-	vertices.reserve(vertex_count);
+	vertices.resize(vertex_count);
 	indices.clear();
-	indices.reserve(index_count);
+	indices.resize(index_count);
 	added_shared = false;
 
 	for (uint16_t i = 0; i < mesh->getNumSubMeshes(); ++i) 

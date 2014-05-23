@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "Actors/Components/ShapeComponent.h"
 #include "Kernel/LKernel.h"
+#include "Thing/Blocks/ModelBlock.h"
 #include "Thing/Blocks/ShapeBlock.h"
+#include "Thing/ThingDefinition.h"
 
 using namespace PonykartParsers;
 using namespace Ponykart::Actors;
@@ -11,6 +13,7 @@ ShapeComponent::ShapeComponent(LThing* lthing, PonykartParsers::ShapeBlock* bloc
 	auto sceneMgr = LKernel::gSceneManager;
 
 	transform = block->getTransform();
+	const std::vector<ModelBlock*>& modelBlocks = block->getOwner()->getModelBlocks();
 
 	type = block->getEnumProperty("type");
 	switch (type)
@@ -38,6 +41,8 @@ ShapeComponent::ShapeComponent(LThing* lthing, PonykartParsers::ShapeBlock* bloc
 		case ThingEnum::Hull:
 		case ThingEnum::Mesh:
 			mesh = block->getStringProperty("mesh");
+			if (modelBlocks.size() == 1)
+				modelMesh = modelBlocks[0]->getStringProperty("mesh","");
 			break;
 		default: break;
 	}
@@ -66,6 +71,11 @@ float ShapeComponent::getHeight() const
 std::string ShapeComponent::getMesh() const
 {
     return mesh;
+}
+
+std::string ShapeComponent::getModelMesh() const
+{
+	return modelMesh;
 }
 
 float ShapeComponent::getMinHeight() const
