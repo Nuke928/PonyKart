@@ -73,9 +73,8 @@ bool PlayerCamera::updateCamera(const Ogre::FrameEvent& evt)
 
 	auto camOr = camera->getOrientation();
 	auto Zdiff = kartRoll - sin((camOr.getRoll() + Radian(M_PI)).valueRadians());
-	if (Zdiff > 0 || Zdiff < 0)
+	if (Zdiff != 0 && Zdiff<1.0f && Zdiff>-1.0f)
 	{
-		assert(Zdiff<1.0f && Zdiff>-1.0f, "Param of ASin isn't in [-1,1] !");
 		camera->roll(Radian(-0.1f * Math::ASin(Zdiff) * M_PI / 180.0));
 	}
 
