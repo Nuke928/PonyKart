@@ -90,7 +90,7 @@ void ThingImporter::prepareFileList()
 				auto scripts = direntSearch(loc, ".thing");
 
 				for (string file : scripts)
-					fileList[getFilenameWithoutExtension(file)] = loc+'/'+file;
+					fileList[getFilenameWithoutExtension(file)] = file;
 			}
 		}
 		hasPreparedFileList = true;

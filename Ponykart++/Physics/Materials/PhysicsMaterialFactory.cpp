@@ -30,7 +30,7 @@ void PhysicsMaterialFactory::readMaterialsFromFiles()
 	{
 		// rev up those files
 		Ogre::ConfigFile cfile;
-		cfile.load(path+filename, "=", true);
+		cfile.load(filename, "=", true);
 
 		auto sectionIterator = cfile.getSectionIterator();
 		while (sectionIterator.hasMoreElements())

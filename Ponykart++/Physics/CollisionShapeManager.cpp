@@ -64,7 +64,7 @@ void CollisionShapeManager::buildFileList()
 			auto scripts = direntSearch(loc, ".bullet");
 
 			for (string file : scripts)
-				bulletFiles[getFilenameWithoutExtension(file)] = loc+'/'+file;
+				bulletFiles[getFilenameWithoutExtension(file)] = file;
 		}
 	}
 #else

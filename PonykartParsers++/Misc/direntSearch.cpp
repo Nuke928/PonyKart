@@ -65,7 +65,7 @@ namespace Extensions
 				std::string fname = entry->d_name;	// filename
 													// if filename's last characters are extension
 				if (fname.find(extension, (fname.length() - extension.length())) != std::string::npos)
-					results.push_back(fname);		// add filename to results vector
+					results.push_back(directory+'/'+fname);		// add filename to results vector
 			}
 			entry = readdir(dir_point);
 		}
