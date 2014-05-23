@@ -229,6 +229,9 @@ void Kart::startDrifting_WheelFunction(Wheel* w)
 
 void Kart::postCreateBody(ThingDefinition* def)
 {
+	if (body == nullptr)
+		throw std::string("[ERROR] Kart::postCreateBody: The kart doesn't have a body !");
+
 	kartMotionState = (KartMotionState*)motionState;
 
 	//body->setCcdMotionThreshold(0.001f);
