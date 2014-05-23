@@ -323,7 +323,10 @@ void LThing::setUpBodyInfo(PonykartParsers::ThingDefinition* def)
 
 	// create our construction info thingy
 	btVector3 inertia;
-	shape->calculateLocalInertia(mass, inertia);
+	if (physicsType & ThingEnum::Static)
+		inertia.setZero();
+	else
+		shape->calculateLocalInertia(mass, inertia);
 
 	// if it's static and doesn't have a sound, we don't need a mogre motion state because we'll be disposing of the root node afterwards
 	if (def->getBoolProperty("Static", false) && !soundComponents.size())
