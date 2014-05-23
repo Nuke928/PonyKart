@@ -231,8 +231,8 @@ void Kart::postCreateBody(ThingDefinition* def)
 {
 	kartMotionState = (KartMotionState*)motionState;
 
-	body->setCcdMotionThreshold(0.001f);
-	body->setCcdSweptSphereRadius(0.04f);
+	//body->setCcdMotionThreshold(0.001f);
+	//body->setCcdSweptSphereRadius(0.04f);
 
 	raycaster = new btDefaultVehicleRaycaster(getG<PhysicsMain>()->getWorld());
 	tuning = new btRaycastVehicle::btVehicleTuning();
@@ -265,6 +265,12 @@ void Kart::finaliseBeforeSimulation(btDiscreteDynamicsWorld* world, const FrameE
 
 	if (!isInAir) 
 	{
+		// tux3/mlkj TEST: Try to mitigate the rotations so we stay on our wheels
+		btVector3 angularVelocity = body->getAngularVelocity();
+		angularVelocity.setX(angularVelocity.x() / 2);
+		angularVelocity.setZ(angularVelocity.z() / 2);
+		body->setAngularVelocity(angularVelocity);
+
 		// going forwards
 		// using 20 because we don't need to check the kart's linear velocity if it's going really slowly
 		if ((currentSpeed > 20.f && !isDriftingAtAll)

@@ -127,9 +127,7 @@ void PhysicsMain::loadPhysicsLevel(const std::string& levelName)
 			SceneNode* dslNode = sceneMgr->getSceneNode(s);
 
 			btCollisionShape* shape;
-
 			std::string bulletFilePath = dslNode->getName() + ".bullet";
-
 			shape = LKernel::getG<CollisionShapeManager>()->getShapeFromFile(bulletFilePath, dslEnt, dslNode);
 
 			// then do the rest as usual
