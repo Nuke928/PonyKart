@@ -39,6 +39,12 @@ MusicSource::MusicSource (const string &filename, bool startPaused, float volume
 }
 
 
+Extensions::ALSource MusicSource::getSource () const
+{
+	return source;
+}
+
+
 void MusicSource::clear ()
 {
 	alSourceStop(source);

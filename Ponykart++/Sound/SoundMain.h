@@ -37,11 +37,15 @@ public:
 
 	SoundMain(); // The sound manager class.
 	~SoundMain();
+	float getSoundVolume ();
+	float setSoundVolume (float value);
+	float getMusicVolume ();
+	float setMusicVolume (float value);
 	float getDefaultReferenceDistance ();
 	float setDefaultReferenceDistance (float value);
 	SoundSource play3D(const std::string filename, const Ogre::Vector3& pos, bool looping, bool startPaused = false, bool efx = false); // Creates an object sound. These sounds do have a 3D position and are attached to SceneNodes. Use these for sound effects and stuff.
 	SoundSource play3D(Extensions::ALBuffer sound, const Ogre::Vector3& pos, bool looping, bool startPaused = false, bool efx = false); // Creates an object sound. These sounds do have a 3D position and are attached to SceneNodes. Use these for sound effects and stuff.
-	MusicSourcePtr PlayMusic (const std::string filename, bool startPaused = false, bool efx = false);
+	MusicSourcePtr playMusic (const std::string filename, bool startPaused = false, bool efx = false);
 	void addSoundComponent(Actors::SoundComponent* sc);
 	// Getters
 	ALCcontext *getContext() const;

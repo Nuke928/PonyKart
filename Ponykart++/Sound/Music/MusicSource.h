@@ -23,7 +23,7 @@ public:
 	MusicSource (const MusicSource &) = delete;
 	MusicSource &operator= (const MusicSource &) = delete;
 
-	Extensions::ALSource GetSource () const;
+	Extensions::ALSource getSource () const;
 
 	void pause ();
 	bool play ();
