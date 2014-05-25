@@ -67,7 +67,7 @@ int VorbisStream::readPCMChunk (ALBuffer buf)
 				result = ov_read(&vf, data.data() + total, data.size() - total, false, 2, true, &bitstream);
 			} else {
 				finishedFlag = true;
-				break;;
+				break;
 			}
 		}
 
