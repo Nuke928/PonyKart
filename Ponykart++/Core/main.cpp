@@ -14,7 +14,7 @@
 #include "Input/KeyBindingManager.h"
 #include "Misc/sdl2Extensions.h"
 
-#define CATCH_STD_STRINGS false
+#define CATCH_STD_STRING true
 
 using namespace Ponykart::Launch;
 using namespace Ponykart::LKernel;
@@ -95,7 +95,7 @@ int main (int argc, char *argv[])
 		return EXIT_SUCCESS;
 #if (CATCH_STD_STRING)
 	}
-	catch (std::string e) // If you can't guarantee that someone will catch your exceptions, throw a string.
+    catch (const std::string& e) // If you can't guarantee that someone will catch your exceptions, throw a string.
 	{
 		log("[ERROR][EXCEPTION] " + e);
 	}
