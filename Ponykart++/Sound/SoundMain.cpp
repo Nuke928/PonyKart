@@ -456,8 +456,12 @@ void SoundMain::onLevelUnload(LevelChangedEventArgs* eventArgs)
 {
 	stopAllSources();
 	alListener3f(AL_POSITION, 0, 0, 0);
-	alListener3f(AL_DIRECTION, 0, 0, -1);
 	alListener3f(AL_VELOCITY, 0, 0, 0);
+	float orientation[6] = {
+		0, 0, -1,
+		0, 1, 0,
+	};
+	alListenerfv(AL_ORIENTATION, orientation);
 
 	components.clear();
 }
