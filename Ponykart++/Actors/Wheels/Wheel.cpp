@@ -78,9 +78,12 @@ Wheel::Wheel(Kart* owner, const Vector3& connectionPoint, WheelID wheelID,
 	node->setInheritOrientation(false);
 
 	Quaternion orientation = kart->getActualOrientation();
-	if (orientation == Quaternion::ZERO) // setOrientation is going to normalize, so sending a zero would make it a NaN quat
-		orientation = Quaternion::IDENTITY;
-	node->setOrientation(orientation);
+	Quaternion orientationNorm = orientation;
+	orientationNorm.normalise();
+	if (orientationNorm.isNaN()) // setOrientation is going to normalize, so sending a zero would make it a NaN quat
+		node->setOrientation(Quaternion::IDENTITY);
+	else
+		node->setOrientation(orientation);
 	if (node->getOrientation().isNaN())
 		throw string("[ERROR] Wheel node with NaN orientation");
 
