@@ -77,7 +77,15 @@ Wheel::Wheel(Kart* owner, const Vector3& connectionPoint, WheelID wheelID,
 	node->attachObject(entity);
 	node->setInheritOrientation(false);
 
-	node->setOrientation(kart->getActualOrientation());
+	Quaternion orientation = kart->getActualOrientation();
+	Quaternion orientationNorm = orientation;
+	orientationNorm.normalise();
+	if (orientationNorm.isNaN()) // setOrientation is going to normalize, so sending a zero would make it a NaN quat
+		node->setOrientation(Quaternion::IDENTITY);
+	else
+		node->setOrientation(orientation);
+	if (node->getOrientation().isNaN())
+		throw string("[ERROR] Wheel node with NaN orientation");
 
 	// and then hook up to the event
 	PhysicsMain::postSimulate.push_back(bind(&Wheel::postSimulate,this,placeholders::_1,placeholders::_2));

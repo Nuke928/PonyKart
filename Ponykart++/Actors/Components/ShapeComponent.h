@@ -26,6 +26,7 @@ namespace Actors
 		float getRadius() const;
 		float getHeight() const;
 		std::string getMesh() const;
+		std::string getModelMesh() const;
 
 		float getMinHeight() const;
 		float getMaxHeight() const;
@@ -39,6 +40,7 @@ namespace Actors
 		float radius;
 		float height;
 		std::string mesh;
+		std::string modelMesh;
 
 		float minHeight;
 		float maxHeight;

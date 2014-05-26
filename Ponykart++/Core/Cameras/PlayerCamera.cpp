@@ -34,29 +34,33 @@ PlayerCamera::PlayerCamera(const std::string& name)
 
 	// create the nodes we're going to interpolate
 	cameraNode = sceneMgr->getRootSceneNode()->createChildSceneNode(name+"_PlayerCameraNode", Vector3(0, Settings::CameraNodeYOffset, Settings::CameraNodeZOffset));
-	targetNode = sceneMgr->getRootSceneNode()->createChildSceneNode(name+"_PlayerCameraTargetNode", Vector3(0, Settings::CameraTargetYOffset, 0));
+	//targetNode = sceneMgr->getRootSceneNode()->createChildSceneNode(name+"_PlayerCameraTargetNode", Vector3(0, Settings::CameraTargetYOffset, 0));
 
-	cameraNode->setAutoTracking(true, targetNode);
+	//cameraNode->setAutoTracking(true, targetNode);
 	cameraNode->setFixedYawAxis(true);
 	cameraNode->attachObject(camera);
 
 	// create the fixed nodes that are attached to the kart
 	followKart = getG<PlayerManager>()->getMainPlayer()->getKart();
 	kartCamNode = followKart->getRootNode()->createChildSceneNode(name + "_KartCameraNode", Vector3(0, Settings::CameraNodeYOffset, Settings::CameraNodeZOffset));
-	kartTargetNode = followKart->getRootNode()->createChildSceneNode(name + "_KartCameraTargetNode", Vector3(0, Settings::CameraTargetYOffset, 0));
+	//kartTargetNode = followKart->getRootNode()->createChildSceneNode(name + "_KartCameraTargetNode", Vector3(0, Settings::CameraTargetYOffset, 0));
 
 	cameraNode->setPosition(kartCamNode->_getDerivedPosition());
-	targetNode->setPosition(kartTargetNode->_getDerivedPosition());
+	//targetNode->setPosition(kartTargetNode->_getDerivedPosition());
 
 	// initialise some stuff for the ray casting
-	rayLength = (cameraNode->getPosition() - targetNode->getPosition()).length();
+	//rayLength = (cameraNode->getPosition() - targetNode->getPosition()).length();
 	world = getG<PhysicsMain>()->getWorld();
 
-	//camera->setAutoTracking(true, followKart->getRootNode(), Vector3(0, 0.4f, 0));
+	camera->setAutoTracking(true, followKart->getRootNode(), Vector3(0, 0.4f, 0));
 }
 
 bool PlayerCamera::updateCamera(const Ogre::FrameEvent& evt)
 {
+	cameraNode->setPosition(kartCamNode->_getDerivedPosition());
+	return true;
+
+	/*
 	// TODO: BUG: FIXME: Still somewhat jittery.
 	Vector3 camDisplacement, targetDisplacement,
 		derivedCam = kartCamNode->_getDerivedPosition(),
@@ -68,6 +72,7 @@ bool PlayerCamera::updateCamera(const Ogre::FrameEvent& evt)
 	cameraNode->translate(camDisplacement * _cameraTightness * evt.timeSinceLastFrame);
 	targetNode->translate(targetDisplacement * _cameraTightness * evt.timeSinceLastFrame);
 	return true;
+	*/
 }
 
 btDynamicsWorld::ClosestRayResultCallback PlayerCamera::castRay(Ogre::Vector3 derivedCam, Ogre::Vector3 derivedTarget)

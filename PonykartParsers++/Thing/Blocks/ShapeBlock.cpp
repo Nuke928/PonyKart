@@ -38,3 +38,8 @@ const Ogre::Matrix4& ShapeBlock::getTransform()
 {
 	return transform;
 }
+
+const ThingDefinition* ShapeBlock::getOwner()
+{
+	return owner;
+}

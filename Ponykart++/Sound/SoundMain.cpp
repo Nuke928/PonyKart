@@ -441,7 +441,7 @@ void SoundMain::buildFileList()
 			soundfiles.insert(end(soundfiles), begin(tmpVec2), end(tmpVec2));
 
 			for (string file : soundfiles)
-				fileList[getFilename(file)] = loc+'/'+file;
+				fileList[getFilename(file)] = file;
 		}
 	}
 }

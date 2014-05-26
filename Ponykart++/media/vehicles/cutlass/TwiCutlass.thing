@@ -48,7 +48,7 @@ Sound {
 
 //Sound 1
 Sound {
-	File = "TwiKart.mp3"
+	File = "TwiKart.opus"
 	Looping = true
 	MinDistance = 20
 	StartPaused = false
