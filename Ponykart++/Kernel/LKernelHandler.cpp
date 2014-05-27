@@ -1,8 +1,9 @@
 #include "pch.h"
 #include "Handlers/UI/MainMenuUIHandler.h"
+#include "Handlers/BackgroundMusicHandler.h"
+#include "Handlers/CameraCreator.h"
 #include "Handlers/MainMenuSinglePlayerHandler.h"
 #include "Handlers/SceneEnvironmentHandler.h"
-#include "Handlers/CameraCreator.h"
 #include "Kernel/LKernel.h"
 #include "Kernel/LKernelHandler.h"
 #include "Kernel/LKernelOgre.h"
@@ -37,6 +38,7 @@ namespace LKernel
 		addGlobalObject(new SceneEnvironmentHandler());
 		addGlobalObject(new MainMenuUIHandler());
 		addGlobalObject(new MainMenuSinglePlayerHandler());
+		addGlobalObject(new BackgroundMusicHandler());
 	}
 }
 }
