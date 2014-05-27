@@ -46,6 +46,8 @@ void DotSceneLoader::parseDotScene(const String &SceneName, const String &groupN
 			delete XMLDoc;
 			return;
 		}
+		else
+			LogManager::getSingleton().logMessage("[DotSceneLoader] Opening "+basename);
 	}
 	catch(...)
 	{
