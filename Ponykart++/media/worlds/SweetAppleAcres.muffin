@@ -307,11 +307,11 @@ Crate {
 	MapRegion = "Barn"
 }
 // the AI keeps getting stuck on this crate
-/*Crate {
-	Position = -2.4369, -0.118263, 40.3368
-	Orientation = 0, 0.608761, -2.66098E-08, 0.793353
-	MapRegion = "Barn"
-}*/
+//Crate {
+//  Position = -2.4369, -0.118263, 40.3368
+//	Orientation = 0, 0.608761, -2.66098E-08, 0.793353
+//	MapRegion = "Barn"
+//}
 Crate {
 	Position = -87.7496, 0.612566, -70.2058
 	Orientation = 0.0107947, -0.257575, -0.0761041, 0.963196
