@@ -99,6 +99,14 @@ int main (int argc, char *argv[])
 	{
 		log("[ERROR][EXCEPTION] " + e);
 	}
+	catch (const std::exception& e) 
+	{
+		log("[ERROR][EXCEPTION] std exception :" + std::string(e.what()));
+	}
+	catch (...) // If you can't guarantee that someone will catch your exceptions, throw a string.
+	{
+		log("[ERROR][EXCEPTION] Unknown exception caught in main.cpp's catch all");
+	}
 
 	log ("[ERROR] Exception thrown! Shutting down...");
 	shutdownOgre();

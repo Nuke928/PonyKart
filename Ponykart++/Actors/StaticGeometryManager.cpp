@@ -9,7 +9,7 @@
 #include "Levels/LevelManager.h"
 #include "Thing/ThingDefinition.h"
 #include "Thing/Blocks/ModelBlock.h"
-#include "Thing/Blocks//ThingBlock.h"
+#include "Thing/Blocks/ThingBlock.h"
 
 using namespace std;
 using namespace Ogre;
