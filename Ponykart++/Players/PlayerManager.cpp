@@ -29,6 +29,7 @@ const string PlayerManager::availableCharacters[] = { "Twilight Sparkle", "Rainb
 const string PlayerManager::defaultCharacter = "Twilight Sparkle";
 
 PlayerManager::PlayerManager()
+: mainPlayer{nullptr}
 {
 	log("[Loading] Creating PlayerManager...");
 	eventId = IDs::incremental();
