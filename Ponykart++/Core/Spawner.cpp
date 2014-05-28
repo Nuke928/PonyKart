@@ -54,6 +54,10 @@ Kart* Spawner::spawnKart(std::string thingName, PonykartParsers::ThingBlock* thi
 		_spawnLock.unlock();
 		throw string("Spawner::spawnKart: Exception caught ! Emergency unlock of _spawnLock. Exception : "+e);
 	}
+	catch (const std::exception& e)
+	{
+		throw string("Spawner::spawnKart: Exception caught ! Emergency unlock of _spawnLock. Exception : " + std::string(e.what()));
+	}
 	catch (...)
 	{
 		_spawnLock.unlock();
@@ -77,6 +81,15 @@ Driver* Spawner::spawnDriver(string thingName, ThingBlock* thingTemplate)
 		invoke<LThing*>(onThingCreation, (LThing*)driver);
 		_spawnLock.unlock();
 		return driver;
+	}
+	catch (const std::string& e)
+	{
+		_spawnLock.unlock();
+		throw string("Spawner::spawnDriver: Exception caught ! Emergency unlock of _spawnLock. Exception : " + e);
+	}
+	catch (const std::exception& e)
+	{
+		throw string("Spawner::spawnDriver: Exception caught ! Emergency unlock of _spawnLock. Exception : " + std::string(e.what()));
 	}
 	catch (...)
 	{
@@ -124,6 +137,15 @@ LThing* Spawner::spawn(std::string thingName, PonykartParsers::ThingBlock* thing
 		invoke(onThingCreation, thing);
 		_spawnLock.unlock();
 		return thing;
+	}
+	catch (const std::string& e)
+	{
+		_spawnLock.unlock();
+		throw string("Spawner::spawn: Exception caught ! Emergency unlock of _spawnLock. Exception : " + e);
+	}
+	catch (const std::exception& e)
+	{
+		throw string("Spawner::spawn: Exception caught ! Emergency unlock of _spawnLock. Exception : " + std::string(e.what()));
 	}
 	catch (...)
 	{

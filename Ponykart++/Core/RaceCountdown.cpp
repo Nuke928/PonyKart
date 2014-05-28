@@ -14,6 +14,8 @@ using namespace Ponykart::Players;
 using namespace std;
 using namespace Ogre;
 
+RaceCountdownEvent RaceCountdown::onCountdown;
+
 RaceCountdown::RaceCountdown()
 {
 	LevelManager::onLevelPostLoad.push_back(bind(&RaceCountdown::onLevelPostLoad, this, placeholders::_1));
