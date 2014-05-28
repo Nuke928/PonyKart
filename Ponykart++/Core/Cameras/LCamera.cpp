@@ -57,7 +57,7 @@ void LCamera::makeActiveCamera()
 	getG<CameraManager>()->switchCurrentCamera(this);
 }
 
-bool LCamera::frameStarted(const FrameEvent& evt)
+bool LCamera::frameRenderingQueued(const FrameEvent& evt)
 {
 	return updateCamera(evt);
 }

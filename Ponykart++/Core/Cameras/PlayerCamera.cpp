@@ -38,7 +38,7 @@ PlayerCamera::PlayerCamera(const std::string& name)
 
 	//cameraNode->setAutoTracking(true, targetNode);
 	cameraNode->setFixedYawAxis(true);
-	cameraNode->attachObject(camera);
+	//cameraNode->attachObject(camera);
 
 	// create the fixed nodes that are attached to the kart
 	followKart = getG<PlayerManager>()->getMainPlayer()->getKart();
@@ -53,11 +53,12 @@ PlayerCamera::PlayerCamera(const std::string& name)
 	world = getG<PhysicsMain>()->getWorld();
 
 	camera->setAutoTracking(true, followKart->getRootNode(), Vector3(0, 0.4f, 0));
+	kartCamNode->attachObject(camera);
 }
 
 bool PlayerCamera::updateCamera(const Ogre::FrameEvent& evt)
 {
-	cameraNode->setPosition(kartCamNode->_getDerivedPosition());
+	//cameraNode->setPosition(kartCamNode->_getDerivedPosition());
 	return true;
 
 	/*
