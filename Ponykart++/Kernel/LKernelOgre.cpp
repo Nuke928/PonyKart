@@ -6,15 +6,17 @@
 #include <OgreSkeletonManager.h>
 #include <OgreRenderWindow.h>
 #include <OgreRoot.h>
+#include "Core/Options.h"
+#include "Handlers/BackgroundMusicHandler.h"
 #include "Kernel/LKernel.h"
 #include "Kernel/LKernelOgre.h"
-#include "Core/Options.h"
 #include "Misc/sdl2Extensions.h"
 #include <SDL_syswm.h>
 
 using namespace std;
 using namespace Ponykart;
 using namespace Ponykart::Core;
+using namespace Ponykart::Handlers;
 using namespace Ogre;
 using namespace Extensions;
 
@@ -186,6 +188,11 @@ void LKernel::details::loadOgreResourceGroups()
 
 void LKernel::shutdownOgre ()
 {
+	// The BackgroundMusicHandler MUST be deleted before SoundMain
+	auto& bgMusicHandler = details::globalObjects[typeid(BackgroundMusicHandler).name()];
+	delete bgMusicHandler;
+	bgMusicHandler = nullptr;
+
 	for (auto obj : details::globalObjects)
 		delete obj.second;
 	details::globalObjects.clear();
