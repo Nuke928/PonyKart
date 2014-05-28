@@ -30,10 +30,32 @@ void LKernel::initOgreRoot()
 	prefPath = string(prefPtr);
 	SDL_free(prefPtr);
 
+	auto ogreConfigPath = prefPath + "/plugins.cfg";
+
+	fstream file;
+
+	file.open(ogreConfigPath.c_str(), ios::in);
+	if (!file.is_open()) // create it if the file doesn't exist, and write out some defaults
+	{
+		file.open(ogreConfigPath.c_str(), ios::out);
+		if (!file.is_open()) throw string("Cannot initialize " + ogreConfigPath);
+#if defined(WIN32)
+		file << "PluginFolder=media/plugins/" << endl;
+#else
+		file << "PluginFolder=/usr/lib/OGRE/" << endl;
+#endif
+		file << "Plugin=RenderSystem_GL" << endl;
+		file << "Plugin=Plugin_ParticleFX" << endl;
+		file << "Plugin=Plugin_BSPSceneManager" << endl;
+		file << "Plugin=Plugin_PCZSceneManager" << endl;
+		file << "Plugin=Plugin_OctreeZone" << endl;
+		file << "Plugin=Plugin_OctreeSceneManager" << endl;
+	}
+
 #if defined(_DEBUG) && defined(WIN32)
 	gRoot = new Ogre::Root("media_debug/config/plugins.cfg", "", "Ponykart.log");
 #else
-	gRoot = new Ogre::Root("media/config/plugins.cfg", "", "Ponykart.log");
+	gRoot = new Ogre::Root(ogreConfigPath, "", "Ponykart.log");
 #endif
 }
 
