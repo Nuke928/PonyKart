@@ -93,6 +93,10 @@ Wheel::Wheel(Kart* owner, const Vector3& connectionPoint, WheelID wheelID,
 
 void Wheel::postSimulate(btDiscreteDynamicsWorld* world, const Ogre::FrameEvent& evt)
 {
+    // TODO: BUG: FIXME: The first time we press accellerate/brake in Debug the kart goes crazy
+    // until we press the key to accelerate/brake in the opposite direction
+    // QtCreator's debugger says that in postSimulate the Wheels are completely corrupted
+    // Probably a bad pointer or maybe bad std::function. Or the debugger is wrong (would't be surprising)
 	if (!Pauser::isPaused)
 	{
 		btWheelInfo info = kart->getVehicle()->getWheelInfo(intWheelID);
