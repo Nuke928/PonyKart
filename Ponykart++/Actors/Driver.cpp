@@ -19,7 +19,7 @@ void Driver::attachToKart(Kart* newKart, Ogre::Vector3 offset)
 	kart = newKart;
 
 	rootNode->getParent()->removeChild(rootNode);
-	rootNode->addChild(rootNode);
+	kart->getRootNode()->addChild(rootNode);
 
 	rootNode->setPosition(offset);
 	rootNode->setOrientation(Quaternion::IDENTITY);
