@@ -19,7 +19,7 @@ using namespace std;
 
 namespace Extensions
 {
-	std::string __cdecl getFilename(const std::string& path)
+    std::string getFilename(const std::string& path)
 	{
 		std::string result;
 		auto pos = path.rfind('/');
@@ -30,7 +30,7 @@ namespace Extensions
 		return result;
 	}
 
-	std::string __cdecl getFilenameWithoutExtension(const std::string& path) // TODO: Check if this is correct (getFilenameWithoutExtension)
+    std::string getFilenameWithoutExtension(const std::string& path) // TODO: Check if this is correct (getFilenameWithoutExtension)
 	{
 		std::string result;
 		auto pos = path.rfind('/');
@@ -44,7 +44,7 @@ namespace Extensions
 	}
 
 
-	std::string __cdecl getFileExtension(const std::string& path) // TODO: Check if this is correct (getFileExtension)
+    std::string getFileExtension(const std::string& path) // TODO: Check if this is correct (getFileExtension)
 	{
 		auto pos = path.rfind('.');
 		if (pos != std::string::npos)
@@ -53,7 +53,7 @@ namespace Extensions
 			return std::string();
 	}
 
-	std::vector<std::string> __cdecl direntSearch(const std::string& directory, const std::string& extension) // recursive search algorithm
+    std::vector<std::string> direntSearch(const std::string& directory, const std::string& extension) // recursive search algorithm
 	{
 		std::vector<std::string> results;
 		DIR* dir_point = opendir(directory.c_str());
@@ -72,7 +72,7 @@ namespace Extensions
 		return results;
 	}
 
-	std::vector<std::string> __cdecl direntSearchRec(const std::string& directory, const std::string& extension) // recursive search algorithm
+    std::vector<std::string> direntSearchRec(const std::string& directory, const std::string& extension) // recursive search algorithm
 	{
 		std::vector<std::string> results;
 		DIR* dir_point = opendir(directory.c_str());
