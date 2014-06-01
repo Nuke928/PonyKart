@@ -7,7 +7,7 @@
 // comment this out if you want drifting to be disabled for human-controlled karts.
 // useful if you want to send a version out to users while the drifting is broken
 /// TODO: Do something about the comment above. Might want to remove the define and #ifdef'd out parts.
-#define DRIFTING_ENABLED
+//#define DRIFTING_ENABLED
 
 namespace Ponykart
 {
