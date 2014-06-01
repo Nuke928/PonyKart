@@ -41,11 +41,12 @@ void LKernel::initOgreRoot()
 	{
 		file.open(ogreConfigPath.c_str(), ios::out);
 		if (!file.is_open()) throw string("Cannot initialize " + ogreConfigPath);
-#if defined(WIN32)
+//#if defined(WIN32)
 		file << "PluginFolder=media/plugins/" << endl;
-#else
-		file << "PluginFolder=/usr/lib/OGRE/" << endl;
-#endif
+//#else
+        // Not portable ! On my machine plugins are in /usr/lib/x86_64-linux-gnu/OGRE-1.9.0/
+//        file << "PluginFolder=/usr/lib/OGRE/" << endl;
+//#endif
 		file << "Plugin=RenderSystem_GL" << endl;
 		file << "Plugin=Plugin_ParticleFX" << endl;
 		file << "Plugin=Plugin_BSPSceneManager" << endl;
