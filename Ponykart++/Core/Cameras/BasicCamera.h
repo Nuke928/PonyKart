@@ -16,4 +16,4 @@ namespace Core
 }
 }
 
-#endif BASICCAMERA_H_INCLUDED
+#endif // BASICCAMERA_H_INCLUDED

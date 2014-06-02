@@ -10,6 +10,7 @@ namespace Ogre
 	class SceneNode;
 }
 
+class btDiscreteDynamicsWorld;
 namespace Ponykart
 {
 namespace Core
@@ -32,6 +33,7 @@ public:
 protected:
 	virtual bool updateCamera(const Ogre::FrameEvent& evt) = 0; ///< Called every frame when the camera is the active camera
 	virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt) override; ///< Calls updateCamera
+    virtual bool postSimulate(btDiscreteDynamicsWorld* world, const Ogre::FrameEvent& evt); ///< Calls updateCamera
 
 protected:
 	friend class CameraManager; ///< CameraManager needs to access the Ogre camera
