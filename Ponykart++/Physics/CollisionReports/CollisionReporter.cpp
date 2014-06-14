@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "Core/IDs.h"
 #include "Kernel/LKernel.h"
 #include "Levels/LevelManager.h"
 #include "Misc/ogreExtensions.h"
@@ -14,14 +15,15 @@ using namespace Ponykart::Levels;
 using namespace Ponykart::Physics;
 
 CollisionReporter::CollisionReporter()
+	: eventId{ IDs::incremental() }
 {
 	// Allocate our 2D array
 	reporters = new CollisionReportEvent*[HIGHEST_BIT_IN_COLLISION_GROUPS + 1];
 	for (int i = 0; i <= HIGHEST_BIT_IN_COLLISION_GROUPS; i++)
 		reporters[i] = new CollisionReportEvent[HIGHEST_BIT_IN_COLLISION_GROUPS + 1];
 
-	PhysicsMain::preSimulate.push_back(bind(&CollisionReporter::preSimulate, this, placeholders::_1, placeholders::_2));
-	PhysicsMain::postSimulate.push_back(bind(&CollisionReporter::postSimulate, this,placeholders::_1, placeholders::_2));
+	PhysicsMain::preSimulate.push_back({ eventId, bind(&CollisionReporter::preSimulate, this, placeholders::_1, placeholders::_2) });
+	PhysicsMain::postSimulate.push_back({ eventId, bind(&CollisionReporter::postSimulate, this, placeholders::_1, placeholders::_2) });
 	PhysicsMain::contactAdded = &CollisionReporter::contactAddedWrapper;
 	LevelManager::onLevelUnload.push_back(bind(&CollisionReporter::onLevelUnload, this, placeholders::_1));
 }

@@ -68,6 +68,7 @@ namespace Physics
 		std::unordered_map<const btCollisionObject*, std::unordered_set<const btCollisionObject*>> currentlyCollidingWith;
 		/// This map contains objects that collided *this* frame.
 		std::unordered_map<const btCollisionObject*, std::unordered_set<const btCollisionObject*>> newCollidingWith;
+		unsigned eventId;
 	};
 }
 }

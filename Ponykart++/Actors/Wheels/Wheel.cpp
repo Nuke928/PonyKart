@@ -88,7 +88,7 @@ Wheel::Wheel(Kart* owner, const Vector3& connectionPoint, WheelID wheelID,
 		throw string("[ERROR] Wheel node with NaN orientation");
 
 	// and then hook up to the event
-	PhysicsMain::postSimulate.push_back(bind(&Wheel::postSimulate,this,placeholders::_1,placeholders::_2));
+	PhysicsMain::postSimulate.push_back({ id, bind(&Wheel::postSimulate, this, placeholders::_1, placeholders::_2) });
 }
 
 void Wheel::postSimulate(btDiscreteDynamicsWorld* world, const Ogre::FrameEvent& evt)

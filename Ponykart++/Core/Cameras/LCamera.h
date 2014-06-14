@@ -33,7 +33,7 @@ public:
 protected:
 	virtual bool updateCamera(const Ogre::FrameEvent& evt) = 0; ///< Called every frame when the camera is the active camera
 	virtual bool frameRenderingQueued(const Ogre::FrameEvent& evt) override; ///< Calls updateCamera
-    virtual bool postSimulate(btDiscreteDynamicsWorld* world, const Ogre::FrameEvent& evt); ///< Calls updateCamera
+    virtual void postSimulate(btDiscreteDynamicsWorld* world, const Ogre::FrameEvent& evt); ///< Calls updateCamera
 
 protected:
 	friend class CameraManager; ///< CameraManager needs to access the Ogre camera
@@ -42,6 +42,7 @@ protected:
 	Ogre::SceneNode* cameraNode; ///< The scene node the camera is attached to
 	std::string name; ///< The name of this camera
 	bool isActive; ///< Is this camera active or not?
+	unsigned eventId;
 };
 } // Core
 } // Ponykart

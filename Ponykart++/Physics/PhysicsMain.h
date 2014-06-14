@@ -19,7 +19,7 @@ namespace Ponykart
 namespace Physics
 {
 	using PhysicsWorldEvent = std::vector<std::function<void (btDiscreteDynamicsWorld*)>>;
-	using PhysicsSimulateEvent = std::vector<std::function<void(btDiscreteDynamicsWorld* world, const Ogre::FrameEvent& evt)>>;
+	using PhysicsSimulateEvent = std::vector<std::pair<unsigned, std::function<void(btDiscreteDynamicsWorld* world, const Ogre::FrameEvent& evt)>>>;
 	/// ContactAdded is used for gContactAddedCallback, a function pointer, not a vector of functions
 	using ContactAdded = std::function<bool (btManifoldPoint&,const btCollisionObjectWrapper*,int,int,const btCollisionObjectWrapper*,int,int)>;
 

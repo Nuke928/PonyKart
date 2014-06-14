@@ -257,7 +257,7 @@ void Kart::postCreateBody(ThingDefinition* def)
 
 	body->setLinearVelocity(btVector3(0, 1, 0));
 
-	PhysicsMain::finaliseBeforeSimulation.push_back(std::bind(&Kart::finaliseBeforeSimulation,this,std::placeholders::_1,std::placeholders::_2));
+	PhysicsMain::finaliseBeforeSimulation.push_back({ id, std::bind(&Kart::finaliseBeforeSimulation, this, std::placeholders::_1, std::placeholders::_2) });
 	getG<RaceCountdown>()->onCountdown.push_back({ id, std::bind(&Kart::onCountdown, this, std::placeholders::_1) });
 }
 

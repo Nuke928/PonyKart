@@ -76,16 +76,16 @@ bool PhysicsMain::frameEnded(const Ogre::FrameEvent& evt)
 
 	// run the events that go just before we simulate
 	for (auto& fun : preSimulate)
-		fun(world, evt);
+		fun.second(world, evt);
 
 	for (auto& fun : finaliseBeforeSimulation)
-		fun(world, evt);
+		fun.second(world, evt);
 
 	world->stepSimulation(PhysicsMain::slowMo ? evt.timeSinceLastFrame / 10.f : evt.timeSinceLastFrame, _maxSubsteps, _fixedTimestep);
 
 	// run the events that go just after we simulate
 	for (auto& fun : postSimulate)
-		fun(world, evt);
+		fun.second(world, evt);
 
 	if (PhysicsMain::drawLines)
 		world->debugDrawWorld();
